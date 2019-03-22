@@ -70,6 +70,8 @@ type UserOperations interface {
 
 	ActionRefreshauthprovideraccess(resource *User) error
 
+	ActionSetharborauth(resource *User, input *SetHarborAuthInput) error
+
 	ActionSetpassword(resource *User, input *SetPasswordInput) (*User, error)
 
 	CollectionActionChangepassword(resource *UserCollection, input *ChangePasswordInput) error
@@ -130,6 +132,11 @@ func (c *UserClient) Delete(container *User) error {
 
 func (c *UserClient) ActionRefreshauthprovideraccess(resource *User) error {
 	err := c.apiClient.Ops.DoAction(UserType, "refreshauthprovideraccess", &resource.Resource, nil, nil)
+	return err
+}
+
+func (c *UserClient) ActionSetharborauth(resource *User, input *SetHarborAuthInput) error {
+	err := c.apiClient.Ops.DoAction(UserType, "setharborauth", &resource.Resource, input, nil)
 	return err
 }
 
