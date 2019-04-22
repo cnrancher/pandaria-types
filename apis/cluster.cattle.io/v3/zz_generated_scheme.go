@@ -35,6 +35,10 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 
 		&ClusterAuthToken{},
 		&ClusterUserAttribute{},
+		&MacvlanSubnet{},
+		&MacvlanSubnetList{},
+		&MacvlanIP{},
+		&MacvlanIPList{},
 	)
 	return nil
 }

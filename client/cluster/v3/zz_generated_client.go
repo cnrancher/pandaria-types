@@ -10,6 +10,8 @@ type Client struct {
 	Namespace        NamespaceOperations
 	PersistentVolume PersistentVolumeOperations
 	StorageClass     StorageClassOperations
+	MacvlanSubnet    MacvlanSubnetOperations
+	MacvlanIP        MacvlanIPOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -25,6 +27,8 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.Namespace = newNamespaceClient(client)
 	client.PersistentVolume = newPersistentVolumeClient(client)
 	client.StorageClass = newStorageClassClient(client)
+	client.MacvlanSubnet = newMacvlanSubnetClient(client)
+	client.MacvlanIP = newMacvlanIPClient(client)
 
 	return client, nil
 }

@@ -22,6 +22,8 @@ type Interface interface {
 
 	ClusterAuthTokensGetter
 	ClusterUserAttributesGetter
+	MacvlanSubnetsGetter
+	MacvlanIPsGetter
 }
 
 type Clients struct {
@@ -29,6 +31,8 @@ type Clients struct {
 
 	ClusterAuthToken     ClusterAuthTokenClient
 	ClusterUserAttribute ClusterUserAttributeClient
+	MacvlanSubnet        MacvlanSubnetClient
+	MacvlanIP            MacvlanIPClient
 }
 
 type Client struct {
@@ -38,6 +42,8 @@ type Client struct {
 
 	clusterAuthTokenControllers     map[string]ClusterAuthTokenController
 	clusterUserAttributeControllers map[string]ClusterUserAttributeController
+	macvlanSubnetControllers        map[string]MacvlanSubnetController
+	macvlanIPControllers            map[string]MacvlanIPController
 }
 
 func Factory(ctx context.Context, config rest.Config) (context.Context, controller.Starter, error) {
@@ -79,6 +85,12 @@ func NewClientsFromInterface(iface Interface) *Clients {
 		ClusterUserAttribute: &clusterUserAttributeClient2{
 			iface: iface.ClusterUserAttributes(""),
 		},
+		MacvlanSubnet: &macvlanSubnetClient2{
+			iface: iface.MacvlanSubnets(""),
+		},
+		MacvlanIP: &macvlanIPClient2{
+			iface: iface.MacvlanIPs(""),
+		},
 	}
 }
 
@@ -97,6 +109,8 @@ func NewForConfig(config rest.Config) (Interface, error) {
 
 		clusterAuthTokenControllers:     map[string]ClusterAuthTokenController{},
 		clusterUserAttributeControllers: map[string]ClusterUserAttributeController{},
+		macvlanSubnetControllers:        map[string]MacvlanSubnetController{},
+		macvlanIPControllers:            map[string]MacvlanIPController{},
 	}, nil
 }
 
@@ -132,6 +146,32 @@ type ClusterUserAttributesGetter interface {
 func (c *Client) ClusterUserAttributes(namespace string) ClusterUserAttributeInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &ClusterUserAttributeResource, ClusterUserAttributeGroupVersionKind, clusterUserAttributeFactory{})
 	return &clusterUserAttributeClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type MacvlanSubnetsGetter interface {
+	MacvlanSubnets(namespace string) MacvlanSubnetInterface
+}
+
+func (c *Client) MacvlanSubnets(namespace string) MacvlanSubnetInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &MacvlanSubnetResource, MacvlanSubnetGroupVersionKind, macvlanSubnetFactory{})
+	return &macvlanSubnetClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type MacvlanIPsGetter interface {
+	MacvlanIPs(namespace string) MacvlanIPInterface
+}
+
+func (c *Client) MacvlanIPs(namespace string) MacvlanIPInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &MacvlanIPResource, MacvlanIPGroupVersionKind, macvlanIPFactory{})
+	return &macvlanIPClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,

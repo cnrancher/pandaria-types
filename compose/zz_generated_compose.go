@@ -66,6 +66,8 @@ type Config struct {
 	Namespaces        map[string]clusterClient.Namespace        `json:"namespaces,omitempty" yaml:"namespaces,omitempty"`
 	PersistentVolumes map[string]clusterClient.PersistentVolume `json:"persistentVolumes,omitempty" yaml:"persistentVolumes,omitempty"`
 	StorageClasss     map[string]clusterClient.StorageClass     `json:"storageClasses,omitempty" yaml:"storageClasses,omitempty"`
+	MacvlanSubnets    map[string]clusterClient.MacvlanSubnet    `json:"macvlanSubnets,omitempty" yaml:"macvlanSubnets,omitempty"`
+	MacvlanIPs        map[string]clusterClient.MacvlanIP        `json:"macvlanIPs,omitempty" yaml:"macvlanIPs,omitempty"`
 
 	// Project Client
 	PersistentVolumeClaims         map[string]projectClient.PersistentVolumeClaim         `json:"persistentVolumeClaims,omitempty" yaml:"persistentVolumeClaims,omitempty"`
