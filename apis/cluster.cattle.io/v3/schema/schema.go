@@ -22,7 +22,8 @@ var (
 		Init(namespaceTypes).
 		Init(persistentVolumeTypes).
 		Init(storageClassTypes).
-		Init(tokens)
+		Init(tokens).
+		Init(macvlanTypes)
 )
 
 func namespaceTypes(schemas *types.Schemas) *types.Schemas {
@@ -102,4 +103,10 @@ func tokens(schemas *types.Schemas) *types.Schemas {
 			schema.CollectionMethods = []string{}
 			schema.ResourceMethods = []string{}
 		})
+}
+
+func macvlanTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		MustImport(&Version, v3.MacvlanSubnet{}).
+		MustImport(&Version, v3.MacvlanIP{})
 }
