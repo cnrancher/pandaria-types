@@ -572,7 +572,17 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 			WorkloadID      string `norman:"type=reference[workload]"`
 			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
 			WorkloadMetrics string `json:"workloadMetrics" norman:"type=array[workloadMetric],nocreate,noupdate"`
-		}{})
+		}{}).
+		MustImport(&Version, v3.PodFileDownloadInput{}).
+		MustImport(&Version, v3.PodFileDownloadOutput{}).
+		MustImportAndCustomize(&Version, v1.Pod{}, func(schema *types.Schema) {
+			schema.ResourceActions = map[string]types.Action{
+				"download": {
+					Input:  "podFileDownloadInput",
+					Output: "podFileDownloadOutput",
+				},
+			}
+		})
 }
 
 func serviceTypes(schemas *types.Schemas) *types.Schemas {
