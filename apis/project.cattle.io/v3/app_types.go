@@ -91,3 +91,12 @@ type RollbackRevision struct {
 	RevisionName string `json:"revisionName,omitempty" norman:"type=reference[/v3/project/schemas/apprevision]"`
 	ForceUpgrade bool   `json:"forceUpgrade,omitempty"`
 }
+
+type PodFileDownloadInput struct {
+	ContainerName string `json:"containerName,omitempty" norman:"type=string"`
+	FilePath      string `json:"filePath" norman:"required,type=string"`
+}
+
+type PodFileDownloadOutput struct {
+	FileContent string `json:"fileContent,omitempty"  norman:"required,type=string"`
+}
