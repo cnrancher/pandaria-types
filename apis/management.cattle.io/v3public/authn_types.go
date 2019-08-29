@@ -106,3 +106,20 @@ type SamlLoginInput struct {
 type SamlLoginOutput struct {
 	IdpRedirectURL string `json:"idpRedirectUrl"`
 }
+
+type SSOProvider struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	AuthProvider      `json:",inline"`
+
+	RedirectURL string `json:"redirectUrl"`
+}
+
+type SSOLogin struct {
+	GenericLogin         `json:",inline"`
+	Code                 string `json:"code"`
+	Digest               string `json:"digest"`
+	Jwt                  string `json:"jwt"`
+	Region               string `json:"region"`
+	RegionClusterKeyName string `json:"regionClusterKeyName"`
+}
