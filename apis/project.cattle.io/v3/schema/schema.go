@@ -539,7 +539,7 @@ func podTypes(schemas *types.Schemas) *types.Schemas {
 		).
 		// Must import handlers before Container
 		MustImport(&Version, v1.ContainerPort{}, struct {
-			Kind       string `json:"kind,omitempty" norman:"type=enum,options=HostPort|NodePort|ClusterIP|LoadBalancer"`
+			Kind       string `json:"kind,omitempty" norman:"type=enum,options=HostPort|NodePort|ClusterIP|LoadBalancer|Http|Ingress"`
 			SourcePort int    `json:"sourcePort,omitempty"`
 			DNSName    string `json:"dnsName,omitempty"`
 			Name       string `json:"name,omitempty"`
