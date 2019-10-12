@@ -18,6 +18,7 @@ type ResourceQuotaLimit struct {
 	PersistentVolumeClaims string `json:"persistentVolumeClaims,omitempty"`
 	ServicesNodePorts      string `json:"servicesNodePorts,omitempty"`
 	ServicesLoadBalancers  string `json:"servicesLoadBalancers,omitempty"`
+	ServicesAllocatedPorts string `json:"servicesAllocatedPorts,omitempty"` // SAIC
 	RequestsCPU            string `json:"requestsCpu,omitempty"`
 	RequestsMemory         string `json:"requestsMemory,omitempty"`
 	RequestsStorage        string `json:"requestsStorage,omitempty"`
