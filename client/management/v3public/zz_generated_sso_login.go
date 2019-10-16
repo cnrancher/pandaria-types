@@ -9,6 +9,7 @@ const (
 	SSOLoginFieldRegion               = "region"
 	SSOLoginFieldRegionClusterKeyName = "regionClusterKeyName"
 	SSOLoginFieldResponseType         = "responseType"
+	SSOLoginFieldSAICAutoLogin        = "saicAutoLogin"
 	SSOLoginFieldTTLMillis            = "ttl"
 )
 
@@ -20,5 +21,6 @@ type SSOLogin struct {
 	Region               string `json:"region,omitempty" yaml:"region,omitempty"`
 	RegionClusterKeyName string `json:"regionClusterKeyName,omitempty" yaml:"regionClusterKeyName,omitempty"`
 	ResponseType         string `json:"responseType,omitempty" yaml:"responseType,omitempty"`
+	SAICAutoLogin        bool   `json:"saicAutoLogin,omitempty" yaml:"saicAutoLogin,omitempty"`
 	TTLMillis            int64  `json:"ttl,omitempty" yaml:"ttl,omitempty"`
 }

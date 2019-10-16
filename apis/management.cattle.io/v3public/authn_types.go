@@ -122,4 +122,5 @@ type SSOLogin struct {
 	Jwt                  string `json:"jwt"`
 	Region               string `json:"region"`
 	RegionClusterKeyName string `json:"regionClusterKeyName"`
+	SAICAutoLogin        bool   `json:"saicAutoLogin"`
 }
