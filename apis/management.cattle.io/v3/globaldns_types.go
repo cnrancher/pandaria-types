@@ -47,6 +47,7 @@ type GlobalDNSProviderSpec struct {
 	Route53ProviderConfig    *Route53ProviderConfig    `json:"route53ProviderConfig,omitempty"`
 	CloudflareProviderConfig *CloudflareProviderConfig `json:"cloudflareProviderConfig,omitempty"`
 	AlidnsProviderConfig     *AlidnsProviderConfig     `json:"alidnsProviderConfig,omitempty"`
+	RDNSProviderConfig       *RDNSProviderConfig       `json:"rdnsProviderConfig,omitempty"` // for pandaria
 	Members                  []Member                  `json:"members,omitempty"`
 	RootDomain               string                    `json:"rootDomain"`
 }
@@ -73,4 +74,9 @@ type UpdateGlobalDNSTargetsInput struct {
 type AlidnsProviderConfig struct {
 	AccessKey string `json:"accessKey" norman:"notnullable,required,minLength=1"`
 	SecretKey string `json:"secretKey" norman:"notnullable,required,minLength=1,type=password"`
+}
+
+type RDNSProviderConfig struct {
+	ETCDUrls string `json:"etcdUrls" norman:"notnullable,required,minLength=1,default=http://localhost:2379"`
+	Secret   string `json:"secret" norman:"nullable"`
 }
