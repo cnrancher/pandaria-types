@@ -15,6 +15,7 @@ const (
 	GlobalDNSProviderFieldMembers                  = "members"
 	GlobalDNSProviderFieldName                     = "name"
 	GlobalDNSProviderFieldOwnerReferences          = "ownerReferences"
+	GlobalDNSProviderFieldRDNSProviderConfig       = "rdnsProviderConfig"
 	GlobalDNSProviderFieldRemoved                  = "removed"
 	GlobalDNSProviderFieldRootDomain               = "rootDomain"
 	GlobalDNSProviderFieldRoute53ProviderConfig    = "route53ProviderConfig"
@@ -32,6 +33,7 @@ type GlobalDNSProvider struct {
 	Members                  []Member                  `json:"members,omitempty" yaml:"members,omitempty"`
 	Name                     string                    `json:"name,omitempty" yaml:"name,omitempty"`
 	OwnerReferences          []OwnerReference          `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
+	RDNSProviderConfig       *RDNSProviderConfig       `json:"rdnsProviderConfig,omitempty" yaml:"rdnsProviderConfig,omitempty"`
 	Removed                  string                    `json:"removed,omitempty" yaml:"removed,omitempty"`
 	RootDomain               string                    `json:"rootDomain,omitempty" yaml:"rootDomain,omitempty"`
 	Route53ProviderConfig    *Route53ProviderConfig    `json:"route53ProviderConfig,omitempty" yaml:"route53ProviderConfig,omitempty"`
