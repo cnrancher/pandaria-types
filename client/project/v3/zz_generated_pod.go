@@ -131,6 +131,8 @@ type PodOperations interface {
 	Replace(existing *Pod) (*Pod, error)
 	ByID(id string) (*Pod, error)
 	Delete(container *Pod) error
+
+	ActionDownload(resource *Pod, input *PodFileDownloadInput) (*PodFileDownloadOutput, error)
 }
 
 func newPodClient(apiClient *Client) *PodClient {
@@ -182,4 +184,10 @@ func (c *PodClient) ByID(id string) (*Pod, error) {
 
 func (c *PodClient) Delete(container *Pod) error {
 	return c.apiClient.Ops.DoResourceDelete(PodType, &container.Resource)
+}
+
+func (c *PodClient) ActionDownload(resource *Pod, input *PodFileDownloadInput) (*PodFileDownloadOutput, error) {
+	resp := &PodFileDownloadOutput{}
+	err := c.apiClient.Ops.DoAction(PodType, "download", &resource.Resource, input, resp)
+	return resp, err
 }
