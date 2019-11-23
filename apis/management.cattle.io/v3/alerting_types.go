@@ -310,6 +310,7 @@ type WechatConfig struct {
 	Agent            string `json:"agent,omitempty" norman:"required"`
 	Corp             string `json:"corp,omitempty" norman:"required"`
 	RecipientType    string `json:"recipientType,omitempty" norman:"required,options=tag|party|user,default=party"`
+	ApiUrl           string `json:"apiUrl,omitempty"`
 	*HTTPClientConfig
 }
 
