@@ -14,6 +14,7 @@ const (
 	ResourceQuotaLimitFieldRequestsStorage        = "requestsStorage"
 	ResourceQuotaLimitFieldSecrets                = "secrets"
 	ResourceQuotaLimitFieldServices               = "services"
+	ResourceQuotaLimitFieldServicesAllocatedPorts = "servicesAllocatedPorts"
 	ResourceQuotaLimitFieldServicesLoadBalancers  = "servicesLoadBalancers"
 	ResourceQuotaLimitFieldServicesNodePorts      = "servicesNodePorts"
 )
@@ -31,6 +32,7 @@ type ResourceQuotaLimit struct {
 	RequestsStorage        string `json:"requestsStorage,omitempty" yaml:"requestsStorage,omitempty"`
 	Secrets                string `json:"secrets,omitempty" yaml:"secrets,omitempty"`
 	Services               string `json:"services,omitempty" yaml:"services,omitempty"`
+	ServicesAllocatedPorts string `json:"servicesAllocatedPorts,omitempty" yaml:"servicesAllocatedPorts,omitempty"`
 	ServicesLoadBalancers  string `json:"servicesLoadBalancers,omitempty" yaml:"servicesLoadBalancers,omitempty"`
 	ServicesNodePorts      string `json:"servicesNodePorts,omitempty" yaml:"servicesNodePorts,omitempty"`
 }
