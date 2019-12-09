@@ -17,6 +17,7 @@ const (
 	ClusterSpecFieldDockerRootDir                       = "dockerRootDir"
 	ClusterSpecFieldEnableClusterAlerting               = "enableClusterAlerting"
 	ClusterSpecFieldEnableClusterMonitoring             = "enableClusterMonitoring"
+	ClusterSpecFieldEnableGPUManagement                 = "enableGPUManagement"
 	ClusterSpecFieldEnableNetworkPolicy                 = "enableNetworkPolicy"
 	ClusterSpecFieldGenericEngineConfig                 = "genericEngineConfig"
 	ClusterSpecFieldGoogleKubernetesEngineConfig        = "googleKubernetesEngineConfig"
@@ -43,6 +44,7 @@ type ClusterSpec struct {
 	DockerRootDir                       string                         `json:"dockerRootDir,omitempty" yaml:"dockerRootDir,omitempty"`
 	EnableClusterAlerting               bool                           `json:"enableClusterAlerting,omitempty" yaml:"enableClusterAlerting,omitempty"`
 	EnableClusterMonitoring             bool                           `json:"enableClusterMonitoring,omitempty" yaml:"enableClusterMonitoring,omitempty"`
+	EnableGPUManagement                 bool                           `json:"enableGPUManagement,omitempty" yaml:"enableGPUManagement,omitempty"`
 	EnableNetworkPolicy                 *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
 	GenericEngineConfig                 map[string]interface{}         `json:"genericEngineConfig,omitempty" yaml:"genericEngineConfig,omitempty"`
 	GoogleKubernetesEngineConfig        map[string]interface{}         `json:"googleKubernetesEngineConfig,omitempty" yaml:"googleKubernetesEngineConfig,omitempty"`
