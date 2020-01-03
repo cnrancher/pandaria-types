@@ -38,6 +38,7 @@ const (
 	ClusterFieldEnableGPUManagement                  = "enableGPUManagement"
 	ClusterFieldEnableNetworkPolicy                  = "enableNetworkPolicy"
 	ClusterFieldFailedSpec                           = "failedSpec"
+	ClusterFieldGPUSchedulerNodePort                 = "gpuSchedulerNodePort"
 	ClusterFieldImportedConfig                       = "importedConfig"
 	ClusterFieldInternal                             = "internal"
 	ClusterFieldIstioEnabled                         = "istioEnabled"
@@ -92,6 +93,7 @@ type Cluster struct {
 	EnableGPUManagement                  bool                           `json:"enableGPUManagement,omitempty" yaml:"enableGPUManagement,omitempty"`
 	EnableNetworkPolicy                  *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
 	FailedSpec                           *ClusterSpec                   `json:"failedSpec,omitempty" yaml:"failedSpec,omitempty"`
+	GPUSchedulerNodePort                 string                         `json:"gpuSchedulerNodePort,omitempty" yaml:"gpuSchedulerNodePort,omitempty"`
 	ImportedConfig                       *ImportedConfig                `json:"importedConfig,omitempty" yaml:"importedConfig,omitempty"`
 	Internal                             bool                           `json:"internal,omitempty" yaml:"internal,omitempty"`
 	IstioEnabled                         bool                           `json:"istioEnabled,omitempty" yaml:"istioEnabled,omitempty"`
