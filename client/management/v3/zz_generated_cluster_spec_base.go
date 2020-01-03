@@ -11,6 +11,7 @@ const (
 	ClusterSpecBaseFieldEnableClusterMonitoring             = "enableClusterMonitoring"
 	ClusterSpecBaseFieldEnableGPUManagement                 = "enableGPUManagement"
 	ClusterSpecBaseFieldEnableNetworkPolicy                 = "enableNetworkPolicy"
+	ClusterSpecBaseFieldGPUSchedulerNodePort                = "gpuSchedulerNodePort"
 	ClusterSpecBaseFieldLocalClusterAuthEndpoint            = "localClusterAuthEndpoint"
 	ClusterSpecBaseFieldRancherKubernetesEngineConfig       = "rancherKubernetesEngineConfig"
 	ClusterSpecBaseFieldWindowsPreferedCluster              = "windowsPreferedCluster"
@@ -26,6 +27,7 @@ type ClusterSpecBase struct {
 	EnableClusterMonitoring             bool                           `json:"enableClusterMonitoring,omitempty" yaml:"enableClusterMonitoring,omitempty"`
 	EnableGPUManagement                 bool                           `json:"enableGPUManagement,omitempty" yaml:"enableGPUManagement,omitempty"`
 	EnableNetworkPolicy                 *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
+	GPUSchedulerNodePort                string                         `json:"gpuSchedulerNodePort,omitempty" yaml:"gpuSchedulerNodePort,omitempty"`
 	LocalClusterAuthEndpoint            *LocalClusterAuthEndpoint      `json:"localClusterAuthEndpoint,omitempty" yaml:"localClusterAuthEndpoint,omitempty"`
 	RancherKubernetesEngineConfig       *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty" yaml:"rancherKubernetesEngineConfig,omitempty"`
 	WindowsPreferedCluster              bool                           `json:"windowsPreferedCluster,omitempty" yaml:"windowsPreferedCluster,omitempty"`
