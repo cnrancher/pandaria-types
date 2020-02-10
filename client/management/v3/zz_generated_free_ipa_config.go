@@ -18,6 +18,7 @@ const (
 	FreeIpaConfigFieldGroupSearchAttribute            = "groupSearchAttribute"
 	FreeIpaConfigFieldGroupSearchBase                 = "groupSearchBase"
 	FreeIpaConfigFieldGroupSearchFilter               = "groupSearchFilter"
+	FreeIpaConfigFieldGroupUniqueIDAttribute          = "groupUniqueIdAttribute"
 	FreeIpaConfigFieldLabels                          = "labels"
 	FreeIpaConfigFieldName                            = "name"
 	FreeIpaConfigFieldOwnerReferences                 = "ownerReferences"
@@ -38,6 +39,7 @@ const (
 	FreeIpaConfigFieldUserSearchAttribute             = "userSearchAttribute"
 	FreeIpaConfigFieldUserSearchBase                  = "userSearchBase"
 	FreeIpaConfigFieldUserSearchFilter                = "userSearchFilter"
+	FreeIpaConfigFieldUserUniqueIDAttribute           = "userUniqueIdAttribute"
 )
 
 type FreeIpaConfig struct {
@@ -57,6 +59,7 @@ type FreeIpaConfig struct {
 	GroupSearchAttribute            string            `json:"groupSearchAttribute,omitempty" yaml:"groupSearchAttribute,omitempty"`
 	GroupSearchBase                 string            `json:"groupSearchBase,omitempty" yaml:"groupSearchBase,omitempty"`
 	GroupSearchFilter               string            `json:"groupSearchFilter,omitempty" yaml:"groupSearchFilter,omitempty"`
+	GroupUniqueIDAttribute          string            `json:"groupUniqueIdAttribute,omitempty" yaml:"groupUniqueIdAttribute,omitempty"`
 	Labels                          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                            string            `json:"name,omitempty" yaml:"name,omitempty"`
 	OwnerReferences                 []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
@@ -77,4 +80,5 @@ type FreeIpaConfig struct {
 	UserSearchAttribute             string            `json:"userSearchAttribute,omitempty" yaml:"userSearchAttribute,omitempty"`
 	UserSearchBase                  string            `json:"userSearchBase,omitempty" yaml:"userSearchBase,omitempty"`
 	UserSearchFilter                string            `json:"userSearchFilter,omitempty" yaml:"userSearchFilter,omitempty"`
+	UserUniqueIDAttribute           string            `json:"userUniqueIdAttribute,omitempty" yaml:"userUniqueIdAttribute,omitempty"`
 }
