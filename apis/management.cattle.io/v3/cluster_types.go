@@ -90,6 +90,7 @@ type Cluster struct {
 type ClusterSpecBase struct {
 	DesiredAgentImage                    string                         `json:"desiredAgentImage"`
 	DesiredAuthImage                     string                         `json:"desiredAuthImage"`
+	AgentImageOverride                   string                         `json:"agentImageOverride"`
 	RancherKubernetesEngineConfig        *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty"`
 	DefaultPodSecurityPolicyTemplateName string                         `json:"defaultPodSecurityPolicyTemplateName,omitempty" norman:"type=reference[podSecurityPolicyTemplate]"`
 	DefaultClusterRoleForProjectMembers  string                         `json:"defaultClusterRoleForProjectMembers,omitempty" norman:"type=reference[roleTemplate]"`
@@ -295,6 +296,11 @@ type CertExpiration struct {
 }
 
 type SaveAsTemplateInput struct {
+	ClusterTemplateName         string `json:"clusterTemplateName,omitempty"`
+	ClusterTemplateRevisionName string `json:"clusterTemplateRevisionName,omitempty"`
+}
+
+type SaveAsTemplateOutput struct {
 	ClusterTemplateName         string `json:"clusterTemplateName,omitempty"`
 	ClusterTemplateRevisionName string `json:"clusterTemplateRevisionName,omitempty"`
 }
