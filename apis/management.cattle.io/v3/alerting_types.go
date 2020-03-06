@@ -62,7 +62,7 @@ type ProjectAlertSpec struct {
 type Recipient struct {
 	Recipient    string `json:"recipient,omitempty"`
 	NotifierName string `json:"notifierName,omitempty" norman:"required,type=reference[notifier]"`
-	NotifierType string `json:"notifierType,omitempty" norman:"required,options=slack|email|pagerduty|webhook|wechat"`
+	NotifierType string `json:"notifierType,omitempty" norman:"required,options=slack|email|pagerduty|webhook|wechat|dingtalk|microsoftTeams|alibabaCloud"`
 }
 
 type TargetNode struct {
@@ -260,23 +260,29 @@ type Notifier struct {
 type NotifierSpec struct {
 	ClusterName string `json:"clusterName" norman:"type=reference[cluster]"`
 
-	DisplayName     string           `json:"displayName,omitempty" norman:"required"`
-	Description     string           `json:"description,omitempty"`
-	SendResolved    bool             `json:"sendResolved,omitempty"`
-	SMTPConfig      *SMTPConfig      `json:"smtpConfig,omitempty"`
-	SlackConfig     *SlackConfig     `json:"slackConfig,omitempty"`
-	PagerdutyConfig *PagerdutyConfig `json:"pagerdutyConfig,omitempty"`
-	WebhookConfig   *WebhookConfig   `json:"webhookConfig,omitempty"`
-	WechatConfig    *WechatConfig    `json:"wechatConfig,omitempty"`
+	DisplayName          string                `json:"displayName,omitempty" norman:"required"`
+	Description          string                `json:"description,omitempty"`
+	SendResolved         bool                  `json:"sendResolved,omitempty"`
+	SMTPConfig           *SMTPConfig           `json:"smtpConfig,omitempty"`
+	SlackConfig          *SlackConfig          `json:"slackConfig,omitempty"`
+	PagerdutyConfig      *PagerdutyConfig      `json:"pagerdutyConfig,omitempty"`
+	WebhookConfig        *WebhookConfig        `json:"webhookConfig,omitempty"`
+	WechatConfig         *WechatConfig         `json:"wechatConfig,omitempty"`
+	DingtalkConfig       *DingtalkConfig       `json:"dingtalkConfig,omitempty"`
+	MicrosoftTeamsConfig *MicrosoftTeamsConfig `json:"microsoftTeamsConfig,omitempty"`
+	AlibabaCloudConfig   *AlibabaCloudConfig   `json:"alibabaCloudConfig,omitempty"`
 }
 
 type Notification struct {
-	Message         string           `json:"message,omitempty"`
-	SMTPConfig      *SMTPConfig      `json:"smtpConfig,omitempty"`
-	SlackConfig     *SlackConfig     `json:"slackConfig,omitempty"`
-	PagerdutyConfig *PagerdutyConfig `json:"pagerdutyConfig,omitempty"`
-	WebhookConfig   *WebhookConfig   `json:"webhookConfig,omitempty"`
-	WechatConfig    *WechatConfig    `json:"wechatConfig,omitempty"`
+	Message              string                `json:"message,omitempty"`
+	SMTPConfig           *SMTPConfig           `json:"smtpConfig,omitempty"`
+	SlackConfig          *SlackConfig          `json:"slackConfig,omitempty"`
+	PagerdutyConfig      *PagerdutyConfig      `json:"pagerdutyConfig,omitempty"`
+	WebhookConfig        *WebhookConfig        `json:"webhookConfig,omitempty"`
+	WechatConfig         *WechatConfig         `json:"wechatConfig,omitempty"`
+	DingtalkConfig       *DingtalkConfig       `json:"dingtalkConfig,omitempty"`
+	MicrosoftTeamsConfig *MicrosoftTeamsConfig `json:"microsoftTeamsConfig,omitempty"`
+	AlibabaCloudConfig   *AlibabaCloudConfig   `json:"alibabaCloudConfig,omitempty"`
 }
 
 type SMTPConfig struct {
@@ -303,6 +309,25 @@ type PagerdutyConfig struct {
 type WebhookConfig struct {
 	URL string `json:"url,omitempty" norman:"required"`
 	*HTTPClientConfig
+}
+
+type DingtalkConfig struct {
+	URL    string `json:"url,omitempty" norman:"required"`
+	Secret string `json:"secret,omitempty" norman:"type=password,required"`
+	*HTTPClientConfig
+}
+
+type MicrosoftTeamsConfig struct {
+	URL string `json:"url,omitempty" norman:"required"`
+	*HTTPClientConfig
+}
+
+type AlibabaCloudConfig struct {
+	AccessKeyID     string   `json:"accessKeyID,omitempty" norman:"required"`
+	AccessKeySecret string   `json:"accessKeySecret,omitempty" norman:"type=password,required"`
+	SignName        string   `json:"signName,omitempty" norman:"required"`
+	TemplateCode    string   `json:"templateCode,omitempty" norman:"required"`
+	To              []string `json:"to,omitempty"`
 }
 
 type WechatConfig struct {
