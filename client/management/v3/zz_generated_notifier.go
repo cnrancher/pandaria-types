@@ -6,12 +6,15 @@ import (
 
 const (
 	NotifierType                      = "notifier"
+	NotifierFieldAliyunSMSConfig      = "aliyunsmsConfig"
 	NotifierFieldAnnotations          = "annotations"
 	NotifierFieldClusterID            = "clusterId"
 	NotifierFieldCreated              = "created"
 	NotifierFieldCreatorID            = "creatorId"
 	NotifierFieldDescription          = "description"
+	NotifierFieldDingtalkConfig       = "dingtalkConfig"
 	NotifierFieldLabels               = "labels"
+	NotifierFieldMSTeamsConfig        = "msteamsConfig"
 	NotifierFieldName                 = "name"
 	NotifierFieldNamespaceId          = "namespaceId"
 	NotifierFieldOwnerReferences      = "ownerReferences"
@@ -31,12 +34,15 @@ const (
 
 type Notifier struct {
 	types.Resource
+	AliyunSMSConfig      *AliyunSMSConfig  `json:"aliyunsmsConfig,omitempty" yaml:"aliyunsmsConfig,omitempty"`
 	Annotations          map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	ClusterID            string            `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
 	Created              string            `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID            string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	Description          string            `json:"description,omitempty" yaml:"description,omitempty"`
+	DingtalkConfig       *DingtalkConfig   `json:"dingtalkConfig,omitempty" yaml:"dingtalkConfig,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
+	MSTeamsConfig        *MSTeamsConfig    `json:"msteamsConfig,omitempty" yaml:"msteamsConfig,omitempty"`
 	Name                 string            `json:"name,omitempty" yaml:"name,omitempty"`
 	NamespaceId          string            `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
 	OwnerReferences      []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
