@@ -131,6 +131,10 @@ type QueryProjectGraph struct {
 	Series    []*TimeSeries `json:"series" norman:"type=array[reference[timeSeries]]"`
 }
 
+type QueryGlobalMetricInput struct {
+	CommonQueryMetricInput
+}
+
 type QueryClusterMetricInput struct {
 	ClusterName string `json:"clusterId" norman:"type=reference[cluster]"`
 	CommonQueryMetricInput

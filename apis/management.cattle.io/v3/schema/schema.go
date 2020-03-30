@@ -726,20 +726,37 @@ func alertTypes(schema *types.Schemas) *types.Schemas {
 			}
 		}).
 		MustImport(&Version, v3.AlertStatus{}).
+		AddMapperForType(&Version, v3.GlobalAlertGroup{},
+			&m.Embed{Field: "status"},
+			m.DisplayName{},
+			m.Drop{Field: "namespaceId"}).
 		AddMapperForType(&Version, v3.ClusterAlertGroup{},
 			&m.Embed{Field: "status"},
 			m.DisplayName{}).
 		AddMapperForType(&Version, v3.ProjectAlertGroup{},
 			&m.Embed{Field: "status"},
 			m.DisplayName{}).
+		AddMapperForType(&Version, v3.GlobalAlertRule{},
+			&m.Embed{Field: "status"},
+			m.DisplayName{},
+			m.Drop{Field: "namespaceId"}).
 		AddMapperForType(&Version, v3.ClusterAlertRule{},
 			&m.Embed{Field: "status"},
 			m.DisplayName{}).
 		AddMapperForType(&Version, v3.ProjectAlertRule{},
 			&m.Embed{Field: "status"},
 			m.DisplayName{}).
+		MustImport(&Version, v3.GlobalAlertGroup{}).
 		MustImport(&Version, v3.ClusterAlertGroup{}).
 		MustImport(&Version, v3.ProjectAlertGroup{}).
+		MustImportAndCustomize(&Version, v3.GlobalAlertRule{}, func(schema *types.Schema) {
+			schema.ResourceActions = map[string]types.Action{
+				"activate":   {},
+				"deactivate": {},
+				"mute":       {},
+				"unmute":     {},
+			}
+		}).
 		MustImportAndCustomize(&Version, v3.ClusterAlertRule{}, func(schema *types.Schema) {
 			schema.ResourceActions = map[string]types.Action{
 				"activate":   {},
@@ -869,6 +886,7 @@ func monitorTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.QueryGraphInput{}).
 		MustImport(&Version, v3.QueryClusterGraphOutput{}).
 		MustImport(&Version, v3.QueryProjectGraphOutput{}).
+		MustImport(&Version, v3.QueryGlobalMetricInput{}).
 		MustImport(&Version, v3.QueryClusterMetricInput{}).
 		MustImport(&Version, v3.QueryProjectMetricInput{}).
 		MustImport(&Version, v3.QueryMetricOutput{}).
@@ -878,6 +896,13 @@ func monitorTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.TimeSeries{}).
 		MustImportAndCustomize(&Version, v3.MonitorMetric{}, func(schema *types.Schema) {
 			schema.CollectionActions = map[string]types.Action{
+				"queryglobal": {
+					Input:  "queryGlobalMetricInput",
+					Output: "queryMetricOutput",
+				},
+				"listglobalmetricname": {
+					Output: "metricNamesOutput",
+				},
 				"querycluster": {
 					Input:  "queryClusterMetricInput",
 					Output: "queryMetricOutput",
