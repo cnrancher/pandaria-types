@@ -56,9 +56,13 @@ type MonitorMetricOperations interface {
 
 	CollectionActionListclustermetricname(resource *MonitorMetricCollection, input *ClusterMetricNamesInput) (*MetricNamesOutput, error)
 
+	CollectionActionListglobalmetricname(resource *MonitorMetricCollection) (*MetricNamesOutput, error)
+
 	CollectionActionListprojectmetricname(resource *MonitorMetricCollection, input *ProjectMetricNamesInput) (*MetricNamesOutput, error)
 
 	CollectionActionQuerycluster(resource *MonitorMetricCollection, input *QueryClusterMetricInput) (*QueryMetricOutput, error)
+
+	CollectionActionQueryglobal(resource *MonitorMetricCollection, input *QueryGlobalMetricInput) (*QueryMetricOutput, error)
 
 	CollectionActionQueryproject(resource *MonitorMetricCollection, input *QueryProjectMetricInput) (*QueryMetricOutput, error)
 }
@@ -120,6 +124,12 @@ func (c *MonitorMetricClient) CollectionActionListclustermetricname(resource *Mo
 	return resp, err
 }
 
+func (c *MonitorMetricClient) CollectionActionListglobalmetricname(resource *MonitorMetricCollection) (*MetricNamesOutput, error) {
+	resp := &MetricNamesOutput{}
+	err := c.apiClient.Ops.DoCollectionAction(MonitorMetricType, "listglobalmetricname", &resource.Collection, nil, resp)
+	return resp, err
+}
+
 func (c *MonitorMetricClient) CollectionActionListprojectmetricname(resource *MonitorMetricCollection, input *ProjectMetricNamesInput) (*MetricNamesOutput, error) {
 	resp := &MetricNamesOutput{}
 	err := c.apiClient.Ops.DoCollectionAction(MonitorMetricType, "listprojectmetricname", &resource.Collection, input, resp)
@@ -129,6 +139,12 @@ func (c *MonitorMetricClient) CollectionActionListprojectmetricname(resource *Mo
 func (c *MonitorMetricClient) CollectionActionQuerycluster(resource *MonitorMetricCollection, input *QueryClusterMetricInput) (*QueryMetricOutput, error) {
 	resp := &QueryMetricOutput{}
 	err := c.apiClient.Ops.DoCollectionAction(MonitorMetricType, "querycluster", &resource.Collection, input, resp)
+	return resp, err
+}
+
+func (c *MonitorMetricClient) CollectionActionQueryglobal(resource *MonitorMetricCollection, input *QueryGlobalMetricInput) (*QueryMetricOutput, error) {
+	resp := &QueryMetricOutput{}
+	err := c.apiClient.Ops.DoCollectionAction(MonitorMetricType, "queryglobal", &resource.Collection, input, resp)
 	return resp, err
 }
 
