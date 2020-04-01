@@ -433,6 +433,8 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.SetPasswordInput{}).
 		MustImport(&Version, v3.SetHarborAuthInput{}).
 		MustImport(&Version, v3.UpdateHarborAuthInput{}).
+		MustImport(&Version, v3.SyncHarborUser{}).
+		MustImport(&Version, v3.HarborAdminAuthInput{}).
 		MustImportAndCustomize(&Version, v3.User{}, func(schema *types.Schema) {
 			schema.ResourceActions = map[string]types.Action{
 				"setpassword": {
@@ -452,6 +454,12 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 					Input: "changePasswordInput",
 				},
 				"refreshauthprovideraccess": {},
+				"syncharboruser": {
+					Input: "syncHarborUser",
+				},
+				"saveharborconfig": {
+					Input: "harborAdminAuthInput",
+				},
 			}
 		}).
 		MustImportAndCustomize(&Version, v3.AuthConfig{}, func(schema *types.Schema) {
