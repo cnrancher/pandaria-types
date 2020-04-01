@@ -79,6 +79,10 @@ type UserOperations interface {
 	CollectionActionChangepassword(resource *UserCollection, input *ChangePasswordInput) error
 
 	CollectionActionRefreshauthprovideraccess(resource *UserCollection) error
+
+	CollectionActionSaveharborconfig(resource *UserCollection, input *SetHarborAuthInput) error
+
+	CollectionActionSyncharboruser(resource *UserCollection, input *SyncHarborUser) error
 }
 
 func newUserClient(apiClient *Client) *UserClient {
@@ -160,5 +164,15 @@ func (c *UserClient) CollectionActionChangepassword(resource *UserCollection, in
 
 func (c *UserClient) CollectionActionRefreshauthprovideraccess(resource *UserCollection) error {
 	err := c.apiClient.Ops.DoCollectionAction(UserType, "refreshauthprovideraccess", &resource.Collection, nil, nil)
+	return err
+}
+
+func (c *UserClient) CollectionActionSaveharborconfig(resource *UserCollection, input *SetHarborAuthInput) error {
+	err := c.apiClient.Ops.DoCollectionAction(UserType, "saveharborconfig", &resource.Collection, input, nil)
+	return err
+}
+
+func (c *UserClient) CollectionActionSyncharboruser(resource *UserCollection, input *SyncHarborUser) error {
+	err := c.apiClient.Ops.DoCollectionAction(UserType, "syncharboruser", &resource.Collection, input, nil)
 	return err
 }

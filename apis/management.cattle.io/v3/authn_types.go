@@ -125,17 +125,6 @@ type SetPasswordInput struct {
 	NewPassword string `json:"newPassword" norman:"type=string,required"`
 }
 
-type SetHarborAuthInput struct {
-	Password string `json:"password" norman:"type=string,required"`
-	Email    string `json:"email" norman:"type=string,required"`
-}
-
-type UpdateHarborAuthInput struct {
-	OldPassword string `json:"oldPassword" norman:"type=string"`
-	NewPassword string `json:"newPassword" norman:"type=string"`
-	Email       string `json:"email" norman:"type=string"`
-}
-
 type AuthConfig struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
