@@ -1,9 +1,14 @@
 package v3
 
 import (
+	"strings"
+
 	"github.com/rancher/norman/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
+
+// Secret is a string that must not be revealed on marshaling.
+type Secret string
 
 type ClusterAlert struct {
 	types.Namespaced
@@ -19,6 +24,10 @@ type ClusterAlert struct {
 	Status AlertStatus `json:"status"`
 }
 
+func (c *ClusterAlert) ObjClusterName() string {
+	return c.Spec.ObjClusterName()
+}
+
 type ProjectAlert struct {
 	types.Namespaced
 
@@ -31,6 +40,10 @@ type ProjectAlert struct {
 	// Most recent observed status of the alert. More info:
 	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
 	Status AlertStatus `json:"status"`
+}
+
+func (p *ProjectAlert) ObjClusterName() string {
+	return p.Spec.ObjClusterName()
 }
 
 type AlertCommonSpec struct {
@@ -51,12 +64,23 @@ type ClusterAlertSpec struct {
 	TargetEvent         *TargetEvent         `json:"targetEvent,omitempty"`
 }
 
+func (c *ClusterAlertSpec) ObjClusterName() string {
+	return c.ClusterName
+}
+
 type ProjectAlertSpec struct {
 	AlertCommonSpec
 
 	ProjectName    string          `json:"projectName" norman:"type=reference[project]"`
 	TargetWorkload *TargetWorkload `json:"targetWorkload,omitempty"`
 	TargetPod      *TargetPod      `json:"targetPod,omitempty"`
+}
+
+func (p *ProjectAlertSpec) ObjClusterName() string {
+	if parts := strings.SplitN(p.ProjectName, ":", 2); len(parts) == 2 {
+		return parts[0]
+	}
+	return ""
 }
 
 type Recipient struct {
@@ -113,6 +137,10 @@ type ClusterAlertGroup struct {
 	Status AlertStatus `json:"status"`
 }
 
+func (c *ClusterAlertGroup) ObjClusterName() string {
+	return c.Spec.ObjClusterName()
+}
+
 type ProjectAlertGroup struct {
 	types.Namespaced
 
@@ -127,16 +155,31 @@ type ProjectAlertGroup struct {
 	Status AlertStatus `json:"status"`
 }
 
+func (p *ProjectAlertGroup) ObjClusterName() string {
+	return p.Spec.ObjClusterName()
+}
+
 type ClusterGroupSpec struct {
 	ClusterName string      `json:"clusterName" norman:"type=reference[cluster]"`
 	Recipients  []Recipient `json:"recipients,omitempty"`
 	CommonGroupField
 }
 
+func (c *ClusterGroupSpec) ObjClusterName() string {
+	return c.ClusterName
+}
+
 type ProjectGroupSpec struct {
 	ProjectName string      `json:"projectName" norman:"type=reference[project]"`
 	Recipients  []Recipient `json:"recipients,omitempty"`
 	CommonGroupField
+}
+
+func (p *ProjectGroupSpec) ObjClusterName() string {
+	if parts := strings.SplitN(p.ProjectName, ":", 2); len(parts) == 2 {
+		return parts[0]
+	}
+	return ""
 }
 
 type ClusterAlertRule struct {
@@ -153,6 +196,10 @@ type ClusterAlertRule struct {
 	Status AlertStatus `json:"status"`
 }
 
+func (c *ClusterAlertRule) ObjClusterName() string {
+	return c.Spec.ObjClusterName()
+}
+
 type ClusterAlertRuleSpec struct {
 	CommonRuleField
 	ClusterName       string             `json:"clusterName" norman:"type=reference[cluster]"`
@@ -161,6 +208,11 @@ type ClusterAlertRuleSpec struct {
 	EventRule         *EventRule         `json:"eventRule,omitempty"`
 	SystemServiceRule *SystemServiceRule `json:"systemServiceRule,omitempty"`
 	MetricRule        *MetricRule        `json:"metricRule,omitempty"`
+	ClusterScanRule   *ClusterScanRule   `json:"clusterScanRule,omitempty"`
+}
+
+func (c *ClusterAlertRuleSpec) ObjClusterName() string {
+	return c.ClusterName
 }
 
 type ProjectAlertRule struct {
@@ -177,6 +229,10 @@ type ProjectAlertRule struct {
 	Status AlertStatus `json:"status"`
 }
 
+func (p *ProjectAlertRule) ObjClusterName() string {
+	return p.Spec.ObjClusterName()
+}
+
 type ProjectAlertRuleSpec struct {
 	CommonRuleField
 	ProjectName  string        `json:"projectName" norman:"type=reference[project]"`
@@ -184,6 +240,13 @@ type ProjectAlertRuleSpec struct {
 	PodRule      *PodRule      `json:"podRule,omitempty"`
 	WorkloadRule *WorkloadRule `json:"workloadRule,omitempty"`
 	MetricRule   *MetricRule   `json:"metricRule,omitempty"`
+}
+
+func (p *ProjectAlertRuleSpec) ObjClusterName() string {
+	if parts := strings.SplitN(p.ProjectName, ":", 2); len(parts) == 2 {
+		return parts[0]
+	}
+	return ""
 }
 
 type CommonGroupField struct {
@@ -197,6 +260,11 @@ type CommonRuleField struct {
 	Severity    string `json:"severity,omitempty" norman:"required,options=info|critical|warning,default=critical"`
 	Inherited   *bool  `json:"inherited,omitempty" norman:"default=true"`
 	TimingField
+}
+
+type ClusterScanRule struct {
+	ScanRunType  ClusterScanRunType `json:"scanRunType,omitempty" norman:"required,options=manual|scheduled,default=scheduled"`
+	FailuresOnly bool               `json:"failuresOnly,omitempty"`
 }
 
 type MetricRule struct {
@@ -273,6 +341,10 @@ type NotifierSpec struct {
 	AliyunSMSConfig *AliyunSMSConfig `json:"aliyunsmsConfig,omitempty"`
 }
 
+func (n *NotifierSpec) ObjClusterName() string {
+	return n.ClusterName
+}
+
 type Notification struct {
 	Message         string           `json:"message,omitempty"`
 	SMTPConfig      *SMTPConfig      `json:"smtpConfig,omitempty"`
@@ -345,6 +417,8 @@ type NotifierStatus struct {
 
 // HTTPClientConfig configures an HTTP client.
 type HTTPClientConfig struct {
+	// The bearer token for the targets.
+	BearerToken Secret `json:"bearer_token,omitempty"`
 	// HTTP proxy server to use to connect to the targets.
 	ProxyURL string `json:"proxyUrl,omitempty"`
 }

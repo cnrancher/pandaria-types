@@ -4,6 +4,7 @@ const (
 	WechatConfigType                  = "wechatConfig"
 	WechatConfigFieldAPIURL           = "apiUrl"
 	WechatConfigFieldAgent            = "agent"
+	WechatConfigFieldBearerToken      = "bearerToken"
 	WechatConfigFieldCorp             = "corp"
 	WechatConfigFieldDefaultRecipient = "defaultRecipient"
 	WechatConfigFieldProxyURL         = "proxyUrl"
@@ -14,6 +15,7 @@ const (
 type WechatConfig struct {
 	APIURL           string `json:"apiUrl,omitempty" yaml:"apiUrl,omitempty"`
 	Agent            string `json:"agent,omitempty" yaml:"agent,omitempty"`
+	BearerToken      string `json:"bearerToken,omitempty" yaml:"bearerToken,omitempty"`
 	Corp             string `json:"corp,omitempty" yaml:"corp,omitempty"`
 	DefaultRecipient string `json:"defaultRecipient,omitempty" yaml:"defaultRecipient,omitempty"`
 	ProxyURL         string `json:"proxyUrl,omitempty" yaml:"proxyUrl,omitempty"`
