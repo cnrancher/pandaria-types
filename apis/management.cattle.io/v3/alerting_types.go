@@ -345,6 +345,8 @@ type NotifierStatus struct {
 
 // HTTPClientConfig configures an HTTP client.
 type HTTPClientConfig struct {
+	// PANDARIA The bearer token for the targets.
+	BearerToken string `json:"bearer_token,omitempty"`
 	// HTTP proxy server to use to connect to the targets.
 	ProxyURL string `json:"proxyUrl,omitempty"`
 }
