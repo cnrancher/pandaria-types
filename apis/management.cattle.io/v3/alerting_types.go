@@ -62,7 +62,7 @@ type ProjectAlertSpec struct {
 type Recipient struct {
 	Recipient    string `json:"recipient,omitempty"`
 	NotifierName string `json:"notifierName,omitempty" norman:"required,type=reference[notifier]"`
-	NotifierType string `json:"notifierType,omitempty" norman:"required,options=slack|email|pagerduty|webhook|wechat|dingtalk|msteams|aliyunsms"`
+	NotifierType string `json:"notifierType,omitempty" norman:"required,options=slack|email|pagerduty|webhook|wechat|dingtalk|msteams|aliyunsms|servicenow"`
 }
 
 type TargetNode struct {
@@ -260,29 +260,31 @@ type Notifier struct {
 type NotifierSpec struct {
 	ClusterName string `json:"clusterName" norman:"type=reference[cluster]"`
 
-	DisplayName     string           `json:"displayName,omitempty" norman:"required"`
-	Description     string           `json:"description,omitempty"`
-	SendResolved    bool             `json:"sendResolved,omitempty"`
-	SMTPConfig      *SMTPConfig      `json:"smtpConfig,omitempty"`
-	SlackConfig     *SlackConfig     `json:"slackConfig,omitempty"`
-	PagerdutyConfig *PagerdutyConfig `json:"pagerdutyConfig,omitempty"`
-	WebhookConfig   *WebhookConfig   `json:"webhookConfig,omitempty"`
-	WechatConfig    *WechatConfig    `json:"wechatConfig,omitempty"`
-	DingtalkConfig  *DingtalkConfig  `json:"dingtalkConfig,omitempty"`
-	MSTeamsConfig   *MSTeamsConfig   `json:"msteamsConfig,omitempty"`
-	AliyunSMSConfig *AliyunSMSConfig `json:"aliyunsmsConfig,omitempty"`
+	DisplayName      string            `json:"displayName,omitempty" norman:"required"`
+	Description      string            `json:"description,omitempty"`
+	SendResolved     bool              `json:"sendResolved,omitempty"`
+	SMTPConfig       *SMTPConfig       `json:"smtpConfig,omitempty"`
+	SlackConfig      *SlackConfig      `json:"slackConfig,omitempty"`
+	PagerdutyConfig  *PagerdutyConfig  `json:"pagerdutyConfig,omitempty"`
+	WebhookConfig    *WebhookConfig    `json:"webhookConfig,omitempty"`
+	WechatConfig     *WechatConfig     `json:"wechatConfig,omitempty"`
+	DingtalkConfig   *DingtalkConfig   `json:"dingtalkConfig,omitempty"`
+	MSTeamsConfig    *MSTeamsConfig    `json:"msteamsConfig,omitempty"`
+	AliyunSMSConfig  *AliyunSMSConfig  `json:"aliyunsmsConfig,omitempty"`
+	ServiceNowConfig *ServiceNowConfig `json:"servicenowConfig,omitempty"`
 }
 
 type Notification struct {
-	Message         string           `json:"message,omitempty"`
-	SMTPConfig      *SMTPConfig      `json:"smtpConfig,omitempty"`
-	SlackConfig     *SlackConfig     `json:"slackConfig,omitempty"`
-	PagerdutyConfig *PagerdutyConfig `json:"pagerdutyConfig,omitempty"`
-	WebhookConfig   *WebhookConfig   `json:"webhookConfig,omitempty"`
-	WechatConfig    *WechatConfig    `json:"wechatConfig,omitempty"`
-	DingtalkConfig  *DingtalkConfig  `json:"dingtalkConfig,omitempty"`
-	MSTeamsConfig   *MSTeamsConfig   `json:"msteamsConfig,omitempty"`
-	AliyunSMSConfig *AliyunSMSConfig `json:"aliyunsmsConfig,omitempty"`
+	Message          string            `json:"message,omitempty"`
+	SMTPConfig       *SMTPConfig       `json:"smtpConfig,omitempty"`
+	SlackConfig      *SlackConfig      `json:"slackConfig,omitempty"`
+	PagerdutyConfig  *PagerdutyConfig  `json:"pagerdutyConfig,omitempty"`
+	WebhookConfig    *WebhookConfig    `json:"webhookConfig,omitempty"`
+	WechatConfig     *WechatConfig     `json:"wechatConfig,omitempty"`
+	DingtalkConfig   *DingtalkConfig   `json:"dingtalkConfig,omitempty"`
+	MSTeamsConfig    *MSTeamsConfig    `json:"msteamsConfig,omitempty"`
+	AliyunSMSConfig  *AliyunSMSConfig  `json:"aliyunsmsConfig,omitempty"`
+	ServiceNowConfig *ServiceNowConfig `json:"servicenowConfig,omitempty"`
 }
 
 type SMTPConfig struct {
@@ -340,11 +342,25 @@ type WechatConfig struct {
 	*HTTPClientConfig
 }
 
+// ServiceNowConfig Support serviceNow
+type ServiceNowConfig struct {
+	URL string `json:"url,omitempty" norman:"required"`
+	*HTTPClientConfig
+}
+
 type NotifierStatus struct {
+}
+
+// BasicAuth contains basic HTTP authentication credentials.
+type BasicAuth struct {
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
 }
 
 // HTTPClientConfig configures an HTTP client.
 type HTTPClientConfig struct {
+	// PANDARIA The basic auth info for the targets.
+	BasicAuth *BasicAuth `json:"basic_auth,omitempty"`
 	// PANDARIA The bearer token for the targets.
 	BearerToken string `json:"bearer_token,omitempty"`
 	// HTTP proxy server to use to connect to the targets.
