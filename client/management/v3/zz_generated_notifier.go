@@ -22,6 +22,7 @@ const (
 	NotifierFieldRemoved              = "removed"
 	NotifierFieldSMTPConfig           = "smtpConfig"
 	NotifierFieldSendResolved         = "sendResolved"
+	NotifierFieldServiceNowConfig     = "servicenowConfig"
 	NotifierFieldSlackConfig          = "slackConfig"
 	NotifierFieldState                = "state"
 	NotifierFieldStatus               = "status"
@@ -50,6 +51,7 @@ type Notifier struct {
 	Removed              string            `json:"removed,omitempty" yaml:"removed,omitempty"`
 	SMTPConfig           *SMTPConfig       `json:"smtpConfig,omitempty" yaml:"smtpConfig,omitempty"`
 	SendResolved         bool              `json:"sendResolved,omitempty" yaml:"sendResolved,omitempty"`
+	ServiceNowConfig     *ServiceNowConfig `json:"servicenowConfig,omitempty" yaml:"servicenowConfig,omitempty"`
 	SlackConfig          *SlackConfig      `json:"slackConfig,omitempty" yaml:"slackConfig,omitempty"`
 	State                string            `json:"state,omitempty" yaml:"state,omitempty"`
 	Status               *NotifierStatus   `json:"status,omitempty" yaml:"status,omitempty"`

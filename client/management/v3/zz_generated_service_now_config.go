@@ -1,14 +1,14 @@
 package client
 
 const (
-	WebhookConfigType             = "webhookConfig"
-	WebhookConfigFieldBasicAuth   = "basic_auth"
-	WebhookConfigFieldBearerToken = "bearer_token"
-	WebhookConfigFieldProxyURL    = "proxyUrl"
-	WebhookConfigFieldURL         = "url"
+	ServiceNowConfigType             = "serviceNowConfig"
+	ServiceNowConfigFieldBasicAuth   = "basic_auth"
+	ServiceNowConfigFieldBearerToken = "bearer_token"
+	ServiceNowConfigFieldProxyURL    = "proxyUrl"
+	ServiceNowConfigFieldURL         = "url"
 )
 
-type WebhookConfig struct {
+type ServiceNowConfig struct {
 	BasicAuth   *BasicAuth `json:"basic_auth,omitempty" yaml:"basic_auth,omitempty"`
 	BearerToken string     `json:"bearer_token,omitempty" yaml:"bearer_token,omitempty"`
 	ProxyURL    string     `json:"proxyUrl,omitempty" yaml:"proxyUrl,omitempty"`
