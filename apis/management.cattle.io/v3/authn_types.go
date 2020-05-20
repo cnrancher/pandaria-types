@@ -348,3 +348,34 @@ type OKTAConfig struct {
 type AuthSystemImages struct {
 	KubeAPIAuth string `json:"kubeAPIAuth,omitempty"`
 }
+
+// Pandaria: cas support
+
+type CASConfig struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	AuthConfig        `json:",inline" mapstructure:",squash"`
+
+	Hostname          string `json:"hostname,omitempty" norman:"required"`
+	Port              string `json:"port,omitempty" norman:"default=80" norman:"required"`
+	TLS               bool   `json:"tls,omitempty" norman:"notnullable,default=false" norman:"required"`
+	ConnectionTimeout int64  `json:"connectionTimeout,omitempty" norman:"default=5000,notnullable,required"`
+	Service           string `json:"service,omitempty" norman:"required"`
+	LoginEndpoint     string `json:"loginEndpoint,omitempty" norman:"default=/cas/login" norman:"required"`             // default = /cas/login
+	LogoutEndpoint    string `json:"logoutEndpoint,omitempty" norman:"default=/cas/logout" norman:"required"`           // default = /cas/logout
+	ServiceValidate   string `json:"serviceValidate,omitempty" norman:"default=/cas/serviceValidate" norman:"required"` // default = /cas/serviceValidate
+}
+
+type CASTestAndApplyInput struct {
+	CASConfig `json:"casConfig,omitempty"`
+	Ticket    string `json:"ticket,omitempty"`
+	Enabled   bool   `json:"enabled,omitempty"`
+}
+
+type CASConfigTestOutput struct {
+	RedirectURL string `json:"redirectUrl"`
+}
+
+type CASLogoutOutput struct {
+	LogoutURL string `json:"logoutUrl"`
+}
