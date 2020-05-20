@@ -593,7 +593,29 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 			schema.ResourceMethods = []string{http.MethodGet, http.MethodPut}
 		}).
 		MustImport(&Version, v3.GoogleOauthConfigApplyInput{}).
-		MustImport(&Version, v3.GoogleOauthConfigTestOutput{})
+		MustImport(&Version, v3.GoogleOauthConfigTestOutput{}).
+		// Pandaria cas support
+		MustImportAndCustomize(&Version, v3.CASConfig{}, func(schema *types.Schema) {
+			schema.BaseType = "authConfig"
+			schema.ResourceActions = map[string]types.Action{
+				"disable": {},
+				"configureTest": {
+					Input:  "casConfig",
+					Output: "casConfigTestOutput",
+				},
+				"testAndApply": {
+					Input: "casTestAndApplyInput",
+				},
+				"logout": {
+					Output: "casLogoutOutput",
+				},
+			}
+			schema.CollectionMethods = []string{}
+			schema.ResourceMethods = []string{http.MethodGet, http.MethodPut}
+		}).
+		MustImport(&Version, v3.CASTestAndApplyInput{}).
+		MustImport(&Version, v3.CASConfigTestOutput{}).
+		MustImport(&Version, v3.CASLogoutOutput{})
 }
 
 func configSchema(schema *types.Schema) {

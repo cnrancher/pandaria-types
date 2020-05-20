@@ -119,3 +119,19 @@ type SamlLoginInput struct {
 type SamlLoginOutput struct {
 	IdpRedirectURL string `json:"idpRedirectUrl"`
 }
+
+// Pandaria: cas support
+
+type CASProvider struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+	AuthProvider      `json:",inline"`
+
+	RedirectURL string `json:"redirectUrl"`
+	LogoutURL   string `json:"logoutUrl"`
+}
+
+type CASLogin struct {
+	GenericLogin `json:",inline"`
+	Ticket       string `json:"ticket" norman:"type=string,required"`
+}
