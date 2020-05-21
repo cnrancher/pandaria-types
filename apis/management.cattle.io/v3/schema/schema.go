@@ -606,16 +606,12 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 				"testAndApply": {
 					Input: "casTestAndApplyInput",
 				},
-				"logout": {
-					Output: "casLogoutOutput",
-				},
 			}
 			schema.CollectionMethods = []string{}
 			schema.ResourceMethods = []string{http.MethodGet, http.MethodPut}
 		}).
 		MustImport(&Version, v3.CASTestAndApplyInput{}).
-		MustImport(&Version, v3.CASConfigTestOutput{}).
-		MustImport(&Version, v3.CASLogoutOutput{})
+		MustImport(&Version, v3.CASConfigTestOutput{})
 }
 
 func configSchema(schema *types.Schema) {
