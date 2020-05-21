@@ -375,7 +375,3 @@ type CASTestAndApplyInput struct {
 type CASConfigTestOutput struct {
 	RedirectURL string `json:"redirectUrl"`
 }
-
-type CASLogoutOutput struct {
-	LogoutURL string `json:"logoutUrl"`
-}
