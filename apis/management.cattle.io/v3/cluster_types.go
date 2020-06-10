@@ -102,6 +102,7 @@ type ClusterSpecBase struct {
 	LocalClusterAuthEndpoint             LocalClusterAuthEndpoint       `json:"localClusterAuthEndpoint,omitempty"`
 	EnableGPUManagement                  bool                           `json:"enableGPUManagement" norman:"default=false"`
 	GPUSchedulerNodePort                 string                         `json:"gpuSchedulerNodePort" norman:"default=32666"`
+	SystemDefaultRegistry                string                         `json:"systemDefaultRegistry,omitempty"` // PANDARIA
 }
 
 type ClusterSpec struct {
