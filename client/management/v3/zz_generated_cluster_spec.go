@@ -27,6 +27,7 @@ const (
 	ClusterSpecFieldInternal                            = "internal"
 	ClusterSpecFieldLocalClusterAuthEndpoint            = "localClusterAuthEndpoint"
 	ClusterSpecFieldRancherKubernetesEngineConfig       = "rancherKubernetesEngineConfig"
+	ClusterSpecFieldSystemDefaultRegistry               = "systemDefaultRegistry"
 	ClusterSpecFieldWindowsPreferedCluster              = "windowsPreferedCluster"
 )
 
@@ -56,5 +57,6 @@ type ClusterSpec struct {
 	Internal                            bool                           `json:"internal,omitempty" yaml:"internal,omitempty"`
 	LocalClusterAuthEndpoint            *LocalClusterAuthEndpoint      `json:"localClusterAuthEndpoint,omitempty" yaml:"localClusterAuthEndpoint,omitempty"`
 	RancherKubernetesEngineConfig       *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty" yaml:"rancherKubernetesEngineConfig,omitempty"`
+	SystemDefaultRegistry               string                         `json:"systemDefaultRegistry,omitempty" yaml:"systemDefaultRegistry,omitempty"`
 	WindowsPreferedCluster              bool                           `json:"windowsPreferedCluster,omitempty" yaml:"windowsPreferedCluster,omitempty"`
 }

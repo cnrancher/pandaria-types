@@ -53,6 +53,7 @@ const (
 	ClusterFieldRemoved                              = "removed"
 	ClusterFieldRequested                            = "requested"
 	ClusterFieldState                                = "state"
+	ClusterFieldSystemDefaultRegistry                = "systemDefaultRegistry"
 	ClusterFieldTransitioning                        = "transitioning"
 	ClusterFieldTransitioningMessage                 = "transitioningMessage"
 	ClusterFieldUUID                                 = "uuid"
@@ -109,6 +110,7 @@ type Cluster struct {
 	Removed                              string                         `json:"removed,omitempty" yaml:"removed,omitempty"`
 	Requested                            map[string]string              `json:"requested,omitempty" yaml:"requested,omitempty"`
 	State                                string                         `json:"state,omitempty" yaml:"state,omitempty"`
+	SystemDefaultRegistry                string                         `json:"systemDefaultRegistry,omitempty" yaml:"systemDefaultRegistry,omitempty"`
 	Transitioning                        string                         `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
 	TransitioningMessage                 string                         `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
 	UUID                                 string                         `json:"uuid,omitempty" yaml:"uuid,omitempty"`

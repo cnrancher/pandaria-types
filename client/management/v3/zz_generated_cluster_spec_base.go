@@ -15,6 +15,7 @@ const (
 	ClusterSpecBaseFieldGPUSchedulerNodePort                = "gpuSchedulerNodePort"
 	ClusterSpecBaseFieldLocalClusterAuthEndpoint            = "localClusterAuthEndpoint"
 	ClusterSpecBaseFieldRancherKubernetesEngineConfig       = "rancherKubernetesEngineConfig"
+	ClusterSpecBaseFieldSystemDefaultRegistry               = "systemDefaultRegistry"
 	ClusterSpecBaseFieldWindowsPreferedCluster              = "windowsPreferedCluster"
 )
 
@@ -32,5 +33,6 @@ type ClusterSpecBase struct {
 	GPUSchedulerNodePort                string                         `json:"gpuSchedulerNodePort,omitempty" yaml:"gpuSchedulerNodePort,omitempty"`
 	LocalClusterAuthEndpoint            *LocalClusterAuthEndpoint      `json:"localClusterAuthEndpoint,omitempty" yaml:"localClusterAuthEndpoint,omitempty"`
 	RancherKubernetesEngineConfig       *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty" yaml:"rancherKubernetesEngineConfig,omitempty"`
+	SystemDefaultRegistry               string                         `json:"systemDefaultRegistry,omitempty" yaml:"systemDefaultRegistry,omitempty"`
 	WindowsPreferedCluster              bool                           `json:"windowsPreferedCluster,omitempty" yaml:"windowsPreferedCluster,omitempty"`
 }
