@@ -65,6 +65,7 @@ const (
 	ClusterConditionMonitoringEnabled          condition.Cond = "MonitoringEnabled"
 	ClusterConditionAlertingEnabled            condition.Cond = "AlertingEnabled"
 	ClusterConditionGPUManagementEnabled       condition.Cond = "GPUManagementEnabled"
+	ClusterConditionDualStackEnabled           condition.Cond = "DualStackEnabled"
 
 	ClusterDriverImported = "imported"
 	ClusterDriverLocal    = "local"
@@ -102,7 +103,8 @@ type ClusterSpecBase struct {
 	LocalClusterAuthEndpoint             LocalClusterAuthEndpoint       `json:"localClusterAuthEndpoint,omitempty"`
 	EnableGPUManagement                  bool                           `json:"enableGPUManagement" norman:"default=false"`
 	GPUSchedulerNodePort                 string                         `json:"gpuSchedulerNodePort" norman:"default=32666"`
-	SystemDefaultRegistry                string                         `json:"systemDefaultRegistry,omitempty"` // PANDARIA
+	SystemDefaultRegistry                string                         `json:"systemDefaultRegistry,omitempty"`        // PANDARIA
+	EnableDualStack                      bool                           `json:"enableDualStack" norman:"default=false"` // PANDARIA
 }
 
 type ClusterSpec struct {

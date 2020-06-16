@@ -18,6 +18,7 @@ const (
 	ClusterSpecFieldDockerRootDir                       = "dockerRootDir"
 	ClusterSpecFieldEnableClusterAlerting               = "enableClusterAlerting"
 	ClusterSpecFieldEnableClusterMonitoring             = "enableClusterMonitoring"
+	ClusterSpecFieldEnableDualStack                     = "enableDualStack"
 	ClusterSpecFieldEnableGPUManagement                 = "enableGPUManagement"
 	ClusterSpecFieldEnableNetworkPolicy                 = "enableNetworkPolicy"
 	ClusterSpecFieldGPUSchedulerNodePort                = "gpuSchedulerNodePort"
@@ -48,6 +49,7 @@ type ClusterSpec struct {
 	DockerRootDir                       string                         `json:"dockerRootDir,omitempty" yaml:"dockerRootDir,omitempty"`
 	EnableClusterAlerting               bool                           `json:"enableClusterAlerting,omitempty" yaml:"enableClusterAlerting,omitempty"`
 	EnableClusterMonitoring             bool                           `json:"enableClusterMonitoring,omitempty" yaml:"enableClusterMonitoring,omitempty"`
+	EnableDualStack                     bool                           `json:"enableDualStack,omitempty" yaml:"enableDualStack,omitempty"`
 	EnableGPUManagement                 bool                           `json:"enableGPUManagement,omitempty" yaml:"enableGPUManagement,omitempty"`
 	EnableNetworkPolicy                 *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
 	GPUSchedulerNodePort                string                         `json:"gpuSchedulerNodePort,omitempty" yaml:"gpuSchedulerNodePort,omitempty"`
