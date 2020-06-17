@@ -6,8 +6,11 @@ const (
 	ProjectLoggingSpecFieldDisplayName           = "displayName"
 	ProjectLoggingSpecFieldElasticsearchConfig   = "elasticsearchConfig"
 	ProjectLoggingSpecFieldEnableJSONParsing     = "enableJSONParsing"
+	ProjectLoggingSpecFieldEnableMultiLineFilter = "enableMultiLineFilter"
 	ProjectLoggingSpecFieldFluentForwarderConfig = "fluentForwarderConfig"
 	ProjectLoggingSpecFieldKafkaConfig           = "kafkaConfig"
+	ProjectLoggingSpecFieldMultiLineEndRegexp    = "multiLineEndRegexp"
+	ProjectLoggingSpecFieldMultiLineStartRegexp  = "multiLineStartRegexp"
 	ProjectLoggingSpecFieldOutputFlushInterval   = "outputFlushInterval"
 	ProjectLoggingSpecFieldOutputTags            = "outputTags"
 	ProjectLoggingSpecFieldProjectID             = "projectId"
@@ -20,8 +23,11 @@ type ProjectLoggingSpec struct {
 	DisplayName           string                 `json:"displayName,omitempty" yaml:"displayName,omitempty"`
 	ElasticsearchConfig   *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearchConfig,omitempty"`
 	EnableJSONParsing     bool                   `json:"enableJSONParsing,omitempty" yaml:"enableJSONParsing,omitempty"`
+	EnableMultiLineFilter bool                   `json:"enableMultiLineFilter,omitempty" yaml:"enableMultiLineFilter,omitempty"`
 	FluentForwarderConfig *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluentForwarderConfig,omitempty"`
 	KafkaConfig           *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafkaConfig,omitempty"`
+	MultiLineEndRegexp    string                 `json:"multiLineEndRegexp,omitempty" yaml:"multiLineEndRegexp,omitempty"`
+	MultiLineStartRegexp  string                 `json:"multiLineStartRegexp,omitempty" yaml:"multiLineStartRegexp,omitempty"`
 	OutputFlushInterval   int64                  `json:"outputFlushInterval,omitempty" yaml:"outputFlushInterval,omitempty"`
 	OutputTags            map[string]string      `json:"outputTags,omitempty" yaml:"outputTags,omitempty"`
 	ProjectID             string                 `json:"projectId,omitempty" yaml:"projectId,omitempty"`
