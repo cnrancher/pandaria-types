@@ -16,6 +16,7 @@ const (
 	CronJobFieldCronJobStatus                 = "cronJobStatus"
 	CronJobFieldDNSConfig                     = "dnsConfig"
 	CronJobFieldDNSPolicy                     = "dnsPolicy"
+	CronJobFieldDescription                   = "description"
 	CronJobFieldEnableServiceLinks            = "enableServiceLinks"
 	CronJobFieldEphemeralContainers           = "ephemeralContainers"
 	CronJobFieldFsgid                         = "fsgid"
@@ -74,6 +75,7 @@ type CronJob struct {
 	CronJobStatus                 *CronJobStatus                 `json:"cronJobStatus,omitempty" yaml:"cronJobStatus,omitempty"`
 	DNSConfig                     *PodDNSConfig                  `json:"dnsConfig,omitempty" yaml:"dnsConfig,omitempty"`
 	DNSPolicy                     string                         `json:"dnsPolicy,omitempty" yaml:"dnsPolicy,omitempty"`
+	Description                   string                         `json:"description,omitempty" yaml:"description,omitempty"`
 	EnableServiceLinks            *bool                          `json:"enableServiceLinks,omitempty" yaml:"enableServiceLinks,omitempty"`
 	EphemeralContainers           []EphemeralContainer           `json:"ephemeralContainers,omitempty" yaml:"ephemeralContainers,omitempty"`
 	Fsgid                         *int64                         `json:"fsgid,omitempty" yaml:"fsgid,omitempty"`

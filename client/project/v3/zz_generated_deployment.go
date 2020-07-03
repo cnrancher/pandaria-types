@@ -16,6 +16,7 @@ const (
 	DeploymentFieldDNSPolicy                     = "dnsPolicy"
 	DeploymentFieldDeploymentConfig              = "deploymentConfig"
 	DeploymentFieldDeploymentStatus              = "deploymentStatus"
+	DeploymentFieldDescription                   = "description"
 	DeploymentFieldEnableServiceLinks            = "enableServiceLinks"
 	DeploymentFieldEphemeralContainers           = "ephemeralContainers"
 	DeploymentFieldFsgid                         = "fsgid"
@@ -75,6 +76,7 @@ type Deployment struct {
 	DNSPolicy                     string                         `json:"dnsPolicy,omitempty" yaml:"dnsPolicy,omitempty"`
 	DeploymentConfig              *DeploymentConfig              `json:"deploymentConfig,omitempty" yaml:"deploymentConfig,omitempty"`
 	DeploymentStatus              *DeploymentStatus              `json:"deploymentStatus,omitempty" yaml:"deploymentStatus,omitempty"`
+	Description                   string                         `json:"description,omitempty" yaml:"description,omitempty"`
 	EnableServiceLinks            *bool                          `json:"enableServiceLinks,omitempty" yaml:"enableServiceLinks,omitempty"`
 	EphemeralContainers           []EphemeralContainer           `json:"ephemeralContainers,omitempty" yaml:"ephemeralContainers,omitempty"`
 	Fsgid                         *int64                         `json:"fsgid,omitempty" yaml:"fsgid,omitempty"`
