@@ -53,7 +53,13 @@ var (
 )
 
 func configMapTypes(schemas *types.Schemas) *types.Schemas {
-	return schemas.MustImport(&Version, v1.ConfigMap{}, projectOverride{})
+	return schemas.
+		AddMapperForType(&Version, v1.ConfigMap{},
+			&m.AnnotationField{Field: "description"},
+		).
+		MustImport(&Version, v1.ConfigMap{}, projectOverride{}, struct {
+			Description string `json:"description"`
+		}{})
 }
 
 type DeploymentConfig struct {
@@ -177,6 +183,7 @@ func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
 				From: "status",
 				To:   "statefulSetStatus",
 			},
+			&m.AnnotationField{Field: "description"},
 			NewWorkloadTypeMapper(),
 		).
 		MustImport(&Version, k8sappv1.StatefulSetSpec{}, statefulSetConfigOverride{}).
@@ -189,6 +196,7 @@ func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
 				return field
 			})
 		}, projectOverride{}, struct {
+			Description     string `json:"description"`
 			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
 			WorkloadMetrics string `json:"workloadMetrics" norman:"type=array[workloadMetric]"`
 		}{})
@@ -297,6 +305,7 @@ func daemonSetTypes(schemas *types.Schemas) *types.Schemas {
 				From: "status",
 				To:   "daemonSetStatus",
 			},
+			&m.AnnotationField{Field: "description"},
 			NewWorkloadTypeMapper(),
 		).
 		MustImport(&Version, k8sappv1.DaemonSetSpec{}, daemonSetOverride{}).
@@ -309,6 +318,7 @@ func daemonSetTypes(schemas *types.Schemas) *types.Schemas {
 				return field
 			})
 		}, projectOverride{}, struct {
+			Description     string `json:"description"`
 			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
 			WorkloadMetrics string `json:"workloadMetrics" norman:"type=array[workloadMetric]"`
 		}{})
@@ -334,6 +344,7 @@ func jobTypes(schemas *types.Schemas) *types.Schemas {
 				From: "status",
 				To:   "jobStatus",
 			},
+			&m.AnnotationField{Field: "description"},
 			NewWorkloadTypeMapper(),
 		).
 		MustImport(&Version, batchv1.JobSpec{}, jobOverride{}).
@@ -346,6 +357,7 @@ func jobTypes(schemas *types.Schemas) *types.Schemas {
 				return field
 			})
 		}, projectOverride{}, struct {
+			Description     string `json:"description"`
 			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
 			WorkloadMetrics string `json:"workloadMetrics" norman:"type=array[workloadMetric]"`
 		}{})
@@ -402,6 +414,7 @@ func cronJobTypes(schemas *types.Schemas) *types.Schemas {
 				From: "status",
 				To:   "cronJobStatus",
 			},
+			&m.AnnotationField{Field: "description"},
 			NewWorkloadTypeMapper(),
 		).
 		MustImport(&Version, batchv1beta1.CronJobSpec{}, cronJobOverride{}).
@@ -415,6 +428,7 @@ func cronJobTypes(schemas *types.Schemas) *types.Schemas {
 				return field
 			})
 		}, projectOverride{}, struct {
+			Description     string `json:"description"`
 			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
 			WorkloadMetrics string `json:"workloadMetrics" norman:"type=array[workloadMetric]"`
 		}{})
@@ -459,6 +473,7 @@ func deploymentTypes(schemas *types.Schemas) *types.Schemas {
 				From: "status",
 				To:   "deploymentStatus",
 			},
+			&m.AnnotationField{Field: "description"},
 			NewWorkloadTypeMapper(),
 		).
 		MustImport(&Version, k8sappv1.DeploymentSpec{}, deploymentConfigOverride{}).
@@ -479,6 +494,7 @@ func deploymentTypes(schemas *types.Schemas) *types.Schemas {
 				return field
 			})
 		}, projectOverride{}, struct {
+			Description     string `json:"description"`
 			PublicEndpoints string `json:"publicEndpoints" norman:"type=array[publicEndpoint],nocreate,noupdate"`
 			WorkloadMetrics string `json:"workloadMetrics" norman:"type=array[workloadMetric]"`
 		}{})
@@ -749,6 +765,7 @@ func volumeTypes(schemas *types.Schemas) *types.Schemas {
 		).
 		AddMapperForType(&Version, v1.PersistentVolumeClaim{},
 			mapper.PersistVolumeClaim{},
+			&m.AnnotationField{Field: "description"},
 		).
 		MustImport(&Version, v1.PersistentVolumeClaimVolumeSource{}, struct {
 			ClaimName string `norman:"type=reference[persistentVolumeClaim]"`
@@ -768,7 +785,9 @@ func volumeTypes(schemas *types.Schemas) *types.Schemas {
 			VolumeName       string   `json:"volumeName,omitempty" norman:"type=reference[/v3/cluster/persistentVolume]"`
 			StorageClassName *string  `json:"storageClassName,omitempty" norman:"type=reference[/v3/cluster/storageClass]"`
 		}{}).
-		MustImport(&Version, v1.PersistentVolumeClaim{}, projectOverride{})
+		MustImport(&Version, v1.PersistentVolumeClaim{}, projectOverride{}, struct {
+			Description string `json:"description"`
+		}{})
 }
 
 func appTypes(schema *types.Schemas) *types.Schemas {
