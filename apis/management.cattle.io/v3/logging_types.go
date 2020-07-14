@@ -38,13 +38,10 @@ type ProjectLogging struct {
 }
 
 type LoggingCommonField struct {
-	DisplayName           string            `json:"displayName,omitempty"`
-	OutputFlushInterval   int               `json:"outputFlushInterval,omitempty" norman:"default=60"`
-	OutputTags            map[string]string `json:"outputTags,omitempty"`
-	EnableJSONParsing     bool              `json:"enableJSONParsing,omitempty"`
-	EnableMultiLineFilter bool              `json:"enableMultiLineFilter,omitempty"`
-	MultiLineStartRegexp  string            `json:"multiLineStartRegexp,omitempty"`
-	MultiLineEndRegexp    string            `json:"multiLineEndRegexp,omitempty"`
+	DisplayName         string            `json:"displayName,omitempty"`
+	OutputFlushInterval int               `json:"outputFlushInterval,omitempty" norman:"default=60"`
+	OutputTags          map[string]string `json:"outputTags,omitempty"`
+	EnableJSONParsing   bool              `json:"enableJSONParsing,omitempty"`
 }
 
 type LoggingTargets struct {
@@ -182,12 +179,12 @@ type CustomTargetConfig struct {
 
 type ClusterTestInput struct {
 	ClusterName string `json:"clusterId" norman:"required,type=reference[cluster]"`
-	LoggingCommonField
 	LoggingTargets
+	OutputTags map[string]string `json:"outputTags,omitempty"`
 }
 
 type ProjectTestInput struct {
 	ProjectName string `json:"projectId" norman:"required,type=reference[project]"`
-	LoggingCommonField
 	LoggingTargets
+	OutputTags map[string]string `json:"outputTags,omitempty"`
 }
