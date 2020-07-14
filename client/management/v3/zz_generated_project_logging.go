@@ -12,12 +12,9 @@ const (
 	ProjectLoggingFieldCustomTargetConfig    = "customTargetConfig"
 	ProjectLoggingFieldElasticsearchConfig   = "elasticsearchConfig"
 	ProjectLoggingFieldEnableJSONParsing     = "enableJSONParsing"
-	ProjectLoggingFieldEnableMultiLineFilter = "enableMultiLineFilter"
 	ProjectLoggingFieldFluentForwarderConfig = "fluentForwarderConfig"
 	ProjectLoggingFieldKafkaConfig           = "kafkaConfig"
 	ProjectLoggingFieldLabels                = "labels"
-	ProjectLoggingFieldMultiLineEndRegexp    = "multiLineEndRegexp"
-	ProjectLoggingFieldMultiLineStartRegexp  = "multiLineStartRegexp"
 	ProjectLoggingFieldName                  = "name"
 	ProjectLoggingFieldNamespaceId           = "namespaceId"
 	ProjectLoggingFieldOutputFlushInterval   = "outputFlushInterval"
@@ -42,12 +39,9 @@ type ProjectLogging struct {
 	CustomTargetConfig    *CustomTargetConfig    `json:"customTargetConfig,omitempty" yaml:"customTargetConfig,omitempty"`
 	ElasticsearchConfig   *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearchConfig,omitempty"`
 	EnableJSONParsing     bool                   `json:"enableJSONParsing,omitempty" yaml:"enableJSONParsing,omitempty"`
-	EnableMultiLineFilter bool                   `json:"enableMultiLineFilter,omitempty" yaml:"enableMultiLineFilter,omitempty"`
 	FluentForwarderConfig *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluentForwarderConfig,omitempty"`
 	KafkaConfig           *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafkaConfig,omitempty"`
 	Labels                map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
-	MultiLineEndRegexp    string                 `json:"multiLineEndRegexp,omitempty" yaml:"multiLineEndRegexp,omitempty"`
-	MultiLineStartRegexp  string                 `json:"multiLineStartRegexp,omitempty" yaml:"multiLineStartRegexp,omitempty"`
 	Name                  string                 `json:"name,omitempty" yaml:"name,omitempty"`
 	NamespaceId           string                 `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
 	OutputFlushInterval   int64                  `json:"outputFlushInterval,omitempty" yaml:"outputFlushInterval,omitempty"`
