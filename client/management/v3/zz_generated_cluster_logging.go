@@ -15,14 +15,11 @@ const (
 	ClusterLoggingFieldCustomTargetConfig     = "customTargetConfig"
 	ClusterLoggingFieldElasticsearchConfig    = "elasticsearchConfig"
 	ClusterLoggingFieldEnableJSONParsing      = "enableJSONParsing"
-	ClusterLoggingFieldEnableMultiLineFilter  = "enableMultiLineFilter"
 	ClusterLoggingFieldFailedSpec             = "failedSpec"
 	ClusterLoggingFieldFluentForwarderConfig  = "fluentForwarderConfig"
 	ClusterLoggingFieldIncludeSystemComponent = "includeSystemComponent"
 	ClusterLoggingFieldKafkaConfig            = "kafkaConfig"
 	ClusterLoggingFieldLabels                 = "labels"
-	ClusterLoggingFieldMultiLineEndRegexp     = "multiLineEndRegexp"
-	ClusterLoggingFieldMultiLineStartRegexp   = "multiLineStartRegexp"
 	ClusterLoggingFieldName                   = "name"
 	ClusterLoggingFieldNamespaceId            = "namespaceId"
 	ClusterLoggingFieldOutputFlushInterval    = "outputFlushInterval"
@@ -48,14 +45,11 @@ type ClusterLogging struct {
 	CustomTargetConfig     *CustomTargetConfig    `json:"customTargetConfig,omitempty" yaml:"customTargetConfig,omitempty"`
 	ElasticsearchConfig    *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearchConfig,omitempty"`
 	EnableJSONParsing      bool                   `json:"enableJSONParsing,omitempty" yaml:"enableJSONParsing,omitempty"`
-	EnableMultiLineFilter  bool                   `json:"enableMultiLineFilter,omitempty" yaml:"enableMultiLineFilter,omitempty"`
 	FailedSpec             *ClusterLoggingSpec    `json:"failedSpec,omitempty" yaml:"failedSpec,omitempty"`
 	FluentForwarderConfig  *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluentForwarderConfig,omitempty"`
 	IncludeSystemComponent *bool                  `json:"includeSystemComponent,omitempty" yaml:"includeSystemComponent,omitempty"`
 	KafkaConfig            *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafkaConfig,omitempty"`
 	Labels                 map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
-	MultiLineEndRegexp     string                 `json:"multiLineEndRegexp,omitempty" yaml:"multiLineEndRegexp,omitempty"`
-	MultiLineStartRegexp   string                 `json:"multiLineStartRegexp,omitempty" yaml:"multiLineStartRegexp,omitempty"`
 	Name                   string                 `json:"name,omitempty" yaml:"name,omitempty"`
 	NamespaceId            string                 `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
 	OutputFlushInterval    int64                  `json:"outputFlushInterval,omitempty" yaml:"outputFlushInterval,omitempty"`
