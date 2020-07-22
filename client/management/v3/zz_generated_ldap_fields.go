@@ -12,6 +12,7 @@ const (
 	LdapFieldsFieldGroupSearchAttribute            = "groupSearchAttribute"
 	LdapFieldsFieldGroupSearchBase                 = "groupSearchBase"
 	LdapFieldsFieldGroupSearchFilter               = "groupSearchFilter"
+	LdapFieldsFieldGroupUniqueIDAttribute          = "groupUniqueIdAttribute"
 	LdapFieldsFieldNestedGroupMembershipEnabled    = "nestedGroupMembershipEnabled"
 	LdapFieldsFieldPort                            = "port"
 	LdapFieldsFieldServers                         = "servers"
@@ -27,6 +28,7 @@ const (
 	LdapFieldsFieldUserSearchAttribute             = "userSearchAttribute"
 	LdapFieldsFieldUserSearchBase                  = "userSearchBase"
 	LdapFieldsFieldUserSearchFilter                = "userSearchFilter"
+	LdapFieldsFieldUserUniqueIDAttribute           = "userUniqueIdAttribute"
 )
 
 type LdapFields struct {
@@ -40,6 +42,7 @@ type LdapFields struct {
 	GroupSearchAttribute            string   `json:"groupSearchAttribute,omitempty" yaml:"groupSearchAttribute,omitempty"`
 	GroupSearchBase                 string   `json:"groupSearchBase,omitempty" yaml:"groupSearchBase,omitempty"`
 	GroupSearchFilter               string   `json:"groupSearchFilter,omitempty" yaml:"groupSearchFilter,omitempty"`
+	GroupUniqueIDAttribute          string   `json:"groupUniqueIdAttribute,omitempty" yaml:"groupUniqueIdAttribute,omitempty"`
 	NestedGroupMembershipEnabled    bool     `json:"nestedGroupMembershipEnabled,omitempty" yaml:"nestedGroupMembershipEnabled,omitempty"`
 	Port                            int64    `json:"port,omitempty" yaml:"port,omitempty"`
 	Servers                         []string `json:"servers,omitempty" yaml:"servers,omitempty"`
@@ -55,4 +58,5 @@ type LdapFields struct {
 	UserSearchAttribute             string   `json:"userSearchAttribute,omitempty" yaml:"userSearchAttribute,omitempty"`
 	UserSearchBase                  string   `json:"userSearchBase,omitempty" yaml:"userSearchBase,omitempty"`
 	UserSearchFilter                string   `json:"userSearchFilter,omitempty" yaml:"userSearchFilter,omitempty"`
+	UserUniqueIDAttribute           string   `json:"userUniqueIdAttribute,omitempty" yaml:"userUniqueIdAttribute,omitempty"`
 }

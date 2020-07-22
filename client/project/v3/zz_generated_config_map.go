@@ -11,6 +11,7 @@ const (
 	ConfigMapFieldCreated         = "created"
 	ConfigMapFieldCreatorID       = "creatorId"
 	ConfigMapFieldData            = "data"
+	ConfigMapFieldDescription     = "description"
 	ConfigMapFieldImmutable       = "immutable"
 	ConfigMapFieldLabels          = "labels"
 	ConfigMapFieldName            = "name"
@@ -28,6 +29,7 @@ type ConfigMap struct {
 	Created         string            `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID       string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	Data            map[string]string `json:"data,omitempty" yaml:"data,omitempty"`
+	Description     string            `json:"description,omitempty" yaml:"description,omitempty"`
 	Immutable       *bool             `json:"immutable,omitempty" yaml:"immutable,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name            string            `json:"name,omitempty" yaml:"name,omitempty"`

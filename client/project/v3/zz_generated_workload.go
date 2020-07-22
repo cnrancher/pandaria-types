@@ -20,6 +20,7 @@ const (
 	WorkloadFieldDaemonSetStatus               = "daemonSetStatus"
 	WorkloadFieldDeploymentConfig              = "deploymentConfig"
 	WorkloadFieldDeploymentStatus              = "deploymentStatus"
+	WorkloadFieldDescription                   = "description"
 	WorkloadFieldEnableServiceLinks            = "enableServiceLinks"
 	WorkloadFieldEphemeralContainers           = "ephemeralContainers"
 	WorkloadFieldFSGroupChangePolicy           = "fsGroupChangePolicy"
@@ -93,6 +94,7 @@ type Workload struct {
 	DaemonSetStatus               *DaemonSetStatus               `json:"daemonSetStatus,omitempty" yaml:"daemonSetStatus,omitempty"`
 	DeploymentConfig              *DeploymentConfig              `json:"deploymentConfig,omitempty" yaml:"deploymentConfig,omitempty"`
 	DeploymentStatus              *DeploymentStatus              `json:"deploymentStatus,omitempty" yaml:"deploymentStatus,omitempty"`
+	Description                   string                         `json:"description,omitempty" yaml:"description,omitempty"`
 	EnableServiceLinks            *bool                          `json:"enableServiceLinks,omitempty" yaml:"enableServiceLinks,omitempty"`
 	EphemeralContainers           []EphemeralContainer           `json:"ephemeralContainers,omitempty" yaml:"ephemeralContainers,omitempty"`
 	FSGroupChangePolicy           string                         `json:"fsGroupChangePolicy,omitempty" yaml:"fsGroupChangePolicy,omitempty"`

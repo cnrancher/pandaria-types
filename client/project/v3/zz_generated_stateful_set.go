@@ -14,6 +14,7 @@ const (
 	StatefulSetFieldCreatorID                     = "creatorId"
 	StatefulSetFieldDNSConfig                     = "dnsConfig"
 	StatefulSetFieldDNSPolicy                     = "dnsPolicy"
+	StatefulSetFieldDescription                   = "description"
 	StatefulSetFieldEnableServiceLinks            = "enableServiceLinks"
 	StatefulSetFieldEphemeralContainers           = "ephemeralContainers"
 	StatefulSetFieldFSGroupChangePolicy           = "fsGroupChangePolicy"
@@ -73,6 +74,7 @@ type StatefulSet struct {
 	CreatorID                     string                         `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	DNSConfig                     *PodDNSConfig                  `json:"dnsConfig,omitempty" yaml:"dnsConfig,omitempty"`
 	DNSPolicy                     string                         `json:"dnsPolicy,omitempty" yaml:"dnsPolicy,omitempty"`
+	Description                   string                         `json:"description,omitempty" yaml:"description,omitempty"`
 	EnableServiceLinks            *bool                          `json:"enableServiceLinks,omitempty" yaml:"enableServiceLinks,omitempty"`
 	EphemeralContainers           []EphemeralContainer           `json:"ephemeralContainers,omitempty" yaml:"ephemeralContainers,omitempty"`
 	FSGroupChangePolicy           string                         `json:"fsGroupChangePolicy,omitempty" yaml:"fsGroupChangePolicy,omitempty"`

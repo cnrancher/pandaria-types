@@ -38,8 +38,11 @@ const (
 	ClusterFieldDriver                               = "driver"
 	ClusterFieldEnableClusterAlerting                = "enableClusterAlerting"
 	ClusterFieldEnableClusterMonitoring              = "enableClusterMonitoring"
+	ClusterFieldEnableDualStack                      = "enableDualStack"
+	ClusterFieldEnableGPUManagement                  = "enableGPUManagement"
 	ClusterFieldEnableNetworkPolicy                  = "enableNetworkPolicy"
 	ClusterFieldFailedSpec                           = "failedSpec"
+	ClusterFieldGPUSchedulerNodePort                 = "gpuSchedulerNodePort"
 	ClusterFieldImportedConfig                       = "importedConfig"
 	ClusterFieldInternal                             = "internal"
 	ClusterFieldIstioEnabled                         = "istioEnabled"
@@ -58,6 +61,7 @@ const (
 	ClusterFieldScheduledClusterScan                 = "scheduledClusterScan"
 	ClusterFieldScheduledClusterScanStatus           = "scheduledClusterScanStatus"
 	ClusterFieldState                                = "state"
+	ClusterFieldSystemDefaultRegistry                = "systemDefaultRegistry"
 	ClusterFieldTransitioning                        = "transitioning"
 	ClusterFieldTransitioningMessage                 = "transitioningMessage"
 	ClusterFieldUUID                                 = "uuid"
@@ -99,8 +103,11 @@ type Cluster struct {
 	Driver                               string                         `json:"driver,omitempty" yaml:"driver,omitempty"`
 	EnableClusterAlerting                bool                           `json:"enableClusterAlerting,omitempty" yaml:"enableClusterAlerting,omitempty"`
 	EnableClusterMonitoring              bool                           `json:"enableClusterMonitoring,omitempty" yaml:"enableClusterMonitoring,omitempty"`
+	EnableDualStack                      bool                           `json:"enableDualStack,omitempty" yaml:"enableDualStack,omitempty"`
+	EnableGPUManagement                  bool                           `json:"enableGPUManagement,omitempty" yaml:"enableGPUManagement,omitempty"`
 	EnableNetworkPolicy                  *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
 	FailedSpec                           *ClusterSpec                   `json:"failedSpec,omitempty" yaml:"failedSpec,omitempty"`
+	GPUSchedulerNodePort                 string                         `json:"gpuSchedulerNodePort,omitempty" yaml:"gpuSchedulerNodePort,omitempty"`
 	ImportedConfig                       *ImportedConfig                `json:"importedConfig,omitempty" yaml:"importedConfig,omitempty"`
 	Internal                             bool                           `json:"internal,omitempty" yaml:"internal,omitempty"`
 	IstioEnabled                         bool                           `json:"istioEnabled,omitempty" yaml:"istioEnabled,omitempty"`
@@ -119,6 +126,7 @@ type Cluster struct {
 	ScheduledClusterScan                 *ScheduledClusterScan          `json:"scheduledClusterScan,omitempty" yaml:"scheduledClusterScan,omitempty"`
 	ScheduledClusterScanStatus           *ScheduledClusterScanStatus    `json:"scheduledClusterScanStatus,omitempty" yaml:"scheduledClusterScanStatus,omitempty"`
 	State                                string                         `json:"state,omitempty" yaml:"state,omitempty"`
+	SystemDefaultRegistry                string                         `json:"systemDefaultRegistry,omitempty" yaml:"systemDefaultRegistry,omitempty"`
 	Transitioning                        string                         `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
 	TransitioningMessage                 string                         `json:"transitioningMessage,omitempty" yaml:"transitioningMessage,omitempty"`
 	UUID                                 string                         `json:"uuid,omitempty" yaml:"uuid,omitempty"`

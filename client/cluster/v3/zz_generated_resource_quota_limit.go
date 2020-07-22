@@ -9,6 +9,8 @@ const (
 	ResourceQuotaLimitFieldPods                   = "pods"
 	ResourceQuotaLimitFieldReplicationControllers = "replicationControllers"
 	ResourceQuotaLimitFieldRequestsCPU            = "requestsCpu"
+	ResourceQuotaLimitFieldRequestsGPUCount       = "requestsGpuCount"
+	ResourceQuotaLimitFieldRequestsGPUMemory      = "requestsGpuMemory"
 	ResourceQuotaLimitFieldRequestsMemory         = "requestsMemory"
 	ResourceQuotaLimitFieldRequestsStorage        = "requestsStorage"
 	ResourceQuotaLimitFieldSecrets                = "secrets"
@@ -25,6 +27,8 @@ type ResourceQuotaLimit struct {
 	Pods                   string `json:"pods,omitempty" yaml:"pods,omitempty"`
 	ReplicationControllers string `json:"replicationControllers,omitempty" yaml:"replicationControllers,omitempty"`
 	RequestsCPU            string `json:"requestsCpu,omitempty" yaml:"requestsCpu,omitempty"`
+	RequestsGPUCount       string `json:"requestsGpuCount,omitempty" yaml:"requestsGpuCount,omitempty"`
+	RequestsGPUMemory      string `json:"requestsGpuMemory,omitempty" yaml:"requestsGpuMemory,omitempty"`
 	RequestsMemory         string `json:"requestsMemory,omitempty" yaml:"requestsMemory,omitempty"`
 	RequestsStorage        string `json:"requestsStorage,omitempty" yaml:"requestsStorage,omitempty"`
 	Secrets                string `json:"secrets,omitempty" yaml:"secrets,omitempty"`
