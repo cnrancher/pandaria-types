@@ -16,9 +16,9 @@ const (
 	DeploymentFieldDNSPolicy                     = "dnsPolicy"
 	DeploymentFieldDeploymentConfig              = "deploymentConfig"
 	DeploymentFieldDeploymentStatus              = "deploymentStatus"
-	DeploymentFieldDescription                   = "description"
 	DeploymentFieldEnableServiceLinks            = "enableServiceLinks"
 	DeploymentFieldEphemeralContainers           = "ephemeralContainers"
+	DeploymentFieldFSGroupChangePolicy           = "fsGroupChangePolicy"
 	DeploymentFieldFsgid                         = "fsgid"
 	DeploymentFieldGids                          = "gids"
 	DeploymentFieldHostAliases                   = "hostAliases"
@@ -76,9 +76,9 @@ type Deployment struct {
 	DNSPolicy                     string                         `json:"dnsPolicy,omitempty" yaml:"dnsPolicy,omitempty"`
 	DeploymentConfig              *DeploymentConfig              `json:"deploymentConfig,omitempty" yaml:"deploymentConfig,omitempty"`
 	DeploymentStatus              *DeploymentStatus              `json:"deploymentStatus,omitempty" yaml:"deploymentStatus,omitempty"`
-	Description                   string                         `json:"description,omitempty" yaml:"description,omitempty"`
 	EnableServiceLinks            *bool                          `json:"enableServiceLinks,omitempty" yaml:"enableServiceLinks,omitempty"`
 	EphemeralContainers           []EphemeralContainer           `json:"ephemeralContainers,omitempty" yaml:"ephemeralContainers,omitempty"`
+	FSGroupChangePolicy           string                         `json:"fsGroupChangePolicy,omitempty" yaml:"fsGroupChangePolicy,omitempty"`
 	Fsgid                         *int64                         `json:"fsgid,omitempty" yaml:"fsgid,omitempty"`
 	Gids                          []int64                        `json:"gids,omitempty" yaml:"gids,omitempty"`
 	HostAliases                   []HostAlias                    `json:"hostAliases,omitempty" yaml:"hostAliases,omitempty"`
@@ -136,6 +136,7 @@ type DeploymentClient struct {
 
 type DeploymentOperations interface {
 	List(opts *types.ListOpts) (*DeploymentCollection, error)
+	ListAll(opts *types.ListOpts) (*DeploymentCollection, error)
 	Create(opts *Deployment) (*Deployment, error)
 	Update(existing *Deployment, updates interface{}) (*Deployment, error)
 	Replace(existing *Deployment) (*Deployment, error)
@@ -143,6 +144,8 @@ type DeploymentOperations interface {
 	Delete(container *Deployment) error
 
 	ActionPause(resource *Deployment) error
+
+	ActionRedeploy(resource *Deployment) error
 
 	ActionResume(resource *Deployment) error
 
@@ -180,6 +183,24 @@ func (c *DeploymentClient) List(opts *types.ListOpts) (*DeploymentCollection, er
 	return resp, err
 }
 
+func (c *DeploymentClient) ListAll(opts *types.ListOpts) (*DeploymentCollection, error) {
+	resp := &DeploymentCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for next, err := resp.Next(); next != nil && err == nil; next, err = next.Next() {
+		data = append(data, next.Data...)
+		resp = next
+		resp.Data = data
+	}
+	if err != nil {
+		return resp, err
+	}
+	return resp, err
+}
+
 func (cc *DeploymentCollection) Next() (*DeploymentCollection, error) {
 	if cc != nil && cc.Pagination != nil && cc.Pagination.Next != "" {
 		resp := &DeploymentCollection{}
@@ -202,6 +223,11 @@ func (c *DeploymentClient) Delete(container *Deployment) error {
 
 func (c *DeploymentClient) ActionPause(resource *Deployment) error {
 	err := c.apiClient.Ops.DoAction(DeploymentType, "pause", &resource.Resource, nil, nil)
+	return err
+}
+
+func (c *DeploymentClient) ActionRedeploy(resource *Deployment) error {
+	err := c.apiClient.Ops.DoAction(DeploymentType, "redeploy", &resource.Resource, nil, nil)
 	return err
 }
 

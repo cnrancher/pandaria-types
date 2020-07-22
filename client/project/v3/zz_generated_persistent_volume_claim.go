@@ -11,7 +11,6 @@ const (
 	PersistentVolumeClaimFieldCreated              = "created"
 	PersistentVolumeClaimFieldCreatorID            = "creatorId"
 	PersistentVolumeClaimFieldDataSource           = "dataSource"
-	PersistentVolumeClaimFieldDescription          = "description"
 	PersistentVolumeClaimFieldLabels               = "labels"
 	PersistentVolumeClaimFieldName                 = "name"
 	PersistentVolumeClaimFieldNamespaceId          = "namespaceId"
@@ -37,7 +36,6 @@ type PersistentVolumeClaim struct {
 	Created              string                       `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID            string                       `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	DataSource           *TypedLocalObjectReference   `json:"dataSource,omitempty" yaml:"dataSource,omitempty"`
-	Description          string                       `json:"description,omitempty" yaml:"description,omitempty"`
 	Labels               map[string]string            `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                 string                       `json:"name,omitempty" yaml:"name,omitempty"`
 	NamespaceId          string                       `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
@@ -68,6 +66,7 @@ type PersistentVolumeClaimClient struct {
 
 type PersistentVolumeClaimOperations interface {
 	List(opts *types.ListOpts) (*PersistentVolumeClaimCollection, error)
+	ListAll(opts *types.ListOpts) (*PersistentVolumeClaimCollection, error)
 	Create(opts *PersistentVolumeClaim) (*PersistentVolumeClaim, error)
 	Update(existing *PersistentVolumeClaim, updates interface{}) (*PersistentVolumeClaim, error)
 	Replace(existing *PersistentVolumeClaim) (*PersistentVolumeClaim, error)
@@ -103,6 +102,24 @@ func (c *PersistentVolumeClaimClient) List(opts *types.ListOpts) (*PersistentVol
 	resp := &PersistentVolumeClaimCollection{}
 	err := c.apiClient.Ops.DoList(PersistentVolumeClaimType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *PersistentVolumeClaimClient) ListAll(opts *types.ListOpts) (*PersistentVolumeClaimCollection, error) {
+	resp := &PersistentVolumeClaimCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for next, err := resp.Next(); next != nil && err == nil; next, err = next.Next() {
+		data = append(data, next.Data...)
+		resp = next
+		resp.Data = data
+	}
+	if err != nil {
+		return resp, err
+	}
 	return resp, err
 }
 

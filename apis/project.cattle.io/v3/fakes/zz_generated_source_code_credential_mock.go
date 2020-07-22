@@ -6,6 +6,7 @@ package fakes
 import (
 	context "context"
 	sync "sync"
+	time "time"
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
@@ -145,6 +146,7 @@ var (
 	lockSourceCodeCredentialControllerMockAddFeatureHandler              sync.RWMutex
 	lockSourceCodeCredentialControllerMockAddHandler                     sync.RWMutex
 	lockSourceCodeCredentialControllerMockEnqueue                        sync.RWMutex
+	lockSourceCodeCredentialControllerMockEnqueueAfter                   sync.RWMutex
 	lockSourceCodeCredentialControllerMockGeneric                        sync.RWMutex
 	lockSourceCodeCredentialControllerMockInformer                       sync.RWMutex
 	lockSourceCodeCredentialControllerMockLister                         sync.RWMutex
@@ -176,6 +178,9 @@ var _ v3.SourceCodeCredentialController = &SourceCodeCredentialControllerMock{}
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
 // 	               panic("mock out the Enqueue method")
+//             },
+//             EnqueueAfterFunc: func(namespace string, name string, after time.Duration)  {
+// 	               panic("mock out the EnqueueAfter method")
 //             },
 //             GenericFunc: func() controller.GenericController {
 // 	               panic("mock out the Generic method")
@@ -213,6 +218,9 @@ type SourceCodeCredentialControllerMock struct {
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
+
+	// EnqueueAfterFunc mocks the EnqueueAfter method.
+	EnqueueAfterFunc func(namespace string, name string, after time.Duration)
 
 	// GenericFunc mocks the Generic method.
 	GenericFunc func() controller.GenericController
@@ -281,6 +289,15 @@ type SourceCodeCredentialControllerMock struct {
 			Namespace string
 			// Name is the name argument value.
 			Name string
+		}
+		// EnqueueAfter holds details about calls to the EnqueueAfter method.
+		EnqueueAfter []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
+			// Name is the name argument value.
+			Name string
+			// After is the after argument value.
+			After time.Duration
 		}
 		// Generic holds details about calls to the Generic method.
 		Generic []struct {
@@ -513,6 +530,45 @@ func (mock *SourceCodeCredentialControllerMock) EnqueueCalls() []struct {
 	return calls
 }
 
+// EnqueueAfter calls EnqueueAfterFunc.
+func (mock *SourceCodeCredentialControllerMock) EnqueueAfter(namespace string, name string, after time.Duration) {
+	if mock.EnqueueAfterFunc == nil {
+		panic("SourceCodeCredentialControllerMock.EnqueueAfterFunc: method is nil but SourceCodeCredentialController.EnqueueAfter was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}{
+		Namespace: namespace,
+		Name:      name,
+		After:     after,
+	}
+	lockSourceCodeCredentialControllerMockEnqueueAfter.Lock()
+	mock.calls.EnqueueAfter = append(mock.calls.EnqueueAfter, callInfo)
+	lockSourceCodeCredentialControllerMockEnqueueAfter.Unlock()
+	mock.EnqueueAfterFunc(namespace, name, after)
+}
+
+// EnqueueAfterCalls gets all the calls that were made to EnqueueAfter.
+// Check the length with:
+//     len(mockedSourceCodeCredentialController.EnqueueAfterCalls())
+func (mock *SourceCodeCredentialControllerMock) EnqueueAfterCalls() []struct {
+	Namespace string
+	Name      string
+	After     time.Duration
+} {
+	var calls []struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}
+	lockSourceCodeCredentialControllerMockEnqueueAfter.RLock()
+	calls = mock.calls.EnqueueAfter
+	lockSourceCodeCredentialControllerMockEnqueueAfter.RUnlock()
+	return calls
+}
+
 // Generic calls GenericFunc.
 func (mock *SourceCodeCredentialControllerMock) Generic() controller.GenericController {
 	if mock.GenericFunc == nil {
@@ -674,6 +730,7 @@ var (
 	lockSourceCodeCredentialInterfaceMockGet                              sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockGetNamespaced                    sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockList                             sync.RWMutex
+	lockSourceCodeCredentialInterfaceMockListNamespaced                   sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockObjectClient                     sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockUpdate                           sync.RWMutex
 	lockSourceCodeCredentialInterfaceMockWatch                            sync.RWMutex
@@ -736,6 +793,9 @@ var _ v3.SourceCodeCredentialInterface = &SourceCodeCredentialInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v3.SourceCodeCredentialList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v3.SourceCodeCredentialList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -800,6 +860,9 @@ type SourceCodeCredentialInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v3.SourceCodeCredentialList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v3.SourceCodeCredentialList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -949,6 +1012,13 @@ type SourceCodeCredentialInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1580,6 +1650,41 @@ func (mock *SourceCodeCredentialInterfaceMock) ListCalls() []struct {
 	lockSourceCodeCredentialInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockSourceCodeCredentialInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *SourceCodeCredentialInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v3.SourceCodeCredentialList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("SourceCodeCredentialInterfaceMock.ListNamespacedFunc: method is nil but SourceCodeCredentialInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockSourceCodeCredentialInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockSourceCodeCredentialInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedSourceCodeCredentialInterface.ListNamespacedCalls())
+func (mock *SourceCodeCredentialInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockSourceCodeCredentialInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockSourceCodeCredentialInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

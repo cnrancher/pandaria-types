@@ -6,6 +6,7 @@ package fakes
 import (
 	context "context"
 	sync "sync"
+	time "time"
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
@@ -145,6 +146,7 @@ var (
 	lockDockerCredentialControllerMockAddFeatureHandler              sync.RWMutex
 	lockDockerCredentialControllerMockAddHandler                     sync.RWMutex
 	lockDockerCredentialControllerMockEnqueue                        sync.RWMutex
+	lockDockerCredentialControllerMockEnqueueAfter                   sync.RWMutex
 	lockDockerCredentialControllerMockGeneric                        sync.RWMutex
 	lockDockerCredentialControllerMockInformer                       sync.RWMutex
 	lockDockerCredentialControllerMockLister                         sync.RWMutex
@@ -176,6 +178,9 @@ var _ v3.DockerCredentialController = &DockerCredentialControllerMock{}
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
 // 	               panic("mock out the Enqueue method")
+//             },
+//             EnqueueAfterFunc: func(namespace string, name string, after time.Duration)  {
+// 	               panic("mock out the EnqueueAfter method")
 //             },
 //             GenericFunc: func() controller.GenericController {
 // 	               panic("mock out the Generic method")
@@ -213,6 +218,9 @@ type DockerCredentialControllerMock struct {
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
+
+	// EnqueueAfterFunc mocks the EnqueueAfter method.
+	EnqueueAfterFunc func(namespace string, name string, after time.Duration)
 
 	// GenericFunc mocks the Generic method.
 	GenericFunc func() controller.GenericController
@@ -281,6 +289,15 @@ type DockerCredentialControllerMock struct {
 			Namespace string
 			// Name is the name argument value.
 			Name string
+		}
+		// EnqueueAfter holds details about calls to the EnqueueAfter method.
+		EnqueueAfter []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
+			// Name is the name argument value.
+			Name string
+			// After is the after argument value.
+			After time.Duration
 		}
 		// Generic holds details about calls to the Generic method.
 		Generic []struct {
@@ -513,6 +530,45 @@ func (mock *DockerCredentialControllerMock) EnqueueCalls() []struct {
 	return calls
 }
 
+// EnqueueAfter calls EnqueueAfterFunc.
+func (mock *DockerCredentialControllerMock) EnqueueAfter(namespace string, name string, after time.Duration) {
+	if mock.EnqueueAfterFunc == nil {
+		panic("DockerCredentialControllerMock.EnqueueAfterFunc: method is nil but DockerCredentialController.EnqueueAfter was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}{
+		Namespace: namespace,
+		Name:      name,
+		After:     after,
+	}
+	lockDockerCredentialControllerMockEnqueueAfter.Lock()
+	mock.calls.EnqueueAfter = append(mock.calls.EnqueueAfter, callInfo)
+	lockDockerCredentialControllerMockEnqueueAfter.Unlock()
+	mock.EnqueueAfterFunc(namespace, name, after)
+}
+
+// EnqueueAfterCalls gets all the calls that were made to EnqueueAfter.
+// Check the length with:
+//     len(mockedDockerCredentialController.EnqueueAfterCalls())
+func (mock *DockerCredentialControllerMock) EnqueueAfterCalls() []struct {
+	Namespace string
+	Name      string
+	After     time.Duration
+} {
+	var calls []struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}
+	lockDockerCredentialControllerMockEnqueueAfter.RLock()
+	calls = mock.calls.EnqueueAfter
+	lockDockerCredentialControllerMockEnqueueAfter.RUnlock()
+	return calls
+}
+
 // Generic calls GenericFunc.
 func (mock *DockerCredentialControllerMock) Generic() controller.GenericController {
 	if mock.GenericFunc == nil {
@@ -674,6 +730,7 @@ var (
 	lockDockerCredentialInterfaceMockGet                              sync.RWMutex
 	lockDockerCredentialInterfaceMockGetNamespaced                    sync.RWMutex
 	lockDockerCredentialInterfaceMockList                             sync.RWMutex
+	lockDockerCredentialInterfaceMockListNamespaced                   sync.RWMutex
 	lockDockerCredentialInterfaceMockObjectClient                     sync.RWMutex
 	lockDockerCredentialInterfaceMockUpdate                           sync.RWMutex
 	lockDockerCredentialInterfaceMockWatch                            sync.RWMutex
@@ -736,6 +793,9 @@ var _ v3.DockerCredentialInterface = &DockerCredentialInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v3.DockerCredentialList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v3.DockerCredentialList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -800,6 +860,9 @@ type DockerCredentialInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v3.DockerCredentialList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v3.DockerCredentialList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -949,6 +1012,13 @@ type DockerCredentialInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1580,6 +1650,41 @@ func (mock *DockerCredentialInterfaceMock) ListCalls() []struct {
 	lockDockerCredentialInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockDockerCredentialInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *DockerCredentialInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v3.DockerCredentialList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("DockerCredentialInterfaceMock.ListNamespacedFunc: method is nil but DockerCredentialInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockDockerCredentialInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockDockerCredentialInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedDockerCredentialInterface.ListNamespacedCalls())
+func (mock *DockerCredentialInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockDockerCredentialInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockDockerCredentialInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

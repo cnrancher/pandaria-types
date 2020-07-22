@@ -14,9 +14,9 @@ const (
 	JobFieldCreatorID                     = "creatorId"
 	JobFieldDNSConfig                     = "dnsConfig"
 	JobFieldDNSPolicy                     = "dnsPolicy"
-	JobFieldDescription                   = "description"
 	JobFieldEnableServiceLinks            = "enableServiceLinks"
 	JobFieldEphemeralContainers           = "ephemeralContainers"
+	JobFieldFSGroupChangePolicy           = "fsGroupChangePolicy"
 	JobFieldFsgid                         = "fsgid"
 	JobFieldGids                          = "gids"
 	JobFieldHostAliases                   = "hostAliases"
@@ -73,9 +73,9 @@ type Job struct {
 	CreatorID                     string                         `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	DNSConfig                     *PodDNSConfig                  `json:"dnsConfig,omitempty" yaml:"dnsConfig,omitempty"`
 	DNSPolicy                     string                         `json:"dnsPolicy,omitempty" yaml:"dnsPolicy,omitempty"`
-	Description                   string                         `json:"description,omitempty" yaml:"description,omitempty"`
 	EnableServiceLinks            *bool                          `json:"enableServiceLinks,omitempty" yaml:"enableServiceLinks,omitempty"`
 	EphemeralContainers           []EphemeralContainer           `json:"ephemeralContainers,omitempty" yaml:"ephemeralContainers,omitempty"`
+	FSGroupChangePolicy           string                         `json:"fsGroupChangePolicy,omitempty" yaml:"fsGroupChangePolicy,omitempty"`
 	Fsgid                         *int64                         `json:"fsgid,omitempty" yaml:"fsgid,omitempty"`
 	Gids                          []int64                        `json:"gids,omitempty" yaml:"gids,omitempty"`
 	HostAliases                   []HostAlias                    `json:"hostAliases,omitempty" yaml:"hostAliases,omitempty"`
@@ -134,6 +134,7 @@ type JobClient struct {
 
 type JobOperations interface {
 	List(opts *types.ListOpts) (*JobCollection, error)
+	ListAll(opts *types.ListOpts) (*JobCollection, error)
 	Create(opts *Job) (*Job, error)
 	Update(existing *Job, updates interface{}) (*Job, error)
 	Replace(existing *Job) (*Job, error)
@@ -169,6 +170,24 @@ func (c *JobClient) List(opts *types.ListOpts) (*JobCollection, error) {
 	resp := &JobCollection{}
 	err := c.apiClient.Ops.DoList(JobType, opts, resp)
 	resp.client = c
+	return resp, err
+}
+
+func (c *JobClient) ListAll(opts *types.ListOpts) (*JobCollection, error) {
+	resp := &JobCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for next, err := resp.Next(); next != nil && err == nil; next, err = next.Next() {
+		data = append(data, next.Data...)
+		resp = next
+		resp.Data = data
+	}
+	if err != nil {
+		return resp, err
+	}
 	return resp, err
 }
 

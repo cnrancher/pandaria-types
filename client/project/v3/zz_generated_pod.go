@@ -17,6 +17,7 @@ const (
 	PodFieldDescription                   = "description"
 	PodFieldEnableServiceLinks            = "enableServiceLinks"
 	PodFieldEphemeralContainers           = "ephemeralContainers"
+	PodFieldFSGroupChangePolicy           = "fsGroupChangePolicy"
 	PodFieldFsgid                         = "fsgid"
 	PodFieldGids                          = "gids"
 	PodFieldHostAliases                   = "hostAliases"
@@ -72,6 +73,7 @@ type Pod struct {
 	Description                   string                         `json:"description,omitempty" yaml:"description,omitempty"`
 	EnableServiceLinks            *bool                          `json:"enableServiceLinks,omitempty" yaml:"enableServiceLinks,omitempty"`
 	EphemeralContainers           []EphemeralContainer           `json:"ephemeralContainers,omitempty" yaml:"ephemeralContainers,omitempty"`
+	FSGroupChangePolicy           string                         `json:"fsGroupChangePolicy,omitempty" yaml:"fsGroupChangePolicy,omitempty"`
 	Fsgid                         *int64                         `json:"fsgid,omitempty" yaml:"fsgid,omitempty"`
 	Gids                          []int64                        `json:"gids,omitempty" yaml:"gids,omitempty"`
 	HostAliases                   []HostAlias                    `json:"hostAliases,omitempty" yaml:"hostAliases,omitempty"`
@@ -126,13 +128,12 @@ type PodClient struct {
 
 type PodOperations interface {
 	List(opts *types.ListOpts) (*PodCollection, error)
+	ListAll(opts *types.ListOpts) (*PodCollection, error)
 	Create(opts *Pod) (*Pod, error)
 	Update(existing *Pod, updates interface{}) (*Pod, error)
 	Replace(existing *Pod) (*Pod, error)
 	ByID(id string) (*Pod, error)
 	Delete(container *Pod) error
-
-	ActionDownload(resource *Pod, input *PodFileDownloadInput) (*PodFileDownloadOutput, error)
 }
 
 func newPodClient(apiClient *Client) *PodClient {
@@ -166,6 +167,24 @@ func (c *PodClient) List(opts *types.ListOpts) (*PodCollection, error) {
 	return resp, err
 }
 
+func (c *PodClient) ListAll(opts *types.ListOpts) (*PodCollection, error) {
+	resp := &PodCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for next, err := resp.Next(); next != nil && err == nil; next, err = next.Next() {
+		data = append(data, next.Data...)
+		resp = next
+		resp.Data = data
+	}
+	if err != nil {
+		return resp, err
+	}
+	return resp, err
+}
+
 func (cc *PodCollection) Next() (*PodCollection, error) {
 	if cc != nil && cc.Pagination != nil && cc.Pagination.Next != "" {
 		resp := &PodCollection{}
@@ -184,10 +203,4 @@ func (c *PodClient) ByID(id string) (*Pod, error) {
 
 func (c *PodClient) Delete(container *Pod) error {
 	return c.apiClient.Ops.DoResourceDelete(PodType, &container.Resource)
-}
-
-func (c *PodClient) ActionDownload(resource *Pod, input *PodFileDownloadInput) (*PodFileDownloadOutput, error) {
-	resp := &PodFileDownloadOutput{}
-	err := c.apiClient.Ops.DoAction(PodType, "download", &resource.Resource, input, resp)
-	return resp, err
 }

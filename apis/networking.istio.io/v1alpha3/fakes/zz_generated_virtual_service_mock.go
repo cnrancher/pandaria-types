@@ -6,6 +6,7 @@ package fakes
 import (
 	context "context"
 	sync "sync"
+	time "time"
 
 	v1alpha3 "github.com/knative/pkg/apis/istio/v1alpha3"
 	controller "github.com/rancher/norman/controller"
@@ -146,6 +147,7 @@ var (
 	lockVirtualServiceControllerMockAddFeatureHandler              sync.RWMutex
 	lockVirtualServiceControllerMockAddHandler                     sync.RWMutex
 	lockVirtualServiceControllerMockEnqueue                        sync.RWMutex
+	lockVirtualServiceControllerMockEnqueueAfter                   sync.RWMutex
 	lockVirtualServiceControllerMockGeneric                        sync.RWMutex
 	lockVirtualServiceControllerMockInformer                       sync.RWMutex
 	lockVirtualServiceControllerMockLister                         sync.RWMutex
@@ -177,6 +179,9 @@ var _ v1alpha3a.VirtualServiceController = &VirtualServiceControllerMock{}
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
 // 	               panic("mock out the Enqueue method")
+//             },
+//             EnqueueAfterFunc: func(namespace string, name string, after time.Duration)  {
+// 	               panic("mock out the EnqueueAfter method")
 //             },
 //             GenericFunc: func() controller.GenericController {
 // 	               panic("mock out the Generic method")
@@ -214,6 +219,9 @@ type VirtualServiceControllerMock struct {
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
+
+	// EnqueueAfterFunc mocks the EnqueueAfter method.
+	EnqueueAfterFunc func(namespace string, name string, after time.Duration)
 
 	// GenericFunc mocks the Generic method.
 	GenericFunc func() controller.GenericController
@@ -282,6 +290,15 @@ type VirtualServiceControllerMock struct {
 			Namespace string
 			// Name is the name argument value.
 			Name string
+		}
+		// EnqueueAfter holds details about calls to the EnqueueAfter method.
+		EnqueueAfter []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
+			// Name is the name argument value.
+			Name string
+			// After is the after argument value.
+			After time.Duration
 		}
 		// Generic holds details about calls to the Generic method.
 		Generic []struct {
@@ -514,6 +531,45 @@ func (mock *VirtualServiceControllerMock) EnqueueCalls() []struct {
 	return calls
 }
 
+// EnqueueAfter calls EnqueueAfterFunc.
+func (mock *VirtualServiceControllerMock) EnqueueAfter(namespace string, name string, after time.Duration) {
+	if mock.EnqueueAfterFunc == nil {
+		panic("VirtualServiceControllerMock.EnqueueAfterFunc: method is nil but VirtualServiceController.EnqueueAfter was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}{
+		Namespace: namespace,
+		Name:      name,
+		After:     after,
+	}
+	lockVirtualServiceControllerMockEnqueueAfter.Lock()
+	mock.calls.EnqueueAfter = append(mock.calls.EnqueueAfter, callInfo)
+	lockVirtualServiceControllerMockEnqueueAfter.Unlock()
+	mock.EnqueueAfterFunc(namespace, name, after)
+}
+
+// EnqueueAfterCalls gets all the calls that were made to EnqueueAfter.
+// Check the length with:
+//     len(mockedVirtualServiceController.EnqueueAfterCalls())
+func (mock *VirtualServiceControllerMock) EnqueueAfterCalls() []struct {
+	Namespace string
+	Name      string
+	After     time.Duration
+} {
+	var calls []struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}
+	lockVirtualServiceControllerMockEnqueueAfter.RLock()
+	calls = mock.calls.EnqueueAfter
+	lockVirtualServiceControllerMockEnqueueAfter.RUnlock()
+	return calls
+}
+
 // Generic calls GenericFunc.
 func (mock *VirtualServiceControllerMock) Generic() controller.GenericController {
 	if mock.GenericFunc == nil {
@@ -675,6 +731,7 @@ var (
 	lockVirtualServiceInterfaceMockGet                              sync.RWMutex
 	lockVirtualServiceInterfaceMockGetNamespaced                    sync.RWMutex
 	lockVirtualServiceInterfaceMockList                             sync.RWMutex
+	lockVirtualServiceInterfaceMockListNamespaced                   sync.RWMutex
 	lockVirtualServiceInterfaceMockObjectClient                     sync.RWMutex
 	lockVirtualServiceInterfaceMockUpdate                           sync.RWMutex
 	lockVirtualServiceInterfaceMockWatch                            sync.RWMutex
@@ -737,6 +794,9 @@ var _ v1alpha3a.VirtualServiceInterface = &VirtualServiceInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -801,6 +861,9 @@ type VirtualServiceInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -950,6 +1013,13 @@ type VirtualServiceInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1581,6 +1651,41 @@ func (mock *VirtualServiceInterfaceMock) ListCalls() []struct {
 	lockVirtualServiceInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockVirtualServiceInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *VirtualServiceInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v1alpha3a.VirtualServiceList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("VirtualServiceInterfaceMock.ListNamespacedFunc: method is nil but VirtualServiceInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockVirtualServiceInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockVirtualServiceInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedVirtualServiceInterface.ListNamespacedCalls())
+func (mock *VirtualServiceInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockVirtualServiceInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockVirtualServiceInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

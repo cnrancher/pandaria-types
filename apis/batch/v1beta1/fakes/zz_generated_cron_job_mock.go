@@ -6,6 +6,7 @@ package fakes
 import (
 	context "context"
 	sync "sync"
+	time "time"
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
@@ -146,6 +147,7 @@ var (
 	lockCronJobControllerMockAddFeatureHandler              sync.RWMutex
 	lockCronJobControllerMockAddHandler                     sync.RWMutex
 	lockCronJobControllerMockEnqueue                        sync.RWMutex
+	lockCronJobControllerMockEnqueueAfter                   sync.RWMutex
 	lockCronJobControllerMockGeneric                        sync.RWMutex
 	lockCronJobControllerMockInformer                       sync.RWMutex
 	lockCronJobControllerMockLister                         sync.RWMutex
@@ -177,6 +179,9 @@ var _ v1beta1a.CronJobController = &CronJobControllerMock{}
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
 // 	               panic("mock out the Enqueue method")
+//             },
+//             EnqueueAfterFunc: func(namespace string, name string, after time.Duration)  {
+// 	               panic("mock out the EnqueueAfter method")
 //             },
 //             GenericFunc: func() controller.GenericController {
 // 	               panic("mock out the Generic method")
@@ -214,6 +219,9 @@ type CronJobControllerMock struct {
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
+
+	// EnqueueAfterFunc mocks the EnqueueAfter method.
+	EnqueueAfterFunc func(namespace string, name string, after time.Duration)
 
 	// GenericFunc mocks the Generic method.
 	GenericFunc func() controller.GenericController
@@ -282,6 +290,15 @@ type CronJobControllerMock struct {
 			Namespace string
 			// Name is the name argument value.
 			Name string
+		}
+		// EnqueueAfter holds details about calls to the EnqueueAfter method.
+		EnqueueAfter []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
+			// Name is the name argument value.
+			Name string
+			// After is the after argument value.
+			After time.Duration
 		}
 		// Generic holds details about calls to the Generic method.
 		Generic []struct {
@@ -514,6 +531,45 @@ func (mock *CronJobControllerMock) EnqueueCalls() []struct {
 	return calls
 }
 
+// EnqueueAfter calls EnqueueAfterFunc.
+func (mock *CronJobControllerMock) EnqueueAfter(namespace string, name string, after time.Duration) {
+	if mock.EnqueueAfterFunc == nil {
+		panic("CronJobControllerMock.EnqueueAfterFunc: method is nil but CronJobController.EnqueueAfter was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}{
+		Namespace: namespace,
+		Name:      name,
+		After:     after,
+	}
+	lockCronJobControllerMockEnqueueAfter.Lock()
+	mock.calls.EnqueueAfter = append(mock.calls.EnqueueAfter, callInfo)
+	lockCronJobControllerMockEnqueueAfter.Unlock()
+	mock.EnqueueAfterFunc(namespace, name, after)
+}
+
+// EnqueueAfterCalls gets all the calls that were made to EnqueueAfter.
+// Check the length with:
+//     len(mockedCronJobController.EnqueueAfterCalls())
+func (mock *CronJobControllerMock) EnqueueAfterCalls() []struct {
+	Namespace string
+	Name      string
+	After     time.Duration
+} {
+	var calls []struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}
+	lockCronJobControllerMockEnqueueAfter.RLock()
+	calls = mock.calls.EnqueueAfter
+	lockCronJobControllerMockEnqueueAfter.RUnlock()
+	return calls
+}
+
 // Generic calls GenericFunc.
 func (mock *CronJobControllerMock) Generic() controller.GenericController {
 	if mock.GenericFunc == nil {
@@ -675,6 +731,7 @@ var (
 	lockCronJobInterfaceMockGet                              sync.RWMutex
 	lockCronJobInterfaceMockGetNamespaced                    sync.RWMutex
 	lockCronJobInterfaceMockList                             sync.RWMutex
+	lockCronJobInterfaceMockListNamespaced                   sync.RWMutex
 	lockCronJobInterfaceMockObjectClient                     sync.RWMutex
 	lockCronJobInterfaceMockUpdate                           sync.RWMutex
 	lockCronJobInterfaceMockWatch                            sync.RWMutex
@@ -737,6 +794,9 @@ var _ v1beta1a.CronJobInterface = &CronJobInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v1beta1a.CronJobList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v1beta1a.CronJobList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -801,6 +861,9 @@ type CronJobInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v1beta1a.CronJobList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v1beta1a.CronJobList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -950,6 +1013,13 @@ type CronJobInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1581,6 +1651,41 @@ func (mock *CronJobInterfaceMock) ListCalls() []struct {
 	lockCronJobInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockCronJobInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *CronJobInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v1beta1a.CronJobList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("CronJobInterfaceMock.ListNamespacedFunc: method is nil but CronJobInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockCronJobInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockCronJobInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedCronJobInterface.ListNamespacedCalls())
+func (mock *CronJobInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockCronJobInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockCronJobInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

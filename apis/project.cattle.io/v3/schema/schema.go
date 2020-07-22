@@ -129,8 +129,9 @@ func workloadTypes(schemas *types.Schemas) *types.Schemas {
 				"rollback": {
 					Input: "rollbackRevision",
 				},
-				"pause":  {},
-				"resume": {},
+				"pause":    {},
+				"resume":   {},
+				"redeploy": {},
 			}
 			schema.MustCustomizeField("name", func(field types.Field) types.Field {
 				field.Type = "dnsLabelRestricted"
@@ -189,6 +190,9 @@ func statefulSetTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, k8sappv1.StatefulSetSpec{}, statefulSetConfigOverride{}).
 		MustImportAndCustomize(&Version, k8sappv1.StatefulSet{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
+			schema.ResourceActions = map[string]types.Action{
+				"redeploy": {},
+			}
 			schema.MustCustomizeField("name", func(field types.Field) types.Field {
 				field.Type = "dnsLabelRestricted"
 				field.Nullable = false
@@ -226,6 +230,9 @@ func replicaSetTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, appsv1.ReplicaSetSpec{}, replicaSetConfigOverride{}).
 		MustImportAndCustomize(&Version, appsv1.ReplicaSet{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
+			schema.ResourceActions = map[string]types.Action{
+				"redeploy": {},
+			}
 			schema.MustCustomizeField("name", func(field types.Field) types.Field {
 				field.Type = "dnsLabelRestricted"
 				field.Nullable = false
@@ -264,6 +271,9 @@ func replicationControllerTypes(schemas *types.Schemas) *types.Schemas {
 			schema.BaseType = "workload"
 			schema.CollectionMethods = []string{http.MethodGet}
 			schema.ResourceMethods = []string{http.MethodGet}
+			schema.ResourceActions = map[string]types.Action{
+				"redeploy": {},
+			}
 			schema.MustCustomizeField("name", func(field types.Field) types.Field {
 				field.Type = "dnsLabelRestricted"
 				field.Nullable = false
@@ -311,6 +321,9 @@ func daemonSetTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, k8sappv1.DaemonSetSpec{}, daemonSetOverride{}).
 		MustImportAndCustomize(&Version, k8sappv1.DaemonSet{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
+			schema.ResourceActions = map[string]types.Action{
+				"redeploy": {},
+			}
 			schema.MustCustomizeField("name", func(field types.Field) types.Field {
 				field.Type = "dnsLabelRestricted"
 				field.Nullable = false
@@ -421,6 +434,9 @@ func cronJobTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, batchv1beta1.JobTemplateSpec{}).
 		MustImportAndCustomize(&Version, batchv1beta1.CronJob{}, func(schema *types.Schema) {
 			schema.BaseType = "workload"
+			schema.ResourceActions = map[string]types.Action{
+				"redeploy": {},
+			}
 			schema.MustCustomizeField("name", func(field types.Field) types.Field {
 				field.Type = "dnsLabelRestricted"
 				field.Nullable = false
@@ -484,8 +500,9 @@ func deploymentTypes(schemas *types.Schemas) *types.Schemas {
 				"rollback": {
 					Input: "deploymentRollbackInput",
 				},
-				"pause":  {},
-				"resume": {},
+				"pause":    {},
+				"resume":   {},
+				"redeploy": {},
 			}
 			schema.MustCustomizeField("name", func(field types.Field) types.Field {
 				field.Type = "dnsLabelRestricted"
@@ -1126,6 +1143,9 @@ func istioTypes(schemas *types.Schemas) *types.Schemas {
 		}{}).
 		MustImport(&Version, istiov1alpha3.VirtualService{}, projectOverride{}, struct {
 			Status interface{}
+		}{}).
+		MustImport(&Version, istiov1alpha3.ConsistentHashLB{}, struct {
+			UseSourceIP *bool `json:"useSourceIp,omitempty"`
 		}{}).
 		MustImport(&Version, istiov1alpha3.DestinationRule{}, projectOverride{}, struct {
 			Status interface{}

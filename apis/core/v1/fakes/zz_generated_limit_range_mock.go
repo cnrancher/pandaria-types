@@ -6,6 +6,7 @@ package fakes
 import (
 	context "context"
 	sync "sync"
+	time "time"
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
@@ -146,6 +147,7 @@ var (
 	lockLimitRangeControllerMockAddFeatureHandler              sync.RWMutex
 	lockLimitRangeControllerMockAddHandler                     sync.RWMutex
 	lockLimitRangeControllerMockEnqueue                        sync.RWMutex
+	lockLimitRangeControllerMockEnqueueAfter                   sync.RWMutex
 	lockLimitRangeControllerMockGeneric                        sync.RWMutex
 	lockLimitRangeControllerMockInformer                       sync.RWMutex
 	lockLimitRangeControllerMockLister                         sync.RWMutex
@@ -177,6 +179,9 @@ var _ v1a.LimitRangeController = &LimitRangeControllerMock{}
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
 // 	               panic("mock out the Enqueue method")
+//             },
+//             EnqueueAfterFunc: func(namespace string, name string, after time.Duration)  {
+// 	               panic("mock out the EnqueueAfter method")
 //             },
 //             GenericFunc: func() controller.GenericController {
 // 	               panic("mock out the Generic method")
@@ -214,6 +219,9 @@ type LimitRangeControllerMock struct {
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
+
+	// EnqueueAfterFunc mocks the EnqueueAfter method.
+	EnqueueAfterFunc func(namespace string, name string, after time.Duration)
 
 	// GenericFunc mocks the Generic method.
 	GenericFunc func() controller.GenericController
@@ -282,6 +290,15 @@ type LimitRangeControllerMock struct {
 			Namespace string
 			// Name is the name argument value.
 			Name string
+		}
+		// EnqueueAfter holds details about calls to the EnqueueAfter method.
+		EnqueueAfter []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
+			// Name is the name argument value.
+			Name string
+			// After is the after argument value.
+			After time.Duration
 		}
 		// Generic holds details about calls to the Generic method.
 		Generic []struct {
@@ -514,6 +531,45 @@ func (mock *LimitRangeControllerMock) EnqueueCalls() []struct {
 	return calls
 }
 
+// EnqueueAfter calls EnqueueAfterFunc.
+func (mock *LimitRangeControllerMock) EnqueueAfter(namespace string, name string, after time.Duration) {
+	if mock.EnqueueAfterFunc == nil {
+		panic("LimitRangeControllerMock.EnqueueAfterFunc: method is nil but LimitRangeController.EnqueueAfter was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}{
+		Namespace: namespace,
+		Name:      name,
+		After:     after,
+	}
+	lockLimitRangeControllerMockEnqueueAfter.Lock()
+	mock.calls.EnqueueAfter = append(mock.calls.EnqueueAfter, callInfo)
+	lockLimitRangeControllerMockEnqueueAfter.Unlock()
+	mock.EnqueueAfterFunc(namespace, name, after)
+}
+
+// EnqueueAfterCalls gets all the calls that were made to EnqueueAfter.
+// Check the length with:
+//     len(mockedLimitRangeController.EnqueueAfterCalls())
+func (mock *LimitRangeControllerMock) EnqueueAfterCalls() []struct {
+	Namespace string
+	Name      string
+	After     time.Duration
+} {
+	var calls []struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}
+	lockLimitRangeControllerMockEnqueueAfter.RLock()
+	calls = mock.calls.EnqueueAfter
+	lockLimitRangeControllerMockEnqueueAfter.RUnlock()
+	return calls
+}
+
 // Generic calls GenericFunc.
 func (mock *LimitRangeControllerMock) Generic() controller.GenericController {
 	if mock.GenericFunc == nil {
@@ -675,6 +731,7 @@ var (
 	lockLimitRangeInterfaceMockGet                              sync.RWMutex
 	lockLimitRangeInterfaceMockGetNamespaced                    sync.RWMutex
 	lockLimitRangeInterfaceMockList                             sync.RWMutex
+	lockLimitRangeInterfaceMockListNamespaced                   sync.RWMutex
 	lockLimitRangeInterfaceMockObjectClient                     sync.RWMutex
 	lockLimitRangeInterfaceMockUpdate                           sync.RWMutex
 	lockLimitRangeInterfaceMockWatch                            sync.RWMutex
@@ -737,6 +794,9 @@ var _ v1a.LimitRangeInterface = &LimitRangeInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1b.ListOptions) (*v1a.LimitRangeList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.LimitRangeList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -801,6 +861,9 @@ type LimitRangeInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1b.ListOptions) (*v1a.LimitRangeList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.LimitRangeList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -950,6 +1013,13 @@ type LimitRangeInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1b.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1b.ListOptions
 		}
@@ -1581,6 +1651,41 @@ func (mock *LimitRangeInterfaceMock) ListCalls() []struct {
 	lockLimitRangeInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockLimitRangeInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *LimitRangeInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.LimitRangeList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("LimitRangeInterfaceMock.ListNamespacedFunc: method is nil but LimitRangeInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockLimitRangeInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockLimitRangeInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedLimitRangeInterface.ListNamespacedCalls())
+func (mock *LimitRangeInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1b.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}
+	lockLimitRangeInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockLimitRangeInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

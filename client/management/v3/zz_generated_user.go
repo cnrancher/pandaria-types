@@ -62,6 +62,7 @@ type UserClient struct {
 
 type UserOperations interface {
 	List(opts *types.ListOpts) (*UserCollection, error)
+	ListAll(opts *types.ListOpts) (*UserCollection, error)
 	Create(opts *User) (*User, error)
 	Update(existing *User, updates interface{}) (*User, error)
 	Replace(existing *User) (*User, error)
@@ -70,19 +71,11 @@ type UserOperations interface {
 
 	ActionRefreshauthprovideraccess(resource *User) error
 
-	ActionSetharborauth(resource *User, input *SetHarborAuthInput) error
-
 	ActionSetpassword(resource *User, input *SetPasswordInput) (*User, error)
-
-	ActionUpdateharborauth(resource *User, input *UpdateHarborAuthInput) error
 
 	CollectionActionChangepassword(resource *UserCollection, input *ChangePasswordInput) error
 
 	CollectionActionRefreshauthprovideraccess(resource *UserCollection) error
-
-	CollectionActionSaveharborconfig(resource *UserCollection, input *HarborAdminAuthInput) error
-
-	CollectionActionSyncharboruser(resource *UserCollection, input *SyncHarborUser) error
 }
 
 func newUserClient(apiClient *Client) *UserClient {
@@ -116,6 +109,24 @@ func (c *UserClient) List(opts *types.ListOpts) (*UserCollection, error) {
 	return resp, err
 }
 
+func (c *UserClient) ListAll(opts *types.ListOpts) (*UserCollection, error) {
+	resp := &UserCollection{}
+	resp, err := c.List(opts)
+	if err != nil {
+		return resp, err
+	}
+	data := resp.Data
+	for next, err := resp.Next(); next != nil && err == nil; next, err = next.Next() {
+		data = append(data, next.Data...)
+		resp = next
+		resp.Data = data
+	}
+	if err != nil {
+		return resp, err
+	}
+	return resp, err
+}
+
 func (cc *UserCollection) Next() (*UserCollection, error) {
 	if cc != nil && cc.Pagination != nil && cc.Pagination.Next != "" {
 		resp := &UserCollection{}
@@ -141,20 +152,10 @@ func (c *UserClient) ActionRefreshauthprovideraccess(resource *User) error {
 	return err
 }
 
-func (c *UserClient) ActionSetharborauth(resource *User, input *SetHarborAuthInput) error {
-	err := c.apiClient.Ops.DoAction(UserType, "setharborauth", &resource.Resource, input, nil)
-	return err
-}
-
 func (c *UserClient) ActionSetpassword(resource *User, input *SetPasswordInput) (*User, error) {
 	resp := &User{}
 	err := c.apiClient.Ops.DoAction(UserType, "setpassword", &resource.Resource, input, resp)
 	return resp, err
-}
-
-func (c *UserClient) ActionUpdateharborauth(resource *User, input *UpdateHarborAuthInput) error {
-	err := c.apiClient.Ops.DoAction(UserType, "updateharborauth", &resource.Resource, input, nil)
-	return err
 }
 
 func (c *UserClient) CollectionActionChangepassword(resource *UserCollection, input *ChangePasswordInput) error {
@@ -164,15 +165,5 @@ func (c *UserClient) CollectionActionChangepassword(resource *UserCollection, in
 
 func (c *UserClient) CollectionActionRefreshauthprovideraccess(resource *UserCollection) error {
 	err := c.apiClient.Ops.DoCollectionAction(UserType, "refreshauthprovideraccess", &resource.Collection, nil, nil)
-	return err
-}
-
-func (c *UserClient) CollectionActionSaveharborconfig(resource *UserCollection, input *HarborAdminAuthInput) error {
-	err := c.apiClient.Ops.DoCollectionAction(UserType, "saveharborconfig", &resource.Collection, input, nil)
-	return err
-}
-
-func (c *UserClient) CollectionActionSyncharboruser(resource *UserCollection, input *SyncHarborUser) error {
-	err := c.apiClient.Ops.DoCollectionAction(UserType, "syncharboruser", &resource.Collection, input, nil)
 	return err
 }

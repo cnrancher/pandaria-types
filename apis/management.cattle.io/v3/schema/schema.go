@@ -47,6 +47,7 @@ var (
 		Init(mgmtSecretTypes).
 		Init(clusterTemplateTypes).
 		Init(driverMetadataTypes).
+		Init(driverMetadataCisTypes).
 		Init(encryptionTypes)
 
 	TokenSchemas = factory.Schemas(&Version).
@@ -70,7 +71,10 @@ func rkeTypes(schemas *types.Schemas) *types.Schemas {
 		).
 		MustImport(&Version, v3.ExtraEnv{}).
 		MustImport(&Version, v3.ExtraVolume{}).
-		MustImport(&Version, v3.ExtraVolumeMount{})
+		MustImport(&Version, v3.ExtraVolumeMount{}).
+		MustImport(&Version, v3.LinearAutoscalerParams{}).
+		MustImport(&Version, v3.DeploymentStrategy{}).
+		MustImport(&Version, v3.DaemonSetUpdateStrategy{})
 }
 
 func schemaTypes(schemas *types.Schemas) *types.Schemas {
@@ -105,6 +109,14 @@ func driverMetadataTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.RKEK8sSystemImage{}).
 		MustImport(&Version, v3.RKEK8sServiceOption{}).
 		MustImport(&Version, v3.RKEAddon{})
+}
+
+func driverMetadataCisTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		AddMapperForType(&Version, v3.CisConfig{}, m.Drop{Field: "namespaceId"}).
+		AddMapperForType(&Version, v3.CisBenchmarkVersion{}, m.Drop{Field: "namespaceId"}).
+		MustImport(&Version, v3.CisConfig{}).
+		MustImport(&Version, v3.CisBenchmarkVersion{})
 }
 
 func catalogTypes(schemas *types.Schemas) *types.Schemas {
@@ -264,7 +276,9 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 				Input:  "rotateCertificateInput",
 				Output: "rotateCertificateOutput",
 			}
-			schema.ResourceActions[v3.ClusterActionRunCISScan] = types.Action{}
+			schema.ResourceActions[v3.ClusterActionRunSecurityScan] = types.Action{
+				Input: "cisScanConfig",
+			}
 			schema.ResourceActions[v3.ClusterActionSaveAsTemplate] = types.Action{
 				Input:  "saveAsTemplateInput",
 				Output: "saveAsTemplateOutput",
@@ -310,10 +324,7 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 				},
 			}
 		}).
-		MustImportAndCustomize(&Version, v3.GlobalRole{}, func(schema *types.Schema) {
-			schema.CollectionMethods = []string{http.MethodGet}
-			schema.ResourceMethods = []string{http.MethodGet, http.MethodPut}
-		}).
+		MustImport(&Version, v3.GlobalRole{}).
 		MustImport(&Version, v3.GlobalRoleBinding{}).
 		MustImport(&Version, v3.RoleTemplate{}).
 		MustImport(&Version, v3.PodSecurityPolicyTemplate{}).
@@ -574,6 +585,7 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 		MustImportAndCustomize(&Version, v3.ADFSConfig{}, configSchema).
 		MustImportAndCustomize(&Version, v3.KeyCloakConfig{}, configSchema).
 		MustImportAndCustomize(&Version, v3.OKTAConfig{}, configSchema).
+		MustImportAndCustomize(&Version, v3.ShibbolethConfig{}, configSchema).
 		MustImport(&Version, v3.SamlConfigTestInput{}).
 		MustImport(&Version, v3.SamlConfigTestOutput{}).
 		//GoogleOAuth Config
@@ -686,12 +698,6 @@ func logTypes(schema *types.Schemas) *types.Schemas {
 
 func globalTypes(schema *types.Schemas) *types.Schemas {
 	return schema.
-		AddMapperForType(&Version, v3.ListenConfig{},
-			m.DisplayName{},
-			m.Drop{Field: "caKey"},
-			m.Drop{Field: "caCert"},
-		).
-		MustImport(&Version, v3.ListenConfig{}).
 		MustImportAndCustomize(&Version, v3.Setting{}, func(schema *types.Schema) {
 			schema.MustCustomizeField("name", func(f types.Field) types.Field {
 				f.Required = true

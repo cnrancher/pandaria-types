@@ -10,13 +10,10 @@ const (
 	ClusterSpecBaseFieldDockerRootDir                       = "dockerRootDir"
 	ClusterSpecBaseFieldEnableClusterAlerting               = "enableClusterAlerting"
 	ClusterSpecBaseFieldEnableClusterMonitoring             = "enableClusterMonitoring"
-	ClusterSpecBaseFieldEnableDualStack                     = "enableDualStack"
-	ClusterSpecBaseFieldEnableGPUManagement                 = "enableGPUManagement"
 	ClusterSpecBaseFieldEnableNetworkPolicy                 = "enableNetworkPolicy"
-	ClusterSpecBaseFieldGPUSchedulerNodePort                = "gpuSchedulerNodePort"
 	ClusterSpecBaseFieldLocalClusterAuthEndpoint            = "localClusterAuthEndpoint"
 	ClusterSpecBaseFieldRancherKubernetesEngineConfig       = "rancherKubernetesEngineConfig"
-	ClusterSpecBaseFieldSystemDefaultRegistry               = "systemDefaultRegistry"
+	ClusterSpecBaseFieldScheduledClusterScan                = "scheduledClusterScan"
 	ClusterSpecBaseFieldWindowsPreferedCluster              = "windowsPreferedCluster"
 )
 
@@ -29,12 +26,9 @@ type ClusterSpecBase struct {
 	DockerRootDir                       string                         `json:"dockerRootDir,omitempty" yaml:"dockerRootDir,omitempty"`
 	EnableClusterAlerting               bool                           `json:"enableClusterAlerting,omitempty" yaml:"enableClusterAlerting,omitempty"`
 	EnableClusterMonitoring             bool                           `json:"enableClusterMonitoring,omitempty" yaml:"enableClusterMonitoring,omitempty"`
-	EnableDualStack                     bool                           `json:"enableDualStack,omitempty" yaml:"enableDualStack,omitempty"`
-	EnableGPUManagement                 bool                           `json:"enableGPUManagement,omitempty" yaml:"enableGPUManagement,omitempty"`
 	EnableNetworkPolicy                 *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
-	GPUSchedulerNodePort                string                         `json:"gpuSchedulerNodePort,omitempty" yaml:"gpuSchedulerNodePort,omitempty"`
 	LocalClusterAuthEndpoint            *LocalClusterAuthEndpoint      `json:"localClusterAuthEndpoint,omitempty" yaml:"localClusterAuthEndpoint,omitempty"`
 	RancherKubernetesEngineConfig       *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty" yaml:"rancherKubernetesEngineConfig,omitempty"`
-	SystemDefaultRegistry               string                         `json:"systemDefaultRegistry,omitempty" yaml:"systemDefaultRegistry,omitempty"`
+	ScheduledClusterScan                *ScheduledClusterScan          `json:"scheduledClusterScan,omitempty" yaml:"scheduledClusterScan,omitempty"`
 	WindowsPreferedCluster              bool                           `json:"windowsPreferedCluster,omitempty" yaml:"windowsPreferedCluster,omitempty"`
 }

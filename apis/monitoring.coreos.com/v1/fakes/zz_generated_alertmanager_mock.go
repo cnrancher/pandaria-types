@@ -6,6 +6,7 @@ package fakes
 import (
 	context "context"
 	sync "sync"
+	time "time"
 
 	v1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
 	controller "github.com/rancher/norman/controller"
@@ -146,6 +147,7 @@ var (
 	lockAlertmanagerControllerMockAddFeatureHandler              sync.RWMutex
 	lockAlertmanagerControllerMockAddHandler                     sync.RWMutex
 	lockAlertmanagerControllerMockEnqueue                        sync.RWMutex
+	lockAlertmanagerControllerMockEnqueueAfter                   sync.RWMutex
 	lockAlertmanagerControllerMockGeneric                        sync.RWMutex
 	lockAlertmanagerControllerMockInformer                       sync.RWMutex
 	lockAlertmanagerControllerMockLister                         sync.RWMutex
@@ -177,6 +179,9 @@ var _ v1a.AlertmanagerController = &AlertmanagerControllerMock{}
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
 // 	               panic("mock out the Enqueue method")
+//             },
+//             EnqueueAfterFunc: func(namespace string, name string, after time.Duration)  {
+// 	               panic("mock out the EnqueueAfter method")
 //             },
 //             GenericFunc: func() controller.GenericController {
 // 	               panic("mock out the Generic method")
@@ -214,6 +219,9 @@ type AlertmanagerControllerMock struct {
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
+
+	// EnqueueAfterFunc mocks the EnqueueAfter method.
+	EnqueueAfterFunc func(namespace string, name string, after time.Duration)
 
 	// GenericFunc mocks the Generic method.
 	GenericFunc func() controller.GenericController
@@ -282,6 +290,15 @@ type AlertmanagerControllerMock struct {
 			Namespace string
 			// Name is the name argument value.
 			Name string
+		}
+		// EnqueueAfter holds details about calls to the EnqueueAfter method.
+		EnqueueAfter []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
+			// Name is the name argument value.
+			Name string
+			// After is the after argument value.
+			After time.Duration
 		}
 		// Generic holds details about calls to the Generic method.
 		Generic []struct {
@@ -514,6 +531,45 @@ func (mock *AlertmanagerControllerMock) EnqueueCalls() []struct {
 	return calls
 }
 
+// EnqueueAfter calls EnqueueAfterFunc.
+func (mock *AlertmanagerControllerMock) EnqueueAfter(namespace string, name string, after time.Duration) {
+	if mock.EnqueueAfterFunc == nil {
+		panic("AlertmanagerControllerMock.EnqueueAfterFunc: method is nil but AlertmanagerController.EnqueueAfter was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}{
+		Namespace: namespace,
+		Name:      name,
+		After:     after,
+	}
+	lockAlertmanagerControllerMockEnqueueAfter.Lock()
+	mock.calls.EnqueueAfter = append(mock.calls.EnqueueAfter, callInfo)
+	lockAlertmanagerControllerMockEnqueueAfter.Unlock()
+	mock.EnqueueAfterFunc(namespace, name, after)
+}
+
+// EnqueueAfterCalls gets all the calls that were made to EnqueueAfter.
+// Check the length with:
+//     len(mockedAlertmanagerController.EnqueueAfterCalls())
+func (mock *AlertmanagerControllerMock) EnqueueAfterCalls() []struct {
+	Namespace string
+	Name      string
+	After     time.Duration
+} {
+	var calls []struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}
+	lockAlertmanagerControllerMockEnqueueAfter.RLock()
+	calls = mock.calls.EnqueueAfter
+	lockAlertmanagerControllerMockEnqueueAfter.RUnlock()
+	return calls
+}
+
 // Generic calls GenericFunc.
 func (mock *AlertmanagerControllerMock) Generic() controller.GenericController {
 	if mock.GenericFunc == nil {
@@ -675,6 +731,7 @@ var (
 	lockAlertmanagerInterfaceMockGet                              sync.RWMutex
 	lockAlertmanagerInterfaceMockGetNamespaced                    sync.RWMutex
 	lockAlertmanagerInterfaceMockList                             sync.RWMutex
+	lockAlertmanagerInterfaceMockListNamespaced                   sync.RWMutex
 	lockAlertmanagerInterfaceMockObjectClient                     sync.RWMutex
 	lockAlertmanagerInterfaceMockUpdate                           sync.RWMutex
 	lockAlertmanagerInterfaceMockWatch                            sync.RWMutex
@@ -737,6 +794,9 @@ var _ v1a.AlertmanagerInterface = &AlertmanagerInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1b.ListOptions) (*v1a.AlertmanagerList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.AlertmanagerList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -801,6 +861,9 @@ type AlertmanagerInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1b.ListOptions) (*v1a.AlertmanagerList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.AlertmanagerList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -950,6 +1013,13 @@ type AlertmanagerInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1b.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1b.ListOptions
 		}
@@ -1581,6 +1651,41 @@ func (mock *AlertmanagerInterfaceMock) ListCalls() []struct {
 	lockAlertmanagerInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockAlertmanagerInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *AlertmanagerInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.AlertmanagerList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("AlertmanagerInterfaceMock.ListNamespacedFunc: method is nil but AlertmanagerInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockAlertmanagerInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockAlertmanagerInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedAlertmanagerInterface.ListNamespacedCalls())
+func (mock *AlertmanagerInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1b.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}
+	lockAlertmanagerInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockAlertmanagerInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

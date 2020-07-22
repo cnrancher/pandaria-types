@@ -6,6 +6,7 @@ package fakes
 import (
 	context "context"
 	sync "sync"
+	time "time"
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
@@ -146,6 +147,7 @@ var (
 	lockDaemonSetControllerMockAddFeatureHandler              sync.RWMutex
 	lockDaemonSetControllerMockAddHandler                     sync.RWMutex
 	lockDaemonSetControllerMockEnqueue                        sync.RWMutex
+	lockDaemonSetControllerMockEnqueueAfter                   sync.RWMutex
 	lockDaemonSetControllerMockGeneric                        sync.RWMutex
 	lockDaemonSetControllerMockInformer                       sync.RWMutex
 	lockDaemonSetControllerMockLister                         sync.RWMutex
@@ -177,6 +179,9 @@ var _ v1a.DaemonSetController = &DaemonSetControllerMock{}
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
 // 	               panic("mock out the Enqueue method")
+//             },
+//             EnqueueAfterFunc: func(namespace string, name string, after time.Duration)  {
+// 	               panic("mock out the EnqueueAfter method")
 //             },
 //             GenericFunc: func() controller.GenericController {
 // 	               panic("mock out the Generic method")
@@ -214,6 +219,9 @@ type DaemonSetControllerMock struct {
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
+
+	// EnqueueAfterFunc mocks the EnqueueAfter method.
+	EnqueueAfterFunc func(namespace string, name string, after time.Duration)
 
 	// GenericFunc mocks the Generic method.
 	GenericFunc func() controller.GenericController
@@ -282,6 +290,15 @@ type DaemonSetControllerMock struct {
 			Namespace string
 			// Name is the name argument value.
 			Name string
+		}
+		// EnqueueAfter holds details about calls to the EnqueueAfter method.
+		EnqueueAfter []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
+			// Name is the name argument value.
+			Name string
+			// After is the after argument value.
+			After time.Duration
 		}
 		// Generic holds details about calls to the Generic method.
 		Generic []struct {
@@ -514,6 +531,45 @@ func (mock *DaemonSetControllerMock) EnqueueCalls() []struct {
 	return calls
 }
 
+// EnqueueAfter calls EnqueueAfterFunc.
+func (mock *DaemonSetControllerMock) EnqueueAfter(namespace string, name string, after time.Duration) {
+	if mock.EnqueueAfterFunc == nil {
+		panic("DaemonSetControllerMock.EnqueueAfterFunc: method is nil but DaemonSetController.EnqueueAfter was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}{
+		Namespace: namespace,
+		Name:      name,
+		After:     after,
+	}
+	lockDaemonSetControllerMockEnqueueAfter.Lock()
+	mock.calls.EnqueueAfter = append(mock.calls.EnqueueAfter, callInfo)
+	lockDaemonSetControllerMockEnqueueAfter.Unlock()
+	mock.EnqueueAfterFunc(namespace, name, after)
+}
+
+// EnqueueAfterCalls gets all the calls that were made to EnqueueAfter.
+// Check the length with:
+//     len(mockedDaemonSetController.EnqueueAfterCalls())
+func (mock *DaemonSetControllerMock) EnqueueAfterCalls() []struct {
+	Namespace string
+	Name      string
+	After     time.Duration
+} {
+	var calls []struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}
+	lockDaemonSetControllerMockEnqueueAfter.RLock()
+	calls = mock.calls.EnqueueAfter
+	lockDaemonSetControllerMockEnqueueAfter.RUnlock()
+	return calls
+}
+
 // Generic calls GenericFunc.
 func (mock *DaemonSetControllerMock) Generic() controller.GenericController {
 	if mock.GenericFunc == nil {
@@ -675,6 +731,7 @@ var (
 	lockDaemonSetInterfaceMockGet                              sync.RWMutex
 	lockDaemonSetInterfaceMockGetNamespaced                    sync.RWMutex
 	lockDaemonSetInterfaceMockList                             sync.RWMutex
+	lockDaemonSetInterfaceMockListNamespaced                   sync.RWMutex
 	lockDaemonSetInterfaceMockObjectClient                     sync.RWMutex
 	lockDaemonSetInterfaceMockUpdate                           sync.RWMutex
 	lockDaemonSetInterfaceMockWatch                            sync.RWMutex
@@ -737,6 +794,9 @@ var _ v1a.DaemonSetInterface = &DaemonSetInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1b.ListOptions) (*v1a.DaemonSetList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1b.ListOptions) (*v1a.DaemonSetList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -801,6 +861,9 @@ type DaemonSetInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1b.ListOptions) (*v1a.DaemonSetList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1b.ListOptions) (*v1a.DaemonSetList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -950,6 +1013,13 @@ type DaemonSetInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1b.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1b.ListOptions
 		}
@@ -1581,6 +1651,41 @@ func (mock *DaemonSetInterfaceMock) ListCalls() []struct {
 	lockDaemonSetInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockDaemonSetInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *DaemonSetInterfaceMock) ListNamespaced(namespace string, opts v1b.ListOptions) (*v1a.DaemonSetList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("DaemonSetInterfaceMock.ListNamespacedFunc: method is nil but DaemonSetInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockDaemonSetInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockDaemonSetInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedDaemonSetInterface.ListNamespacedCalls())
+func (mock *DaemonSetInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1b.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1b.ListOptions
+	}
+	lockDaemonSetInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockDaemonSetInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 

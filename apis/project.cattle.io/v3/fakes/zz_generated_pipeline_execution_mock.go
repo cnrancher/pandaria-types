@@ -6,6 +6,7 @@ package fakes
 import (
 	context "context"
 	sync "sync"
+	time "time"
 
 	controller "github.com/rancher/norman/controller"
 	objectclient "github.com/rancher/norman/objectclient"
@@ -145,6 +146,7 @@ var (
 	lockPipelineExecutionControllerMockAddFeatureHandler              sync.RWMutex
 	lockPipelineExecutionControllerMockAddHandler                     sync.RWMutex
 	lockPipelineExecutionControllerMockEnqueue                        sync.RWMutex
+	lockPipelineExecutionControllerMockEnqueueAfter                   sync.RWMutex
 	lockPipelineExecutionControllerMockGeneric                        sync.RWMutex
 	lockPipelineExecutionControllerMockInformer                       sync.RWMutex
 	lockPipelineExecutionControllerMockLister                         sync.RWMutex
@@ -176,6 +178,9 @@ var _ v3.PipelineExecutionController = &PipelineExecutionControllerMock{}
 //             },
 //             EnqueueFunc: func(namespace string, name string)  {
 // 	               panic("mock out the Enqueue method")
+//             },
+//             EnqueueAfterFunc: func(namespace string, name string, after time.Duration)  {
+// 	               panic("mock out the EnqueueAfter method")
 //             },
 //             GenericFunc: func() controller.GenericController {
 // 	               panic("mock out the Generic method")
@@ -213,6 +218,9 @@ type PipelineExecutionControllerMock struct {
 
 	// EnqueueFunc mocks the Enqueue method.
 	EnqueueFunc func(namespace string, name string)
+
+	// EnqueueAfterFunc mocks the EnqueueAfter method.
+	EnqueueAfterFunc func(namespace string, name string, after time.Duration)
 
 	// GenericFunc mocks the Generic method.
 	GenericFunc func() controller.GenericController
@@ -281,6 +289,15 @@ type PipelineExecutionControllerMock struct {
 			Namespace string
 			// Name is the name argument value.
 			Name string
+		}
+		// EnqueueAfter holds details about calls to the EnqueueAfter method.
+		EnqueueAfter []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
+			// Name is the name argument value.
+			Name string
+			// After is the after argument value.
+			After time.Duration
 		}
 		// Generic holds details about calls to the Generic method.
 		Generic []struct {
@@ -513,6 +530,45 @@ func (mock *PipelineExecutionControllerMock) EnqueueCalls() []struct {
 	return calls
 }
 
+// EnqueueAfter calls EnqueueAfterFunc.
+func (mock *PipelineExecutionControllerMock) EnqueueAfter(namespace string, name string, after time.Duration) {
+	if mock.EnqueueAfterFunc == nil {
+		panic("PipelineExecutionControllerMock.EnqueueAfterFunc: method is nil but PipelineExecutionController.EnqueueAfter was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}{
+		Namespace: namespace,
+		Name:      name,
+		After:     after,
+	}
+	lockPipelineExecutionControllerMockEnqueueAfter.Lock()
+	mock.calls.EnqueueAfter = append(mock.calls.EnqueueAfter, callInfo)
+	lockPipelineExecutionControllerMockEnqueueAfter.Unlock()
+	mock.EnqueueAfterFunc(namespace, name, after)
+}
+
+// EnqueueAfterCalls gets all the calls that were made to EnqueueAfter.
+// Check the length with:
+//     len(mockedPipelineExecutionController.EnqueueAfterCalls())
+func (mock *PipelineExecutionControllerMock) EnqueueAfterCalls() []struct {
+	Namespace string
+	Name      string
+	After     time.Duration
+} {
+	var calls []struct {
+		Namespace string
+		Name      string
+		After     time.Duration
+	}
+	lockPipelineExecutionControllerMockEnqueueAfter.RLock()
+	calls = mock.calls.EnqueueAfter
+	lockPipelineExecutionControllerMockEnqueueAfter.RUnlock()
+	return calls
+}
+
 // Generic calls GenericFunc.
 func (mock *PipelineExecutionControllerMock) Generic() controller.GenericController {
 	if mock.GenericFunc == nil {
@@ -674,6 +730,7 @@ var (
 	lockPipelineExecutionInterfaceMockGet                              sync.RWMutex
 	lockPipelineExecutionInterfaceMockGetNamespaced                    sync.RWMutex
 	lockPipelineExecutionInterfaceMockList                             sync.RWMutex
+	lockPipelineExecutionInterfaceMockListNamespaced                   sync.RWMutex
 	lockPipelineExecutionInterfaceMockObjectClient                     sync.RWMutex
 	lockPipelineExecutionInterfaceMockUpdate                           sync.RWMutex
 	lockPipelineExecutionInterfaceMockWatch                            sync.RWMutex
@@ -736,6 +793,9 @@ var _ v3.PipelineExecutionInterface = &PipelineExecutionInterfaceMock{}
 //             },
 //             ListFunc: func(opts v1.ListOptions) (*v3.PipelineExecutionList, error) {
 // 	               panic("mock out the List method")
+//             },
+//             ListNamespacedFunc: func(namespace string, opts v1.ListOptions) (*v3.PipelineExecutionList, error) {
+// 	               panic("mock out the ListNamespaced method")
 //             },
 //             ObjectClientFunc: func() *objectclient.ObjectClient {
 // 	               panic("mock out the ObjectClient method")
@@ -800,6 +860,9 @@ type PipelineExecutionInterfaceMock struct {
 
 	// ListFunc mocks the List method.
 	ListFunc func(opts v1.ListOptions) (*v3.PipelineExecutionList, error)
+
+	// ListNamespacedFunc mocks the ListNamespaced method.
+	ListNamespacedFunc func(namespace string, opts v1.ListOptions) (*v3.PipelineExecutionList, error)
 
 	// ObjectClientFunc mocks the ObjectClient method.
 	ObjectClientFunc func() *objectclient.ObjectClient
@@ -949,6 +1012,13 @@ type PipelineExecutionInterfaceMock struct {
 		}
 		// List holds details about calls to the List method.
 		List []struct {
+			// Opts is the opts argument value.
+			Opts v1.ListOptions
+		}
+		// ListNamespaced holds details about calls to the ListNamespaced method.
+		ListNamespaced []struct {
+			// Namespace is the namespace argument value.
+			Namespace string
 			// Opts is the opts argument value.
 			Opts v1.ListOptions
 		}
@@ -1580,6 +1650,41 @@ func (mock *PipelineExecutionInterfaceMock) ListCalls() []struct {
 	lockPipelineExecutionInterfaceMockList.RLock()
 	calls = mock.calls.List
 	lockPipelineExecutionInterfaceMockList.RUnlock()
+	return calls
+}
+
+// ListNamespaced calls ListNamespacedFunc.
+func (mock *PipelineExecutionInterfaceMock) ListNamespaced(namespace string, opts v1.ListOptions) (*v3.PipelineExecutionList, error) {
+	if mock.ListNamespacedFunc == nil {
+		panic("PipelineExecutionInterfaceMock.ListNamespacedFunc: method is nil but PipelineExecutionInterface.ListNamespaced was just called")
+	}
+	callInfo := struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}{
+		Namespace: namespace,
+		Opts:      opts,
+	}
+	lockPipelineExecutionInterfaceMockListNamespaced.Lock()
+	mock.calls.ListNamespaced = append(mock.calls.ListNamespaced, callInfo)
+	lockPipelineExecutionInterfaceMockListNamespaced.Unlock()
+	return mock.ListNamespacedFunc(namespace, opts)
+}
+
+// ListNamespacedCalls gets all the calls that were made to ListNamespaced.
+// Check the length with:
+//     len(mockedPipelineExecutionInterface.ListNamespacedCalls())
+func (mock *PipelineExecutionInterfaceMock) ListNamespacedCalls() []struct {
+	Namespace string
+	Opts      v1.ListOptions
+} {
+	var calls []struct {
+		Namespace string
+		Opts      v1.ListOptions
+	}
+	lockPipelineExecutionInterfaceMockListNamespaced.RLock()
+	calls = mock.calls.ListNamespaced
+	lockPipelineExecutionInterfaceMockListNamespaced.RUnlock()
 	return calls
 }
 
