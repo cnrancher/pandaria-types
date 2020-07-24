@@ -16,7 +16,6 @@ var (
 	CreatorMadeOwner                         condition.Cond = "CreatorMadeOwner"
 	DefaultNetworkPolicyCreated              condition.Cond = "DefaultNetworkPolicyCreated"
 	ProjectConditionInitialRolesPopulated    condition.Cond = "InitialRolesPopulated"
-	ProjectConditionMonitoringEnabled        condition.Cond = "MonitoringEnabled"
 	ProjectConditionMetricExpressionDeployed condition.Cond = "MetricExpressionDeployed"
 )
 
@@ -37,7 +36,7 @@ func (p *Project) ObjClusterName() string {
 type ProjectStatus struct {
 	Conditions                    []ProjectCondition `json:"conditions"`
 	PodSecurityPolicyTemplateName string             `json:"podSecurityPolicyTemplateId"`
-	MonitoringStatus              *MonitoringStatus  `json:"monitoringStatus,omitempty" norman:"nocreate,noupdate"`
+	MonitoringStatus              *MonitoringStatus  `json:"monitoringStatus,omitempty" norman:"nocreate,noupdate"`  //Deprecated
 }
 
 type ProjectCondition struct {
@@ -62,7 +61,7 @@ type ProjectSpec struct {
 	ResourceQuota                 *ProjectResourceQuota   `json:"resourceQuota,omitempty"`
 	NamespaceDefaultResourceQuota *NamespaceResourceQuota `json:"namespaceDefaultResourceQuota,omitempty"`
 	ContainerDefaultResourceLimit *ContainerResourceLimit `json:"containerDefaultResourceLimit,omitempty"`
-	EnableProjectMonitoring       bool                    `json:"enableProjectMonitoring" norman:"default=false"`
+	EnableProjectMonitoring       bool                    `json:"enableProjectMonitoring" norman:"nocreate,noupdate,default=false"` //Deprecated
 }
 
 func (p *ProjectSpec) ObjClusterName() string {

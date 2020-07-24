@@ -312,16 +312,6 @@ func authzTypes(schemas *types.Schemas) *types.Schemas {
 					Output: "project",
 				},
 				"exportYaml": {},
-				"enableMonitoring": {
-					Input: "monitoringInput",
-				},
-				"disableMonitoring": {},
-				"viewMonitoring": {
-					Output: "monitoringOutput",
-				},
-				"editMonitoring": {
-					Input: "monitoringInput",
-				},
 			}
 		}).
 		MustImport(&Version, v3.GlobalRole{}).
