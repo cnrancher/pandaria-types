@@ -77,6 +77,7 @@ type SamlProvider struct {
 	AuthProvider      `json:",inline"`
 
 	RedirectURL string `json:"redirectUrl"`
+	LogoutURL   string `json:"logoutUrl"`
 }
 
 type AzureADLogin struct {
