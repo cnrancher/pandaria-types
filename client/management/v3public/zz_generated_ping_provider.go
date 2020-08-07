@@ -6,6 +6,7 @@ const (
 	PingProviderFieldCreated         = "created"
 	PingProviderFieldCreatorID       = "creatorId"
 	PingProviderFieldLabels          = "labels"
+	PingProviderFieldLogoutURL       = "logoutUrl"
 	PingProviderFieldName            = "name"
 	PingProviderFieldOwnerReferences = "ownerReferences"
 	PingProviderFieldRedirectURL     = "redirectUrl"
@@ -19,6 +20,7 @@ type PingProvider struct {
 	Created         string            `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID       string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	Labels          map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
+	LogoutURL       string            `json:"logoutUrl,omitempty" yaml:"logoutUrl,omitempty"`
 	Name            string            `json:"name,omitempty" yaml:"name,omitempty"`
 	OwnerReferences []OwnerReference  `json:"ownerReferences,omitempty" yaml:"ownerReferences,omitempty"`
 	RedirectURL     string            `json:"redirectUrl,omitempty" yaml:"redirectUrl,omitempty"`
