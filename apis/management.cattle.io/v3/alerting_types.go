@@ -253,15 +253,23 @@ type CommonGroupField struct {
 }
 
 type CommonRuleField struct {
-	DisplayName string `json:"displayName,omitempty"`
-	Severity    string `json:"severity,omitempty" norman:"required,options=info|critical|warning,default=critical"`
-	Inherited   *bool  `json:"inherited,omitempty" norman:"default=true"`
+	DisplayName     string           `json:"displayName,omitempty"`
+	Severity        string           `json:"severity,omitempty" norman:"required,options=info|critical|warning,default=critical"`
+	Inherited       *bool            `json:"inherited,omitempty" norman:"default=true"`
+	ExtraAlertDatas []ExtraAlertData `json:"extraAlertDatas,omitempty"`
 	TimingField
 }
 
 type ClusterScanRule struct {
 	ScanRunType  ClusterScanRunType `json:"scanRunType,omitempty" norman:"required,options=manual|scheduled,default=scheduled"`
 	FailuresOnly bool               `json:"failuresOnly,omitempty"`
+}
+
+type ExtraAlertData struct {
+	TargetKey   string `json:"targetKey,omitempty" norman:"required"`
+	SourceValue string `json:"sourceValue,omitempty" norman:"required"`
+	SourceType  string `json:"sourceType,omitempty" norman:"required,options=static|labels|annotations,default=static"`
+	TargetType  string `json:"targetType,omitempty" norman:"required,options=labels|annotations,default=labels"`
 }
 
 type MetricRule struct {
