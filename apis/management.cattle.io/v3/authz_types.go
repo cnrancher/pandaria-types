@@ -36,7 +36,7 @@ func (p *Project) ObjClusterName() string {
 type ProjectStatus struct {
 	Conditions                    []ProjectCondition `json:"conditions"`
 	PodSecurityPolicyTemplateName string             `json:"podSecurityPolicyTemplateId"`
-	MonitoringStatus              *MonitoringStatus  `json:"monitoringStatus,omitempty" norman:"nocreate,noupdate"`  //Deprecated
+	MonitoringStatus              *MonitoringStatus  `json:"monitoringStatus,omitempty" norman:"nocreate,noupdate"` //Deprecated
 }
 
 type ProjectCondition struct {
