@@ -35,7 +35,7 @@ require (
 	github.com/pkg/errors v0.8.1
 	github.com/rancher/norman v0.0.0-20191126011629-6269ccdbeace
 	github.com/sirupsen/logrus v1.4.2
-	golang.org/x/tools v0.0.0-20191029041327-9cc4af7d6b2c // indirect
+	golang.org/x/tools v0.0.0-20200828161849-5deb26317202 // indirect
 	k8s.io/api v0.0.0
 	k8s.io/apiextensions-apiserver v0.0.0
 	k8s.io/apimachinery v0.0.0
