@@ -6,6 +6,7 @@ const (
 	ClusterAlertRuleSpecFieldClusterScanRule       = "clusterScanRule"
 	ClusterAlertRuleSpecFieldDisplayName           = "displayName"
 	ClusterAlertRuleSpecFieldEventRule             = "eventRule"
+	ClusterAlertRuleSpecFieldExtraAlertDatas       = "extraAlertDatas"
 	ClusterAlertRuleSpecFieldGroupID               = "groupId"
 	ClusterAlertRuleSpecFieldGroupIntervalSeconds  = "groupIntervalSeconds"
 	ClusterAlertRuleSpecFieldGroupWaitSeconds      = "groupWaitSeconds"
@@ -22,6 +23,7 @@ type ClusterAlertRuleSpec struct {
 	ClusterScanRule       *ClusterScanRule   `json:"clusterScanRule,omitempty" yaml:"clusterScanRule,omitempty"`
 	DisplayName           string             `json:"displayName,omitempty" yaml:"displayName,omitempty"`
 	EventRule             *EventRule         `json:"eventRule,omitempty" yaml:"eventRule,omitempty"`
+	ExtraAlertDatas       []ExtraAlertData   `json:"extraAlertDatas,omitempty" yaml:"extraAlertDatas,omitempty"`
 	GroupID               string             `json:"groupId,omitempty" yaml:"groupId,omitempty"`
 	GroupIntervalSeconds  int64              `json:"groupIntervalSeconds,omitempty" yaml:"groupIntervalSeconds,omitempty"`
 	GroupWaitSeconds      int64              `json:"groupWaitSeconds,omitempty" yaml:"groupWaitSeconds,omitempty"`

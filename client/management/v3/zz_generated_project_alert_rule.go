@@ -10,6 +10,7 @@ const (
 	ProjectAlertRuleFieldAnnotations           = "annotations"
 	ProjectAlertRuleFieldCreated               = "created"
 	ProjectAlertRuleFieldCreatorID             = "creatorId"
+	ProjectAlertRuleFieldExtraAlertDatas       = "extraAlertDatas"
 	ProjectAlertRuleFieldGroupID               = "groupId"
 	ProjectAlertRuleFieldGroupIntervalSeconds  = "groupIntervalSeconds"
 	ProjectAlertRuleFieldGroupWaitSeconds      = "groupWaitSeconds"
@@ -37,6 +38,7 @@ type ProjectAlertRule struct {
 	Annotations           map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created               string            `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID             string            `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	ExtraAlertDatas       []ExtraAlertData  `json:"extraAlertDatas,omitempty" yaml:"extraAlertDatas,omitempty"`
 	GroupID               string            `json:"groupId,omitempty" yaml:"groupId,omitempty"`
 	GroupIntervalSeconds  int64             `json:"groupIntervalSeconds,omitempty" yaml:"groupIntervalSeconds,omitempty"`
 	GroupWaitSeconds      int64             `json:"groupWaitSeconds,omitempty" yaml:"groupWaitSeconds,omitempty"`
