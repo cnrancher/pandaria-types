@@ -40,6 +40,7 @@ type Interface interface {
 	PipelineExecutionsGetter
 	PipelineSettingsGetter
 	SourceCodeRepositoriesGetter
+	CloneAppsGetter
 }
 
 type Client struct {
@@ -67,6 +68,7 @@ type Client struct {
 	pipelineExecutionControllers             map[string]PipelineExecutionController
 	pipelineSettingControllers               map[string]PipelineSettingController
 	sourceCodeRepositoryControllers          map[string]SourceCodeRepositoryController
+	cloneAppControllers                      map[string]CloneAppController
 }
 
 func NewForConfig(config rest.Config) (Interface, error) {
@@ -102,6 +104,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		pipelineExecutionControllers:             map[string]PipelineExecutionController{},
 		pipelineSettingControllers:               map[string]PipelineSettingController{},
 		sourceCodeRepositoryControllers:          map[string]SourceCodeRepositoryController{},
+		cloneAppControllers:                      map[string]CloneAppController{},
 	}, nil
 }
 
@@ -371,6 +374,19 @@ type SourceCodeRepositoriesGetter interface {
 func (c *Client) SourceCodeRepositories(namespace string) SourceCodeRepositoryInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &SourceCodeRepositoryResource, SourceCodeRepositoryGroupVersionKind, sourceCodeRepositoryFactory{})
 	return &sourceCodeRepositoryClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type CloneAppsGetter interface {
+	CloneApps(namespace string) CloneAppInterface
+}
+
+func (c *Client) CloneApps(namespace string) CloneAppInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &CloneAppResource, CloneAppGroupVersionKind, cloneAppFactory{})
+	return &cloneAppClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
