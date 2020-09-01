@@ -49,7 +49,8 @@ var (
 		Init(pipelineTypes).
 		Init(monitoringTypes).
 		Init(autoscalingTypes).
-		Init(istioTypes)
+		Init(istioTypes).
+		Init(cloneAppTypes)
 )
 
 func configMapTypes(schemas *types.Schemas) *types.Schemas {
@@ -1153,4 +1154,12 @@ func istioTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, istiov1alpha3.Gateway{}, projectOverride{}, struct {
 			Status interface{}
 		}{})
+}
+
+func cloneAppTypes(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		MustImport(&Version, v3.CloneTarget{}).
+		MustImportAndCustomize(&Version, v3.CloneApp{}, func(schema *types.Schema) {
+			delete(schema.ResourceFields, "namespaceId")
+		})
 }
