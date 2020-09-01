@@ -50,6 +50,7 @@ type Client struct {
 	VirtualService                VirtualServiceOperations
 	DestinationRule               DestinationRuleOperations
 	Gateway                       GatewayOperations
+	CloneApp                      CloneAppOperations
 }
 
 func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
@@ -105,6 +106,7 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.VirtualService = newVirtualServiceClient(client)
 	client.DestinationRule = newDestinationRuleClient(client)
 	client.Gateway = newGatewayClient(client)
+	client.CloneApp = newCloneAppClient(client)
 
 	return client, nil
 }
