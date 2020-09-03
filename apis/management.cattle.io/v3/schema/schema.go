@@ -98,6 +98,12 @@ func mgmtSecretTypes(schemas *types.Schemas) *types.Schemas {
 		schema.PluralName = "managementSecrets"
 		schema.CodeName = "ManagementSecret"
 		schema.CodeNamePlural = "ManagementSecrets"
+		schema.MustCustomizeField("name", func(field types.Field) types.Field {
+			field.Type = "hostname"
+			field.Nullable = false
+			field.Required = true
+			return field
+		})
 	})
 }
 
@@ -418,6 +424,7 @@ func authnTypes(schemas *types.Schemas) *types.Schemas {
 		AddMapperForType(&Version, v3.Group{}, m.DisplayName{}).
 		MustImport(&Version, v3.Group{}).
 		MustImport(&Version, v3.GroupMember{}).
+		MustImport(&Version, v3.SamlToken{}).
 		AddMapperForType(&Version, v3.Principal{}, m.DisplayName{}).
 		MustImportAndCustomize(&Version, v3.Principal{}, func(schema *types.Schema) {
 			schema.CollectionMethods = []string{http.MethodGet}
