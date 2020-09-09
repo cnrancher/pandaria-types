@@ -109,6 +109,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ClusterAlertList{},
 		&ProjectAlert{},
 		&ProjectAlertList{},
+		&NotificationTemplate{},
+		&NotificationTemplateList{},
 		&Notifier{},
 		&NotifierList{},
 		&ClusterAlertGroup{},

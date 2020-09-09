@@ -58,6 +58,7 @@ type Interface interface {
 	FeaturesGetter
 	ClusterAlertsGetter
 	ProjectAlertsGetter
+	NotificationTemplatesGetter
 	NotifiersGetter
 	ClusterAlertGroupsGetter
 	ProjectAlertGroupsGetter
@@ -125,6 +126,7 @@ type Clients struct {
 	Feature                                 FeatureClient
 	ClusterAlert                            ClusterAlertClient
 	ProjectAlert                            ProjectAlertClient
+	NotificationTemplate                    NotificationTemplateClient
 	Notifier                                NotifierClient
 	ClusterAlertGroup                       ClusterAlertGroupClient
 	ProjectAlertGroup                       ProjectAlertGroupClient
@@ -194,6 +196,7 @@ type Client struct {
 	featureControllers                                 map[string]FeatureController
 	clusterAlertControllers                            map[string]ClusterAlertController
 	projectAlertControllers                            map[string]ProjectAlertController
+	notificationTemplateControllers                    map[string]NotificationTemplateController
 	notifierControllers                                map[string]NotifierController
 	clusterAlertGroupControllers                       map[string]ClusterAlertGroupController
 	projectAlertGroupControllers                       map[string]ProjectAlertGroupController
@@ -367,6 +370,9 @@ func NewClientsFromInterface(iface Interface) *Clients {
 		ProjectAlert: &projectAlertClient2{
 			iface: iface.ProjectAlerts(""),
 		},
+		NotificationTemplate: &notificationTemplateClient2{
+			iface: iface.NotificationTemplates(""),
+		},
 		Notifier: &notifierClient2{
 			iface: iface.Notifiers(""),
 		},
@@ -493,6 +499,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		featureControllers:                                 map[string]FeatureController{},
 		clusterAlertControllers:                            map[string]ClusterAlertController{},
 		projectAlertControllers:                            map[string]ProjectAlertController{},
+		notificationTemplateControllers:                    map[string]NotificationTemplateController{},
 		notifierControllers:                                map[string]NotifierController{},
 		clusterAlertGroupControllers:                       map[string]ClusterAlertGroupController{},
 		projectAlertGroupControllers:                       map[string]ProjectAlertGroupController{},
@@ -1020,6 +1027,19 @@ type ProjectAlertsGetter interface {
 func (c *Client) ProjectAlerts(namespace string) ProjectAlertInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &ProjectAlertResource, ProjectAlertGroupVersionKind, projectAlertFactory{})
 	return &projectAlertClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type NotificationTemplatesGetter interface {
+	NotificationTemplates(namespace string) NotificationTemplateInterface
+}
+
+func (c *Client) NotificationTemplates(namespace string) NotificationTemplateInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &NotificationTemplateResource, NotificationTemplateGroupVersionKind, notificationTemplateFactory{})
+	return &notificationTemplateClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
