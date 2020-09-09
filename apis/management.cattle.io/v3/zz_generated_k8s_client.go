@@ -58,6 +58,7 @@ type Interface interface {
 	FeaturesGetter
 	ClusterAlertsGetter
 	ProjectAlertsGetter
+	NotificationTemplatesGetter
 	NotifiersGetter
 	ClusterAlertGroupsGetter
 	ProjectAlertGroupsGetter
@@ -129,6 +130,7 @@ type Client struct {
 	featureControllers                                 map[string]FeatureController
 	clusterAlertControllers                            map[string]ClusterAlertController
 	projectAlertControllers                            map[string]ProjectAlertController
+	notificationTemplateControllers                    map[string]NotificationTemplateController
 	notifierControllers                                map[string]NotifierController
 	clusterAlertGroupControllers                       map[string]ClusterAlertGroupController
 	projectAlertGroupControllers                       map[string]ProjectAlertGroupController
@@ -208,6 +210,7 @@ func NewForConfig(config rest.Config) (Interface, error) {
 		featureControllers:                                 map[string]FeatureController{},
 		clusterAlertControllers:                            map[string]ClusterAlertController{},
 		projectAlertControllers:                            map[string]ProjectAlertController{},
+		notificationTemplateControllers:                    map[string]NotificationTemplateController{},
 		notifierControllers:                                map[string]NotifierController{},
 		clusterAlertGroupControllers:                       map[string]ClusterAlertGroupController{},
 		projectAlertGroupControllers:                       map[string]ProjectAlertGroupController{},
@@ -737,6 +740,19 @@ type ProjectAlertsGetter interface {
 func (c *Client) ProjectAlerts(namespace string) ProjectAlertInterface {
 	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &ProjectAlertResource, ProjectAlertGroupVersionKind, projectAlertFactory{})
 	return &projectAlertClient{
+		ns:           namespace,
+		client:       c,
+		objectClient: objectClient,
+	}
+}
+
+type NotificationTemplatesGetter interface {
+	NotificationTemplates(namespace string) NotificationTemplateInterface
+}
+
+func (c *Client) NotificationTemplates(namespace string) NotificationTemplateInterface {
+	objectClient := objectclient.NewObjectClient(namespace, c.restClient, &NotificationTemplateResource, NotificationTemplateGroupVersionKind, notificationTemplateFactory{})
+	return &notificationTemplateClient{
 		ns:           namespace,
 		client:       c,
 		objectClient: objectClient,
