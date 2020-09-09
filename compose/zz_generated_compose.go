@@ -44,6 +44,7 @@ type Config struct {
 	Features                                 map[string]managementClient.Feature                                 `json:"features,omitempty" yaml:"features,omitempty"`
 	ClusterAlerts                            map[string]managementClient.ClusterAlert                            `json:"clusterAlerts,omitempty" yaml:"clusterAlerts,omitempty"`
 	ProjectAlerts                            map[string]managementClient.ProjectAlert                            `json:"projectAlerts,omitempty" yaml:"projectAlerts,omitempty"`
+	NotificationTemplates                    map[string]managementClient.NotificationTemplate                    `json:"notificationTemplates,omitempty" yaml:"notificationTemplates,omitempty"`
 	Notifiers                                map[string]managementClient.Notifier                                `json:"notifiers,omitempty" yaml:"notifiers,omitempty"`
 	ClusterAlertGroups                       map[string]managementClient.ClusterAlertGroup                       `json:"clusterAlertGroups,omitempty" yaml:"clusterAlertGroups,omitempty"`
 	ProjectAlertGroups                       map[string]managementClient.ProjectAlertGroup                       `json:"projectAlertGroups,omitempty" yaml:"projectAlertGroups,omitempty"`

@@ -44,6 +44,7 @@ type Client struct {
 	Feature                                 FeatureOperations
 	ClusterAlert                            ClusterAlertOperations
 	ProjectAlert                            ProjectAlertOperations
+	NotificationTemplate                    NotificationTemplateOperations
 	Notifier                                NotifierOperations
 	ClusterAlertGroup                       ClusterAlertGroupOperations
 	ProjectAlertGroup                       ProjectAlertGroupOperations
@@ -120,6 +121,7 @@ func NewClient(opts *clientbase.ClientOpts) (*Client, error) {
 	client.Feature = newFeatureClient(client)
 	client.ClusterAlert = newClusterAlertClient(client)
 	client.ProjectAlert = newProjectAlertClient(client)
+	client.NotificationTemplate = newNotificationTemplateClient(client)
 	client.Notifier = newNotifierClient(client)
 	client.ClusterAlertGroup = newClusterAlertGroupClient(client)
 	client.ProjectAlertGroup = newProjectAlertGroupClient(client)
