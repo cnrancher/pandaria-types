@@ -713,6 +713,7 @@ func alertTypes(schema *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.ClusterAlert{}).
 		MustImport(&Version, v3.ProjectAlert{}).
 		MustImport(&Version, v3.Notification{}).
+		MustImport(&Version, v3.NotificationTemplate{}).
 		MustImportAndCustomize(&Version, v3.Notifier{}, func(schema *types.Schema) {
 			schema.CollectionActions = map[string]types.Action{
 				"send": {

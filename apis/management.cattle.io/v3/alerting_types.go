@@ -251,6 +251,30 @@ type SystemServiceRule struct {
 	Condition string `json:"condition,omitempty" norman:"required,options=etcd|controller-manager|scheduler,default=scheduler"`
 }
 
+type NotificationTemplate struct {
+	types.Namespaced
+
+	metav1.TypeMeta `json:",inline"`
+	// Standard object’s metadata. More info:
+	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#metadata
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Spec NotificationTemplateSpec `json:"spec"`
+	// Most recent observed status of the notificationTemplate. More info:
+	// https://github.com/kubernetes/community/blob/master/contributors/devel/api-conventions.md#spec-and-status
+	Status NotificationTemplateStatus `json:"status"`
+}
+
+type NotificationTemplateSpec struct {
+	ClusterName string `json:"clusterName" norman:"type=reference[cluster]"`
+
+	Enabled bool   `json:"enabled,omitempty"`
+	Content string `json:"content,omitempty"`
+}
+
+type NotificationTemplateStatus struct {
+}
+
 type Notifier struct {
 	types.Namespaced
 
