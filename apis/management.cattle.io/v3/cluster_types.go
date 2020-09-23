@@ -293,13 +293,15 @@ type IngressCapabilities struct {
 }
 
 type MonitoringInput struct {
-	Version string            `json:"version,omitempty"`
-	Answers map[string]string `json:"answers,omitempty"`
+	Version    string            `json:"version,omitempty"`
+	Answers    map[string]string `json:"answers,omitempty"`
+	ValuesYaml string            `json:"valuesYaml,omitempty"`
 }
 
 type MonitoringOutput struct {
-	Version string            `json:"version,omitempty"`
-	Answers map[string]string `json:"answers,omitempty"`
+	Version    string            `json:"version,omitempty"`
+	Answers    map[string]string `json:"answers,omitempty"`
+	ValuesYaml string            `json:"valuesYaml,omitempty"`
 }
 
 type RestoreFromEtcdBackupInput struct {
