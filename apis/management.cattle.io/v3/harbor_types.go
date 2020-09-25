@@ -22,4 +22,5 @@ type HarborAdminAuthInput struct {
 	ServerURL string `json:"serverURL" norman:"type=string,required"`
 	Password  string `json:"password" norman:"type=password,required"`
 	Username  string `json:"username" norman:"type=string,required"`
+	Version   string `json:"version" norman:"type=string"`
 }
