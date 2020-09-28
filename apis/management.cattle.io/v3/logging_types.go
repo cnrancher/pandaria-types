@@ -48,10 +48,14 @@ func (p *ProjectLogging) ObjClusterName() string {
 }
 
 type LoggingCommonField struct {
-	DisplayName         string            `json:"displayName,omitempty"`
-	OutputFlushInterval int               `json:"outputFlushInterval,omitempty" norman:"default=60"`
-	OutputTags          map[string]string `json:"outputTags,omitempty"`
-	EnableJSONParsing   bool              `json:"enableJSONParsing,omitempty"`
+	DisplayName               string            `json:"displayName,omitempty"`
+	OutputFlushInterval       int               `json:"outputFlushInterval,omitempty" norman:"default=60"`
+	OutputTags                map[string]string `json:"outputTags,omitempty"`
+	EnableJSONParsing         bool              `json:"enableJSONParsing,omitempty"`
+	EnableExceptionStackMatch bool              `json:"enableExceptionStackMatch,omitempty"`
+	EnableMultiLineFilter     bool              `json:"enableMultiLineFilter,omitempty"`
+	MultiLineStartRegexp      string            `json:"multiLineStartRegexp,omitempty"`
+	MultiLineEndRegexp        string            `json:"multiLineEndRegexp,omitempty"`
 }
 
 type LoggingTargets struct {
@@ -200,8 +204,8 @@ type CustomTargetConfig struct {
 
 type ClusterTestInput struct {
 	ClusterName string `json:"clusterId" norman:"required,type=reference[cluster]"`
+	LoggingCommonField
 	LoggingTargets
-	OutputTags map[string]string `json:"outputTags,omitempty"`
 }
 
 func (c *ClusterTestInput) ObjClusterName() string {
@@ -210,8 +214,8 @@ func (c *ClusterTestInput) ObjClusterName() string {
 
 type ProjectTestInput struct {
 	ProjectName string `json:"projectId" norman:"required,type=reference[project]"`
+	LoggingCommonField
 	LoggingTargets
-	OutputTags map[string]string `json:"outputTags,omitempty"`
 }
 
 func (p *ProjectTestInput) ObjClusterName() string {
