@@ -9,6 +9,7 @@ const (
 	ClusterTestInputFieldEnableExceptionStackMatch = "enableExceptionStackMatch"
 	ClusterTestInputFieldEnableJSONParsing         = "enableJSONParsing"
 	ClusterTestInputFieldEnableMultiLineFilter     = "enableMultiLineFilter"
+	ClusterTestInputFieldExcludeContainerPaths     = "excludeContainerPaths"
 	ClusterTestInputFieldFluentForwarderConfig     = "fluentForwarderConfig"
 	ClusterTestInputFieldKafkaConfig               = "kafkaConfig"
 	ClusterTestInputFieldMultiLineEndRegexp        = "multiLineEndRegexp"
@@ -27,6 +28,7 @@ type ClusterTestInput struct {
 	EnableExceptionStackMatch bool                   `json:"enableExceptionStackMatch,omitempty" yaml:"enableExceptionStackMatch,omitempty"`
 	EnableJSONParsing         bool                   `json:"enableJSONParsing,omitempty" yaml:"enableJSONParsing,omitempty"`
 	EnableMultiLineFilter     bool                   `json:"enableMultiLineFilter,omitempty" yaml:"enableMultiLineFilter,omitempty"`
+	ExcludeContainerPaths     map[string][]string    `json:"excludeContainerPaths,omitempty" yaml:"excludeContainerPaths,omitempty"`
 	FluentForwarderConfig     *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluentForwarderConfig,omitempty"`
 	KafkaConfig               *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafkaConfig,omitempty"`
 	MultiLineEndRegexp        string                 `json:"multiLineEndRegexp,omitempty" yaml:"multiLineEndRegexp,omitempty"`

@@ -17,6 +17,7 @@ const (
 	ClusterLoggingFieldEnableExceptionStackMatch = "enableExceptionStackMatch"
 	ClusterLoggingFieldEnableJSONParsing         = "enableJSONParsing"
 	ClusterLoggingFieldEnableMultiLineFilter     = "enableMultiLineFilter"
+	ClusterLoggingFieldExcludeContainerPaths     = "excludeContainerPaths"
 	ClusterLoggingFieldFailedSpec                = "failedSpec"
 	ClusterLoggingFieldFluentForwarderConfig     = "fluentForwarderConfig"
 	ClusterLoggingFieldIncludeSystemComponent    = "includeSystemComponent"
@@ -51,6 +52,7 @@ type ClusterLogging struct {
 	EnableExceptionStackMatch bool                   `json:"enableExceptionStackMatch,omitempty" yaml:"enableExceptionStackMatch,omitempty"`
 	EnableJSONParsing         bool                   `json:"enableJSONParsing,omitempty" yaml:"enableJSONParsing,omitempty"`
 	EnableMultiLineFilter     bool                   `json:"enableMultiLineFilter,omitempty" yaml:"enableMultiLineFilter,omitempty"`
+	ExcludeContainerPaths     map[string][]string    `json:"excludeContainerPaths,omitempty" yaml:"excludeContainerPaths,omitempty"`
 	FailedSpec                *ClusterLoggingSpec    `json:"failedSpec,omitempty" yaml:"failedSpec,omitempty"`
 	FluentForwarderConfig     *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluentForwarderConfig,omitempty"`
 	IncludeSystemComponent    *bool                  `json:"includeSystemComponent,omitempty" yaml:"includeSystemComponent,omitempty"`
