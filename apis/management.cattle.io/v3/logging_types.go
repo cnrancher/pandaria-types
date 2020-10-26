@@ -48,14 +48,15 @@ func (p *ProjectLogging) ObjClusterName() string {
 }
 
 type LoggingCommonField struct {
-	DisplayName               string            `json:"displayName,omitempty"`
-	OutputFlushInterval       int               `json:"outputFlushInterval,omitempty" norman:"default=60"`
-	OutputTags                map[string]string `json:"outputTags,omitempty"`
-	EnableJSONParsing         bool              `json:"enableJSONParsing,omitempty"`
-	EnableExceptionStackMatch bool              `json:"enableExceptionStackMatch,omitempty"`
-	EnableMultiLineFilter     bool              `json:"enableMultiLineFilter,omitempty"`
-	MultiLineStartRegexp      string            `json:"multiLineStartRegexp,omitempty"`
-	MultiLineEndRegexp        string            `json:"multiLineEndRegexp,omitempty"`
+	DisplayName               string              `json:"displayName,omitempty"`
+	OutputFlushInterval       int                 `json:"outputFlushInterval,omitempty" norman:"default=60"`
+	OutputTags                map[string]string   `json:"outputTags,omitempty"`
+	EnableJSONParsing         bool                `json:"enableJSONParsing,omitempty"`
+	EnableExceptionStackMatch bool                `json:"enableExceptionStackMatch,omitempty"`
+	EnableMultiLineFilter     bool                `json:"enableMultiLineFilter,omitempty"`
+	MultiLineStartRegexp      string              `json:"multiLineStartRegexp,omitempty"`
+	MultiLineEndRegexp        string              `json:"multiLineEndRegexp,omitempty"`
+	ExcludeContainerPaths     map[string][]string `json:"excludeContainerPaths,omitempty"`
 }
 
 type LoggingTargets struct {
