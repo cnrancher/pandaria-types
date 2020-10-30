@@ -20,6 +20,8 @@ import (
 	extv1beta1 "github.com/rancher/types/apis/extensions/v1beta1"
 	managementv3 "github.com/rancher/types/apis/management.cattle.io/v3"
 	managementSchema "github.com/rancher/types/apis/management.cattle.io/v3/schema"
+	pandariav3 "github.com/rancher/types/apis/mgt.pandaria.io/v3"
+	pandariaSchema "github.com/rancher/types/apis/mgt.pandaria.io/v3/schema"
 	monitoringv1 "github.com/rancher/types/apis/monitoring.coreos.com/v1"
 	istiov1alpha3 "github.com/rancher/types/apis/networking.istio.io/v1alpha3"
 	knetworkingv1 "github.com/rancher/types/apis/networking.k8s.io/v1"
@@ -60,11 +62,12 @@ type ScaledContext struct {
 	UserManager       user.Manager
 	PeerManager       peermanager.PeerManager
 
-	Management managementv3.Interface
-	Project    projectv3.Interface
-	RBAC       rbacv1.Interface
-	Core       corev1.Interface
-	Storage    storagev1.Interface
+	Management         managementv3.Interface
+	Project            projectv3.Interface
+	RBAC               rbacv1.Interface
+	Core               corev1.Interface
+	Storage            storagev1.Interface
+	PandariaManagement pandariav3.Interface // PANDARIA
 
 	RunContext        context.Context
 	managementContext *ManagementContext
@@ -143,10 +146,17 @@ func NewScaledContext(config rest.Config) (*ScaledContext, error) {
 		return nil, err
 	}
 
+	// PANDARIA
+	context.PandariaManagement, err = pandariav3.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
 	context.Schemas = types.NewSchemas().
 		AddSchemas(managementSchema.Schemas).
 		AddSchemas(clusterSchema.Schemas).
-		AddSchemas(projectSchema.Schemas)
+		AddSchemas(projectSchema.Schemas).
+		AddSchemas(pandariaSchema.Schemas) // PANDARIA
 
 	return context, err
 }
@@ -168,10 +178,11 @@ type ManagementContext struct {
 	Dialer            dialer.Factory
 	UserManager       user.Manager
 
-	Management managementv3.Interface
-	Project    projectv3.Interface
-	RBAC       rbacv1.Interface
-	Core       corev1.Interface
+	Management         managementv3.Interface
+	Project            projectv3.Interface
+	RBAC               rbacv1.Interface
+	Core               corev1.Interface
+	PandariaManagement pandariav3.Interface // PANDARIA
 }
 
 func (c *ManagementContext) controllers() []controller.Starter {
@@ -350,14 +361,22 @@ func NewManagementContext(config rest.Config) (*ManagementContext, error) {
 		return nil, err
 	}
 
+	// PANDARIA
+	context.PandariaManagement, err = pandariav3.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
 	context.Schemas = types.NewSchemas().
 		AddSchemas(managementSchema.Schemas).
 		AddSchemas(clusterSchema.Schemas).
-		AddSchemas(projectSchema.Schemas)
+		AddSchemas(projectSchema.Schemas).
+		AddSchemas(pandariaSchema.Schemas) // PANDARIA
 
 	context.Scheme = runtime.NewScheme()
 	managementv3.AddToScheme(context.Scheme)
 	projectv3.AddToScheme(context.Scheme)
+	pandariav3.AddToScheme(context.Scheme) // PANDARIA
 
 	return context, err
 }
