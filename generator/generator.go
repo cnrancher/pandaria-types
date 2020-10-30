@@ -65,13 +65,13 @@ func Generate(schemas *types.Schemas, backendTypes map[string]bool) {
 	}
 }
 
-func GenerateComposeType(projectSchemas *types.Schemas, managementSchemas *types.Schemas, clusterSchemas *types.Schemas) {
-	if err := generateComposeType(filepath.Join(basePackage, baseCompose), projectSchemas, managementSchemas, clusterSchemas); err != nil {
+func GenerateComposeType(projectSchemas *types.Schemas, managementSchemas *types.Schemas, clusterSchemas *types.Schemas, pandariaSchemas *types.Schemas) {
+	if err := generateComposeType(filepath.Join(basePackage, baseCompose), projectSchemas, managementSchemas, clusterSchemas, pandariaSchemas); err != nil {
 		panic(err)
 	}
 }
 
-func generateComposeType(baseCompose string, projectSchemas *types.Schemas, managementSchemas *types.Schemas, clusterSchemas *types.Schemas) error {
+func generateComposeType(baseCompose string, projectSchemas *types.Schemas, managementSchemas *types.Schemas, clusterSchemas *types.Schemas, pandariaSchemas *types.Schemas) error {
 	outputDir := filepath.Join(args.DefaultSourceTree(), baseCompose)
 	if err := os.MkdirAll(outputDir, 0755); err != nil {
 		return err
@@ -94,6 +94,7 @@ func generateComposeType(baseCompose string, projectSchemas *types.Schemas, mana
 		"managementSchemas": managementSchemas.Schemas(),
 		"projectSchemas":    projectSchemas.Schemas(),
 		"clusterSchemas":    clusterSchemas.Schemas(),
+		"pandariaSchemas":   pandariaSchemas.Schemas(),
 	}); err != nil {
 		return err
 	}

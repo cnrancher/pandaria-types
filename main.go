@@ -10,6 +10,7 @@ import (
 	clusterSchema "github.com/rancher/types/apis/cluster.cattle.io/v3/schema"
 	managementSchema "github.com/rancher/types/apis/management.cattle.io/v3/schema"
 	publicSchema "github.com/rancher/types/apis/management.cattle.io/v3public/schema"
+	pandariaSchema "github.com/rancher/types/apis/mgt.pandaria.io/v3/schema"
 	projectSchema "github.com/rancher/types/apis/project.cattle.io/v3/schema"
 	"github.com/rancher/types/generator"
 
@@ -28,7 +29,7 @@ import (
 )
 
 func main() {
-	generator.GenerateComposeType(projectSchema.Schemas, managementSchema.Schemas, clusterSchema.Schemas)
+	generator.GenerateComposeType(projectSchema.Schemas, managementSchema.Schemas, clusterSchema.Schemas, pandariaSchema.Schemas)
 	generator.Generate(managementSchema.Schemas, map[string]bool{
 		"userAttribute": true,
 	})
@@ -38,6 +39,7 @@ func main() {
 		"clusterAuthToken":     true,
 	})
 	generator.Generate(projectSchema.Schemas, nil)
+	generator.Generate(pandariaSchema.Schemas, nil)
 	generator.GenerateNativeTypes(v1.SchemeGroupVersion, []interface{}{
 		v1.Endpoints{},
 		v1.PersistentVolumeClaim{},
