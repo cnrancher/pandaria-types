@@ -47,6 +47,7 @@ type CloneApp struct {
 	ConfigMapList             []v1.ConfigMap            `json:"configMapList,omitempty"`
 	PersistentVolumeClaimList []*RelatedSourceInterface `json:"pvcList,omitempty"`
 	IngressList               []extv1beta1.Ingress      `json:"ingressList,omitempty"`
+	ServiceList               []*RelatedSourceInterface `json:"serviceList,omitempty"`
 }
 
 type CloneTarget struct {
