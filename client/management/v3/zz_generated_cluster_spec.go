@@ -21,6 +21,7 @@ const (
 	ClusterSpecFieldEnableDualStack                     = "enableDualStack"
 	ClusterSpecFieldEnableGPUManagement                 = "enableGPUManagement"
 	ClusterSpecFieldEnableNetworkPolicy                 = "enableNetworkPolicy"
+	ClusterSpecFieldFluentdLogDir                       = "fluentdLogDir"
 	ClusterSpecFieldGPUSchedulerNodePort                = "gpuSchedulerNodePort"
 	ClusterSpecFieldGenericEngineConfig                 = "genericEngineConfig"
 	ClusterSpecFieldGoogleKubernetesEngineConfig        = "googleKubernetesEngineConfig"
@@ -54,6 +55,7 @@ type ClusterSpec struct {
 	EnableDualStack                     bool                           `json:"enableDualStack,omitempty" yaml:"enableDualStack,omitempty"`
 	EnableGPUManagement                 bool                           `json:"enableGPUManagement,omitempty" yaml:"enableGPUManagement,omitempty"`
 	EnableNetworkPolicy                 *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
+	FluentdLogDir                       string                         `json:"fluentdLogDir,omitempty" yaml:"fluentdLogDir,omitempty"`
 	GPUSchedulerNodePort                string                         `json:"gpuSchedulerNodePort,omitempty" yaml:"gpuSchedulerNodePort,omitempty"`
 	GenericEngineConfig                 map[string]interface{}         `json:"genericEngineConfig,omitempty" yaml:"genericEngineConfig,omitempty"`
 	GoogleKubernetesEngineConfig        map[string]interface{}         `json:"googleKubernetesEngineConfig,omitempty" yaml:"googleKubernetesEngineConfig,omitempty"`
