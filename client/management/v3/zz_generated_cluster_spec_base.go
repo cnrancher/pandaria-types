@@ -13,6 +13,7 @@ const (
 	ClusterSpecBaseFieldEnableDualStack                     = "enableDualStack"
 	ClusterSpecBaseFieldEnableGPUManagement                 = "enableGPUManagement"
 	ClusterSpecBaseFieldEnableNetworkPolicy                 = "enableNetworkPolicy"
+	ClusterSpecBaseFieldFluentdLogDir                       = "fluentdLogDir"
 	ClusterSpecBaseFieldGPUSchedulerNodePort                = "gpuSchedulerNodePort"
 	ClusterSpecBaseFieldLocalClusterAuthEndpoint            = "localClusterAuthEndpoint"
 	ClusterSpecBaseFieldRancherKubernetesEngineConfig       = "rancherKubernetesEngineConfig"
@@ -33,6 +34,7 @@ type ClusterSpecBase struct {
 	EnableDualStack                     bool                           `json:"enableDualStack,omitempty" yaml:"enableDualStack,omitempty"`
 	EnableGPUManagement                 bool                           `json:"enableGPUManagement,omitempty" yaml:"enableGPUManagement,omitempty"`
 	EnableNetworkPolicy                 *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
+	FluentdLogDir                       string                         `json:"fluentdLogDir,omitempty" yaml:"fluentdLogDir,omitempty"`
 	GPUSchedulerNodePort                string                         `json:"gpuSchedulerNodePort,omitempty" yaml:"gpuSchedulerNodePort,omitempty"`
 	LocalClusterAuthEndpoint            *LocalClusterAuthEndpoint      `json:"localClusterAuthEndpoint,omitempty" yaml:"localClusterAuthEndpoint,omitempty"`
 	RancherKubernetesEngineConfig       *RancherKubernetesEngineConfig `json:"rancherKubernetesEngineConfig,omitempty" yaml:"rancherKubernetesEngineConfig,omitempty"`
