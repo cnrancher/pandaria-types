@@ -157,6 +157,8 @@ type ClusterOperations interface {
 
 	ActionBackupEtcd(resource *Cluster) error
 
+	ActionCheckNetworkAddons(resource *Cluster) (*NeedUpdateNetworkAddons, error)
+
 	ActionDisableMonitoring(resource *Cluster) error
 
 	ActionEditMonitoring(resource *Cluster, input *MonitoringInput) error
@@ -168,6 +170,8 @@ type ClusterOperations interface {
 	ActionGenerateKubeconfig(resource *Cluster) (*GenerateKubeConfigOutput, error)
 
 	ActionImportYaml(resource *Cluster, input *ImportClusterYamlInput) (*ImportYamlOutput, error)
+
+	ActionRefreshNetworkAddons(resource *Cluster) error
 
 	ActionRestoreFromEtcdBackup(resource *Cluster, input *RestoreFromEtcdBackupInput) error
 
@@ -254,6 +258,12 @@ func (c *ClusterClient) ActionBackupEtcd(resource *Cluster) error {
 	return err
 }
 
+func (c *ClusterClient) ActionCheckNetworkAddons(resource *Cluster) (*NeedUpdateNetworkAddons, error) {
+	resp := &NeedUpdateNetworkAddons{}
+	err := c.apiClient.Ops.DoAction(ClusterType, "checkNetworkAddons", &resource.Resource, nil, resp)
+	return resp, err
+}
+
 func (c *ClusterClient) ActionDisableMonitoring(resource *Cluster) error {
 	err := c.apiClient.Ops.DoAction(ClusterType, "disableMonitoring", &resource.Resource, nil, nil)
 	return err
@@ -285,6 +295,11 @@ func (c *ClusterClient) ActionImportYaml(resource *Cluster, input *ImportCluster
 	resp := &ImportYamlOutput{}
 	err := c.apiClient.Ops.DoAction(ClusterType, "importYaml", &resource.Resource, input, resp)
 	return resp, err
+}
+
+func (c *ClusterClient) ActionRefreshNetworkAddons(resource *Cluster) error {
+	err := c.apiClient.Ops.DoAction(ClusterType, "refreshNetworkAddons", &resource.Resource, nil, nil)
+	return err
 }
 
 func (c *ClusterClient) ActionRestoreFromEtcdBackup(resource *Cluster, input *RestoreFromEtcdBackupInput) error {
