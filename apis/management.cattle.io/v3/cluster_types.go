@@ -33,6 +33,8 @@ const (
 	ClusterActionRotateCertificates    = "rotateCertificates"
 	ClusterActionRunSecurityScan       = "runSecurityScan"
 	ClusterActionSaveAsTemplate        = "saveAsTemplate"
+	ClusterActionRefreshNetworkAddons  = "refreshNetworkAddons" // PANDARIA: Support manual update network addons
+	ClusterActionCheckNetworkAddons    = "checkNetworkAddons"   // PANDARIA: Check if the network addons can be updated
 
 	// ClusterConditionReady Cluster ready to serve API (healthy when true, unhealthy when false)
 	ClusterConditionReady          condition.Cond = "Ready"
@@ -339,4 +341,9 @@ type SaveAsTemplateInput struct {
 type SaveAsTemplateOutput struct {
 	ClusterTemplateName         string `json:"clusterTemplateName,omitempty"`
 	ClusterTemplateRevisionName string `json:"clusterTemplateRevisionName,omitempty"`
+}
+
+type NeedUpdateNetworkAddons struct { // PANDARIA: Support manual update network addons
+	NeedUpdate bool   `json:"needUpdate"`
+	Message    string `json:"message,omitempty"`
 }

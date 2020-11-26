@@ -239,6 +239,7 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.RestoreFromEtcdBackupInput{}).
 		MustImport(&Version, v3.SaveAsTemplateInput{}).
 		MustImport(&Version, v3.SaveAsTemplateOutput{}).
+		MustImport(&Version, v3.NeedUpdateNetworkAddons{}). // PANDARIA: Support manual update network addons
 		MustImportAndCustomize(&Version, v3.ETCDService{}, func(schema *types.Schema) {
 			schema.MustCustomizeField("extraArgs", func(field types.Field) types.Field {
 				field.Default = map[string]interface{}{
@@ -288,6 +289,11 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 			schema.ResourceActions[v3.ClusterActionSaveAsTemplate] = types.Action{
 				Input:  "saveAsTemplateInput",
 				Output: "saveAsTemplateOutput",
+			}
+			// PANDARIA: Support manual update network addons
+			schema.ResourceActions[v3.ClusterActionRefreshNetworkAddons] = types.Action{}
+			schema.ResourceActions[v3.ClusterActionCheckNetworkAddons] = types.Action{
+				Output: "needUpdateNetworkAddons",
 			}
 		})
 }
