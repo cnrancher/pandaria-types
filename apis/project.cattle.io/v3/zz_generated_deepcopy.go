@@ -709,9 +709,12 @@ func (in *CloneApp) DeepCopyInto(out *CloneApp) {
 	}
 	if in.ServiceList != nil {
 		in, out := &in.ServiceList, &out.ServiceList
-		*out = make([]v1.Service, len(*in))
+		*out = make([]*RelatedSourceInterface, len(*in))
 		for i := range *in {
-			(*in)[i].DeepCopyInto(&(*out)[i])
+			if (*in)[i] != nil {
+				in, out := &(*in)[i], &(*out)[i]
+				*out = (*in).DeepCopy()
+			}
 		}
 	}
 	return
