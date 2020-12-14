@@ -40,7 +40,7 @@ type CloneApp struct {
 	PersistentVolumeClaimList []map[string]interface{} `json:"pvcList,omitempty" yaml:"pvcList,omitempty"`
 	Removed                   string                   `json:"removed,omitempty" yaml:"removed,omitempty"`
 	SecretList                []map[string]interface{} `json:"secretList,omitempty" yaml:"secretList,omitempty"`
-	ServiceList               []DNSRecord              `json:"serviceList,omitempty" yaml:"serviceList,omitempty"`
+	ServiceList               []map[string]interface{} `json:"serviceList,omitempty" yaml:"serviceList,omitempty"`
 	Target                    *CloneTarget             `json:"target,omitempty" yaml:"target,omitempty"`
 	UUID                      string                   `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 	Workload                  *Workload                `json:"workload,omitempty" yaml:"workload,omitempty"`
