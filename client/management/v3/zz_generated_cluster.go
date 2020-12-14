@@ -39,6 +39,7 @@ const (
 	ClusterFieldEnableClusterAlerting                = "enableClusterAlerting"
 	ClusterFieldEnableClusterMonitoring              = "enableClusterMonitoring"
 	ClusterFieldEnableDualStack                      = "enableDualStack"
+	ClusterFieldEnableF5CIS                          = "enableF5CIS"
 	ClusterFieldEnableGPUManagement                  = "enableGPUManagement"
 	ClusterFieldEnableNetworkPolicy                  = "enableNetworkPolicy"
 	ClusterFieldFailedSpec                           = "failedSpec"
@@ -105,6 +106,7 @@ type Cluster struct {
 	EnableClusterAlerting                bool                           `json:"enableClusterAlerting,omitempty" yaml:"enableClusterAlerting,omitempty"`
 	EnableClusterMonitoring              bool                           `json:"enableClusterMonitoring,omitempty" yaml:"enableClusterMonitoring,omitempty"`
 	EnableDualStack                      bool                           `json:"enableDualStack,omitempty" yaml:"enableDualStack,omitempty"`
+	EnableF5CIS                          bool                           `json:"enableF5CIS,omitempty" yaml:"enableF5CIS,omitempty"`
 	EnableGPUManagement                  bool                           `json:"enableGPUManagement,omitempty" yaml:"enableGPUManagement,omitempty"`
 	EnableNetworkPolicy                  *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
 	FailedSpec                           *ClusterSpec                   `json:"failedSpec,omitempty" yaml:"failedSpec,omitempty"`
@@ -157,9 +159,15 @@ type ClusterOperations interface {
 
 	ActionBackupEtcd(resource *Cluster) error
 
+	ActionDisableF5CIS(resource *Cluster) error
+
 	ActionDisableMonitoring(resource *Cluster) error
 
+	ActionEditF5CIS(resource *Cluster, input *F5CISInput) error
+
 	ActionEditMonitoring(resource *Cluster, input *MonitoringInput) error
+
+	ActionEnableF5CIS(resource *Cluster, input *F5CISInput) error
 
 	ActionEnableMonitoring(resource *Cluster, input *MonitoringInput) error
 
@@ -176,6 +184,8 @@ type ClusterOperations interface {
 	ActionRunSecurityScan(resource *Cluster, input *CisScanConfig) error
 
 	ActionSaveAsTemplate(resource *Cluster, input *SaveAsTemplateInput) (*SaveAsTemplateOutput, error)
+
+	ActionViewF5CIS(resource *Cluster) (*F5CISOutput, error)
 
 	ActionViewMonitoring(resource *Cluster) (*MonitoringOutput, error)
 }
@@ -254,13 +264,28 @@ func (c *ClusterClient) ActionBackupEtcd(resource *Cluster) error {
 	return err
 }
 
+func (c *ClusterClient) ActionDisableF5CIS(resource *Cluster) error {
+	err := c.apiClient.Ops.DoAction(ClusterType, "disableF5CIS", &resource.Resource, nil, nil)
+	return err
+}
+
 func (c *ClusterClient) ActionDisableMonitoring(resource *Cluster) error {
 	err := c.apiClient.Ops.DoAction(ClusterType, "disableMonitoring", &resource.Resource, nil, nil)
 	return err
 }
 
+func (c *ClusterClient) ActionEditF5CIS(resource *Cluster, input *F5CISInput) error {
+	err := c.apiClient.Ops.DoAction(ClusterType, "editF5CIS", &resource.Resource, input, nil)
+	return err
+}
+
 func (c *ClusterClient) ActionEditMonitoring(resource *Cluster, input *MonitoringInput) error {
 	err := c.apiClient.Ops.DoAction(ClusterType, "editMonitoring", &resource.Resource, input, nil)
+	return err
+}
+
+func (c *ClusterClient) ActionEnableF5CIS(resource *Cluster, input *F5CISInput) error {
+	err := c.apiClient.Ops.DoAction(ClusterType, "enableF5CIS", &resource.Resource, input, nil)
 	return err
 }
 
@@ -306,6 +331,12 @@ func (c *ClusterClient) ActionRunSecurityScan(resource *Cluster, input *CisScanC
 func (c *ClusterClient) ActionSaveAsTemplate(resource *Cluster, input *SaveAsTemplateInput) (*SaveAsTemplateOutput, error) {
 	resp := &SaveAsTemplateOutput{}
 	err := c.apiClient.Ops.DoAction(ClusterType, "saveAsTemplate", &resource.Resource, input, resp)
+	return resp, err
+}
+
+func (c *ClusterClient) ActionViewF5CIS(resource *Cluster) (*F5CISOutput, error) {
+	resp := &F5CISOutput{}
+	err := c.apiClient.Ops.DoAction(ClusterType, "viewF5CIS", &resource.Resource, nil, resp)
 	return resp, err
 }
 
