@@ -11,6 +11,7 @@ const (
 	ClusterSpecBaseFieldEnableClusterAlerting               = "enableClusterAlerting"
 	ClusterSpecBaseFieldEnableClusterMonitoring             = "enableClusterMonitoring"
 	ClusterSpecBaseFieldEnableDualStack                     = "enableDualStack"
+	ClusterSpecBaseFieldEnableF5CIS                         = "enableF5CIS"
 	ClusterSpecBaseFieldEnableGPUManagement                 = "enableGPUManagement"
 	ClusterSpecBaseFieldEnableNetworkPolicy                 = "enableNetworkPolicy"
 	ClusterSpecBaseFieldFluentdLogDir                       = "fluentdLogDir"
@@ -32,6 +33,7 @@ type ClusterSpecBase struct {
 	EnableClusterAlerting               bool                           `json:"enableClusterAlerting,omitempty" yaml:"enableClusterAlerting,omitempty"`
 	EnableClusterMonitoring             bool                           `json:"enableClusterMonitoring,omitempty" yaml:"enableClusterMonitoring,omitempty"`
 	EnableDualStack                     bool                           `json:"enableDualStack,omitempty" yaml:"enableDualStack,omitempty"`
+	EnableF5CIS                         bool                           `json:"enableF5CIS,omitempty" yaml:"enableF5CIS,omitempty"`
 	EnableGPUManagement                 bool                           `json:"enableGPUManagement,omitempty" yaml:"enableGPUManagement,omitempty"`
 	EnableNetworkPolicy                 *bool                          `json:"enableNetworkPolicy,omitempty" yaml:"enableNetworkPolicy,omitempty"`
 	FluentdLogDir                       string                         `json:"fluentdLogDir,omitempty" yaml:"fluentdLogDir,omitempty"`

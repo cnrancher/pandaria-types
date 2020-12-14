@@ -14,6 +14,7 @@ import (
 	autoscaling "github.com/rancher/types/apis/autoscaling/v2beta2"
 	batchv1 "github.com/rancher/types/apis/batch/v1"
 	batchv1beta1 "github.com/rancher/types/apis/batch/v1beta1"
+	f5cisv1 "github.com/rancher/types/apis/cis.f5.com/v1"
 	clusterv3 "github.com/rancher/types/apis/cluster.cattle.io/v3"
 	clusterSchema "github.com/rancher/types/apis/cluster.cattle.io/v3/schema"
 	corev1 "github.com/rancher/types/apis/core/v1"
@@ -229,6 +230,7 @@ type UserContext struct {
 	Istio          istiov1alpha3.Interface
 	Storage        storagev1.Interface
 	Policy         policyv1beta1.Interface
+	F5CIS          f5cisv1.Interface
 
 	RBACw wrbacv1.Interface
 	rbacw *rbac.Factory
@@ -250,6 +252,7 @@ func (w *UserContext) controllers() []controller.Starter {
 		w.Storage,
 		w.Policy,
 		w.rbacw,
+		w.F5CIS,
 	}
 }
 
@@ -274,6 +277,7 @@ func (w *UserContext) UserOnlyContext() *UserOnlyContext {
 		Istio:        w.Istio,
 		Storage:      w.Storage,
 		Policy:       w.Policy,
+		F5CIS:        w.F5CIS,
 	}
 }
 
@@ -298,6 +302,7 @@ type UserOnlyContext struct {
 	Istio           istiov1alpha3.Interface
 	Storage         storagev1.Interface
 	Policy          policyv1beta1.Interface
+	F5CIS           f5cisv1.Interface
 }
 
 func (w *UserOnlyContext) controllers() []controller.Starter {
@@ -313,6 +318,7 @@ func (w *UserOnlyContext) controllers() []controller.Starter {
 		w.Monitoring,
 		w.Storage,
 		w.Policy,
+		w.F5CIS,
 	}
 }
 
@@ -476,6 +482,11 @@ func NewUserContext(scaledContext *ScaledContext, config rest.Config, clusterNam
 		return nil, err
 	}
 
+	context.F5CIS, err = f5cisv1.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
 	context.Cluster, err = clusterv3.NewForConfig(config)
 	if err != nil {
 		return nil, err
@@ -587,6 +598,11 @@ func NewUserOnlyContext(config rest.Config) (*UserOnlyContext, error) {
 	}
 
 	context.Monitoring, err = monitoringv1.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+
+	context.F5CIS, err = f5cisv1.NewForConfig(config)
 	if err != nil {
 		return nil, err
 	}

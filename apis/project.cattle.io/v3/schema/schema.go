@@ -3,6 +3,7 @@ package schema
 import (
 	"net/http"
 
+	f5cisv1 "github.com/F5Networks/k8s-bigip-ctlr/config/apis/cis/v1"
 	monitoringv1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
 	istiov1alpha3 "github.com/knative/pkg/apis/istio/v1alpha3"
 	"github.com/rancher/norman/types"
@@ -50,7 +51,8 @@ var (
 		Init(monitoringTypes).
 		Init(autoscalingTypes).
 		Init(istioTypes).
-		Init(cloneAppTypes)
+		Init(cloneAppTypes).
+		Init(f5Types)
 )
 
 func configMapTypes(schemas *types.Schemas) *types.Schemas {
@@ -1174,4 +1176,20 @@ func cloneAppTypes(schemas *types.Schemas) *types.Schemas {
 		MustImportAndCustomize(&Version, v3.CloneApp{}, func(schema *types.Schema) {
 			delete(schema.ResourceFields, "namespaceId")
 		})
+}
+
+func f5Types(schemas *types.Schemas) *types.Schemas {
+	return schemas.
+		// TypeName("f5VirtualServer", f5cisv1.VirtualServer{}).
+		// TypeName("f5Pool", f5cisv1.Pool{}).
+		// TypeName("f5VSMonitor", f5cisv1.Monitor{}).
+		// TypeName("f5TLSProfile", f5cisv1.TLSProfile{}).
+		// TypeName("f5TLSProfileSpec", f5cisv1.TLSProfileSpec{}).
+		// TypeName("f5TLS", f5cisv1.TLS{}).
+		// TypeName("f5TransportServer", f5cisv1.TransportServer{}).
+		// TypeName("f5TransportServerSpec", f5cisv1.TransportServerSpec{}).
+		MustImport(&Version, f5cisv1.VirtualServer{}, projectOverride{}).
+		MustImport(&Version, f5cisv1.TLSProfile{}, projectOverride{}).
+		MustImport(&Version, f5cisv1.TransportServer{}, projectOverride{}).
+		MustImport(&Version, f5cisv1.ExternalDNS{}, projectOverride{})
 }

@@ -4,6 +4,7 @@
 package main
 
 import (
+	f5cisv1 "github.com/F5Networks/k8s-bigip-ctlr/config/apis/cis/v1"
 	monitoring "github.com/coreos/prometheus-operator/pkg/apis/monitoring"
 	monitoringv1 "github.com/coreos/prometheus-operator/pkg/apis/monitoring/v1"
 	istiov1alpha3 "github.com/knative/pkg/apis/istio/v1alpha3"
@@ -125,5 +126,14 @@ func main() {
 		[]interface{}{
 			apiregistrationv1.APIService{},
 		},
+	)
+	generator.GenerateNativeTypes(f5cisv1.SchemeGroupVersion,
+		[]interface{}{
+			f5cisv1.VirtualServer{},
+			f5cisv1.TLSProfile{},
+			f5cisv1.TransportServer{},
+			f5cisv1.ExternalDNS{},
+		},
+		nil,
 	)
 }

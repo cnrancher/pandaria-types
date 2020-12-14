@@ -9,6 +9,7 @@ replace (
 )
 
 require (
+	github.com/F5Networks/k8s-bigip-ctlr v0.0.0-20201204153954-a3df363ee660
 	github.com/coreos/prometheus-operator v0.36.0
 	github.com/knative/pkg v0.0.0-20190817231834-12ee58e32cc8
 	github.com/pkg/errors v0.8.1
