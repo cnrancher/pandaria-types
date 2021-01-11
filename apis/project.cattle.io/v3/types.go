@@ -121,6 +121,10 @@ type WorkloadMetric struct {
 }
 
 type WorkloadMetricRelabelConfig struct {
-	Regex  string `json:"regex,omitempty"`
-	Action string `json:"action,omitempty" norman:"type=enum,options=labeldrop,default=labeldrop"` //will support more when user need
+	RelabelType  string   `json:"relabelType,omitempty" norman:"type=enum,options=metricRelabel|relabel,default=metricRelabel"`
+	TargetLabel  string   `json:"targetLabel,omitempty"`
+	SourceLabels []string `json:"sourceLabels,omitempty"`
+	Replacement  string   `json:"replacement,omitempty"`
+	Regex        string   `json:"regex,omitempty"`
+	Action       string   `json:"action,omitempty" norman:"type=enum,options=replace|keep|drop|labelmap|labeldrop,default=labeldrop"`
 }
