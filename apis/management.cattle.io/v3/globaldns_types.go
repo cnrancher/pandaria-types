@@ -47,7 +47,8 @@ type GlobalDNSProviderSpec struct {
 	Route53ProviderConfig    *Route53ProviderConfig    `json:"route53ProviderConfig,omitempty"`
 	CloudflareProviderConfig *CloudflareProviderConfig `json:"cloudflareProviderConfig,omitempty"`
 	AlidnsProviderConfig     *AlidnsProviderConfig     `json:"alidnsProviderConfig,omitempty"`
-	RDNSProviderConfig       *RDNSProviderConfig       `json:"rdnsProviderConfig,omitempty"` // for pandaria
+	RDNSProviderConfig       *RDNSProviderConfig       `json:"rdnsProviderConfig,omitempty"`    // for pandaria
+	F5BIGIPProviderConfig    *F5BIGIPProviderConfig    `json:"f5bigipProviderConfig,omitempty"` // for pandaria
 	Members                  []Member                  `json:"members,omitempty"`
 	RootDomain               string                    `json:"rootDomain"`
 }
@@ -79,4 +80,15 @@ type AlidnsProviderConfig struct {
 type RDNSProviderConfig struct {
 	ETCDUrls string `json:"etcdUrls" norman:"notnullable,required,minLength=1,default=http://localhost:2379"`
 	Secret   string `json:"secret" norman:"nullable"`
+}
+
+type F5BIGIPProviderConfig struct {
+	F5BIGIPHost           string `json:"f5BigipHost" norman:"notnullable,required"`
+	F5BIGIPPort           string `json:"f5BigipPort" norman:"notnullable,required,default=8443"`
+	F5BIGIPUser           string `json:"f5BigipUser" norman:"notnullable,required,default=admin"`
+	F5BIGIPPasswd         string `json:"f5BigipPasswd" norman:"notnullable,required"`
+	F5BIGIPDatacenterName string `json:"f5BigipDatacenterName" norman:"notnullable,required"`
+	F5BIGIPServerName     string `json:"f5BigipServerName" norman:"notnullable,required"`
+	F5BIGIPDeviceIP       string `json:"f5BigipDeviceIP" norman:"notnullable,required"`
+	F5BIGIPDeviceName     string `json:"f5BigipDeviceName" norman:"notnullable,required,default=www.bigip.com"`
 }
