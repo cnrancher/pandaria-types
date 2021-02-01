@@ -11,6 +11,7 @@ const (
 	GlobalDNSProviderFieldCloudflareProviderConfig = "cloudflareProviderConfig"
 	GlobalDNSProviderFieldCreated                  = "created"
 	GlobalDNSProviderFieldCreatorID                = "creatorId"
+	GlobalDNSProviderFieldF5BIGIPProviderConfig    = "f5bigipProviderConfig"
 	GlobalDNSProviderFieldLabels                   = "labels"
 	GlobalDNSProviderFieldMembers                  = "members"
 	GlobalDNSProviderFieldName                     = "name"
@@ -29,6 +30,7 @@ type GlobalDNSProvider struct {
 	CloudflareProviderConfig *CloudflareProviderConfig `json:"cloudflareProviderConfig,omitempty" yaml:"cloudflareProviderConfig,omitempty"`
 	Created                  string                    `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID                string                    `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	F5BIGIPProviderConfig    *F5BIGIPProviderConfig    `json:"f5bigipProviderConfig,omitempty" yaml:"f5bigipProviderConfig,omitempty"`
 	Labels                   map[string]string         `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Members                  []Member                  `json:"members,omitempty" yaml:"members,omitempty"`
 	Name                     string                    `json:"name,omitempty" yaml:"name,omitempty"`
