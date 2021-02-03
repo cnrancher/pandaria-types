@@ -86,12 +86,17 @@ type RDNSProviderConfig struct {
 }
 
 type F5BIGIPProviderConfig struct {
-	F5BIGIPHost           string `json:"f5BigipHost" norman:"notnullable,required"`
-	F5BIGIPPort           string `json:"f5BigipPort" norman:"notnullable,required,default=8443"`
-	F5BIGIPUser           string `json:"f5BigipUser" norman:"notnullable,required,default=admin"`
-	F5BIGIPPasswd         string `json:"f5BigipPasswd" norman:"notnullable,required"`
-	F5BIGIPDatacenterName string `json:"f5BigipDatacenterName" norman:"notnullable,required"`
-	F5BIGIPServerName     string `json:"f5BigipServerName" norman:"notnullable,required"`
-	F5BIGIPDeviceIP       string `json:"f5BigipDeviceIP" norman:"notnullable,required"`
-	F5BIGIPDeviceName     string `json:"f5BigipDeviceName" norman:"notnullable,required,default=www.bigip.com"`
+	F5BIGIPHost           string           `json:"f5BigipHost" norman:"notnullable,required"`
+	F5BIGIPPort           string           `json:"f5BigipPort" norman:"notnullable,required,default=8443"`
+	F5BIGIPUser           string           `json:"f5BigipUser" norman:"notnullable,required,default=admin"`
+	F5BIGIPPasswd         string           `json:"f5BigipPasswd" norman:"notnullable,required"`
+	F5BIGIPDatacenterName string           `json:"f5BigipDatacenterName" norman:"notnullable,required"`
+	F5BIGIPServerName     string           `json:"f5BigipServerName" norman:"notnullable,required"`
+	F5BIGIPDeviceIPS      []ServerAddresse `json:"f5BigipDeviceIPs" norman:"notnullable,required"`
+}
+
+type ServerAddresse struct {
+	Name        string `json:"name" norman:"notnullable,required"`
+	DeviceName  string `json:"deviceName" norman:"notnullable,required"`
+	Translation string `json:"translation,omitempty"`
 }
