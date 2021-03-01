@@ -33,6 +33,10 @@ const (
 	ClusterActionRotateCertificates    = "rotateCertificates"
 	ClusterActionRunSecurityScan       = "runSecurityScan"
 	ClusterActionSaveAsTemplate        = "saveAsTemplate"
+	ClusterActionEnableF5CIS           = "enableF5CIS"  // PANDARIA
+	ClusterActionDisableF5CIS          = "disableF5CIS" // PANDARIA
+	ClusterActionViewF5CIS             = "viewF5CIS"    // PANDARIA
+	ClusterActionEditF5CIS             = "editF5CIS"    // PANDARIA
 
 	// ClusterConditionReady Cluster ready to serve API (healthy when true, unhealthy when false)
 	ClusterConditionReady          condition.Cond = "Ready"
@@ -68,6 +72,7 @@ const (
 	ClusterConditionAlertingEnabled            condition.Cond = "AlertingEnabled"
 	ClusterConditionGPUManagementEnabled       condition.Cond = "GPUManagementEnabled"
 	ClusterConditionDualStackEnabled           condition.Cond = "DualStackEnabled"
+	ClusterConditionF5CISEnabled               condition.Cond = "F5CISEnabled"
 
 	ClusterDriverImported = "imported"
 	ClusterDriverLocal    = "local"
@@ -112,6 +117,7 @@ type ClusterSpecBase struct {
 	SystemDefaultRegistry                string                         `json:"systemDefaultRegistry,omitempty"`        // PANDARIA
 	EnableDualStack                      bool                           `json:"enableDualStack" norman:"default=false"` // PANDARIA
 	ScheduledClusterScan                 *ScheduledClusterScan          `json:"scheduledClusterScan,omitempty"`
+	EnableF5CIS                          bool                           `json:"enableF5CIS" norman:"default=false"` // PANDARIA
 }
 
 type ClusterSpec struct {
@@ -301,6 +307,20 @@ type MonitoringInput struct {
 }
 
 type MonitoringOutput struct {
+	Version      string            `json:"version,omitempty"`
+	Answers      map[string]string `json:"answers,omitempty"`
+	ValuesYaml   string            `json:"valuesYaml,omitempty"`
+	ExtraAnswers map[string]string `json:"extraAnswers,omitempty"`
+}
+
+type F5CISInput struct {
+	Version      string            `json:"version,omitempty"`
+	Answers      map[string]string `json:"answers,omitempty"`
+	ValuesYaml   string            `json:"valuesYaml,omitempty"`
+	ExtraAnswers map[string]string `json:"extraAnswers,omitempty"`
+}
+
+type F5CISOutput struct {
 	Version      string            `json:"version,omitempty"`
 	Answers      map[string]string `json:"answers,omitempty"`
 	ValuesYaml   string            `json:"valuesYaml,omitempty"`

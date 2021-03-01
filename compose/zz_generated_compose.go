@@ -123,4 +123,8 @@ type Config struct {
 	DestinationRules               map[string]projectClient.DestinationRule               `json:"destinationRules,omitempty" yaml:"destinationRules,omitempty"`
 	Gateways                       map[string]projectClient.Gateway                       `json:"gateways,omitempty" yaml:"gateways,omitempty"`
 	CloneApps                      map[string]projectClient.CloneApp                      `json:"cloneApps,omitempty" yaml:"cloneApps,omitempty"`
+	VirtualServers                 map[string]projectClient.VirtualServer                 `json:"virtualServers,omitempty" yaml:"virtualServers,omitempty"`
+	TLSProfiles                    map[string]projectClient.TLSProfile                    `json:"tlsProfiles,omitempty" yaml:"tlsProfiles,omitempty"`
+	TransportServers               map[string]projectClient.TransportServer               `json:"transportServers,omitempty" yaml:"transportServers,omitempty"`
+	ExternalDNSs                   map[string]projectClient.ExternalDNS                   `json:"externalDNSs,omitempty" yaml:"externalDNSs,omitempty"`
 }
