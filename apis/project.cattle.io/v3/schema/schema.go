@@ -1180,15 +1180,12 @@ func cloneAppTypes(schemas *types.Schemas) *types.Schemas {
 
 func f5Types(schemas *types.Schemas) *types.Schemas {
 	return schemas.
-		// TypeName("f5VirtualServer", f5cisv1.VirtualServer{}).
-		// TypeName("f5Pool", f5cisv1.Pool{}).
-		// TypeName("f5VSMonitor", f5cisv1.Monitor{}).
-		// TypeName("f5TLSProfile", f5cisv1.TLSProfile{}).
-		// TypeName("f5TLSProfileSpec", f5cisv1.TLSProfileSpec{}).
-		// TypeName("f5TLS", f5cisv1.TLS{}).
-		// TypeName("f5TransportServer", f5cisv1.TransportServer{}).
-		// TypeName("f5TransportServerSpec", f5cisv1.TransportServerSpec{}).
 		MustImport(&Version, f5cisv1.VirtualServer{}, projectOverride{}).
+		MustImportAndCustomize(&Version, f5cisv1.Monitor{}, func(schema *types.Schema) {
+			timeoutField := schema.ResourceFields["timeout"]
+			timeoutField.Default = 16 //default value from F5 docs
+			schema.ResourceFields["timeout"] = timeoutField
+		}, projectOverride{}).
 		MustImport(&Version, f5cisv1.TLSProfile{}, projectOverride{}).
 		MustImport(&Version, f5cisv1.TransportServer{}, projectOverride{}).
 		MustImport(&Version, f5cisv1.ExternalDNS{}, projectOverride{})
