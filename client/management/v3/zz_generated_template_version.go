@@ -13,6 +13,7 @@ const (
 	TemplateVersionFieldDigest               = "digest"
 	TemplateVersionFieldExternalID           = "externalId"
 	TemplateVersionFieldFiles                = "files"
+	TemplateVersionFieldHelmVersion          = "helmVersion"
 	TemplateVersionFieldKubeVersion          = "kubeVersion"
 	TemplateVersionFieldLabels               = "labels"
 	TemplateVersionFieldName                 = "name"
@@ -45,6 +46,7 @@ type TemplateVersion struct {
 	Digest               string                 `json:"digest,omitempty" yaml:"digest,omitempty"`
 	ExternalID           string                 `json:"externalId,omitempty" yaml:"externalId,omitempty"`
 	Files                map[string]string      `json:"files,omitempty" yaml:"files,omitempty"`
+	HelmVersion          string                 `json:"helmVersion,omitempty" yaml:"helmVersion,omitempty"`
 	KubeVersion          string                 `json:"kubeVersion,omitempty" yaml:"kubeVersion,omitempty"`
 	Labels               map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                 string                 `json:"name,omitempty" yaml:"name,omitempty"`

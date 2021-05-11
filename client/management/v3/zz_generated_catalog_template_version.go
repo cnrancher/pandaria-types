@@ -13,6 +13,7 @@ const (
 	CatalogTemplateVersionFieldDigest               = "digest"
 	CatalogTemplateVersionFieldExternalID           = "externalId"
 	CatalogTemplateVersionFieldFiles                = "files"
+	CatalogTemplateVersionFieldHelmVersion          = "helmVersion"
 	CatalogTemplateVersionFieldKubeVersion          = "kubeVersion"
 	CatalogTemplateVersionFieldLabels               = "labels"
 	CatalogTemplateVersionFieldName                 = "name"
@@ -45,6 +46,7 @@ type CatalogTemplateVersion struct {
 	Digest               string                 `json:"digest,omitempty" yaml:"digest,omitempty"`
 	ExternalID           string                 `json:"externalId,omitempty" yaml:"externalId,omitempty"`
 	Files                map[string]string      `json:"files,omitempty" yaml:"files,omitempty"`
+	HelmVersion          string                 `json:"helmVersion,omitempty" yaml:"helmVersion,omitempty"`
 	KubeVersion          string                 `json:"kubeVersion,omitempty" yaml:"kubeVersion,omitempty"`
 	Labels               map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                 string                 `json:"name,omitempty" yaml:"name,omitempty"`
