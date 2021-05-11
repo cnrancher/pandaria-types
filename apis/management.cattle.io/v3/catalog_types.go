@@ -151,6 +151,7 @@ type TemplateVersionSpec struct {
 	Digest              string            `json:"digest,omitempty"`
 	RancherMinVersion   string            `json:"rancherMinVersion,omitempty"`
 	RancherMaxVersion   string            `json:"rancherMaxVersion,omitempty"`
+	HelmVersion         string            `json:"helmVersion,omitempty" norman:"noupdate,nocreate"`
 
 	// Deprecated: Do not use
 	Files map[string]string `json:"files,omitempty" norman:"nocreate,noupdate"`
