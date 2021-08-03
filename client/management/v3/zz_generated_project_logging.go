@@ -18,7 +18,9 @@ const (
 	ProjectLoggingFieldFluentForwarderConfig     = "fluentForwarderConfig"
 	ProjectLoggingFieldKafkaConfig               = "kafkaConfig"
 	ProjectLoggingFieldLabels                    = "labels"
+	ProjectLoggingFieldMultiLineContinuousRegexp = "multiLineContinuousRegexp"
 	ProjectLoggingFieldMultiLineEndRegexp        = "multiLineEndRegexp"
+	ProjectLoggingFieldMultiLineSeparator        = "multiLineSeparator"
 	ProjectLoggingFieldMultiLineStartRegexp      = "multiLineStartRegexp"
 	ProjectLoggingFieldName                      = "name"
 	ProjectLoggingFieldNamespaceId               = "namespaceId"
@@ -50,7 +52,9 @@ type ProjectLogging struct {
 	FluentForwarderConfig     *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluentForwarderConfig,omitempty"`
 	KafkaConfig               *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafkaConfig,omitempty"`
 	Labels                    map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
+	MultiLineContinuousRegexp string                 `json:"multiLineContinuousRegexp,omitempty" yaml:"multiLineContinuousRegexp,omitempty"`
 	MultiLineEndRegexp        string                 `json:"multiLineEndRegexp,omitempty" yaml:"multiLineEndRegexp,omitempty"`
+	MultiLineSeparator        string                 `json:"multiLineSeparator,omitempty" yaml:"multiLineSeparator,omitempty"`
 	MultiLineStartRegexp      string                 `json:"multiLineStartRegexp,omitempty" yaml:"multiLineStartRegexp,omitempty"`
 	Name                      string                 `json:"name,omitempty" yaml:"name,omitempty"`
 	NamespaceId               string                 `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`

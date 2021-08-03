@@ -23,7 +23,9 @@ const (
 	ClusterLoggingFieldIncludeSystemComponent    = "includeSystemComponent"
 	ClusterLoggingFieldKafkaConfig               = "kafkaConfig"
 	ClusterLoggingFieldLabels                    = "labels"
+	ClusterLoggingFieldMultiLineContinuousRegexp = "multiLineContinuousRegexp"
 	ClusterLoggingFieldMultiLineEndRegexp        = "multiLineEndRegexp"
+	ClusterLoggingFieldMultiLineSeparator        = "multiLineSeparator"
 	ClusterLoggingFieldMultiLineStartRegexp      = "multiLineStartRegexp"
 	ClusterLoggingFieldName                      = "name"
 	ClusterLoggingFieldNamespaceId               = "namespaceId"
@@ -58,7 +60,9 @@ type ClusterLogging struct {
 	IncludeSystemComponent    *bool                  `json:"includeSystemComponent,omitempty" yaml:"includeSystemComponent,omitempty"`
 	KafkaConfig               *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafkaConfig,omitempty"`
 	Labels                    map[string]string      `json:"labels,omitempty" yaml:"labels,omitempty"`
+	MultiLineContinuousRegexp string                 `json:"multiLineContinuousRegexp,omitempty" yaml:"multiLineContinuousRegexp,omitempty"`
 	MultiLineEndRegexp        string                 `json:"multiLineEndRegexp,omitempty" yaml:"multiLineEndRegexp,omitempty"`
+	MultiLineSeparator        string                 `json:"multiLineSeparator,omitempty" yaml:"multiLineSeparator,omitempty"`
 	MultiLineStartRegexp      string                 `json:"multiLineStartRegexp,omitempty" yaml:"multiLineStartRegexp,omitempty"`
 	Name                      string                 `json:"name,omitempty" yaml:"name,omitempty"`
 	NamespaceId               string                 `json:"namespaceId,omitempty" yaml:"namespaceId,omitempty"`
