@@ -12,7 +12,9 @@ const (
 	ClusterTestInputFieldEnableMultiLineFilter     = "enableMultiLineFilter"
 	ClusterTestInputFieldFluentForwarderConfig     = "fluentForwarderConfig"
 	ClusterTestInputFieldKafkaConfig               = "kafkaConfig"
+	ClusterTestInputFieldMultiLineContinuousRegexp = "multiLineContinuousRegexp"
 	ClusterTestInputFieldMultiLineEndRegexp        = "multiLineEndRegexp"
+	ClusterTestInputFieldMultiLineSeparator        = "multiLineSeparator"
 	ClusterTestInputFieldMultiLineStartRegexp      = "multiLineStartRegexp"
 	ClusterTestInputFieldOutputFlushInterval       = "outputFlushInterval"
 	ClusterTestInputFieldOutputTags                = "outputTags"
@@ -31,7 +33,9 @@ type ClusterTestInput struct {
 	EnableMultiLineFilter     bool                   `json:"enableMultiLineFilter,omitempty" yaml:"enableMultiLineFilter,omitempty"`
 	FluentForwarderConfig     *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluentForwarderConfig,omitempty"`
 	KafkaConfig               *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafkaConfig,omitempty"`
+	MultiLineContinuousRegexp string                 `json:"multiLineContinuousRegexp,omitempty" yaml:"multiLineContinuousRegexp,omitempty"`
 	MultiLineEndRegexp        string                 `json:"multiLineEndRegexp,omitempty" yaml:"multiLineEndRegexp,omitempty"`
+	MultiLineSeparator        string                 `json:"multiLineSeparator,omitempty" yaml:"multiLineSeparator,omitempty"`
 	MultiLineStartRegexp      string                 `json:"multiLineStartRegexp,omitempty" yaml:"multiLineStartRegexp,omitempty"`
 	OutputFlushInterval       int64                  `json:"outputFlushInterval,omitempty" yaml:"outputFlushInterval,omitempty"`
 	OutputTags                map[string]string      `json:"outputTags,omitempty" yaml:"outputTags,omitempty"`

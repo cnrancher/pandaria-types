@@ -13,7 +13,9 @@ const (
 	ClusterLoggingSpecFieldFluentForwarderConfig     = "fluentForwarderConfig"
 	ClusterLoggingSpecFieldIncludeSystemComponent    = "includeSystemComponent"
 	ClusterLoggingSpecFieldKafkaConfig               = "kafkaConfig"
+	ClusterLoggingSpecFieldMultiLineContinuousRegexp = "multiLineContinuousRegexp"
 	ClusterLoggingSpecFieldMultiLineEndRegexp        = "multiLineEndRegexp"
+	ClusterLoggingSpecFieldMultiLineSeparator        = "multiLineSeparator"
 	ClusterLoggingSpecFieldMultiLineStartRegexp      = "multiLineStartRegexp"
 	ClusterLoggingSpecFieldOutputFlushInterval       = "outputFlushInterval"
 	ClusterLoggingSpecFieldOutputTags                = "outputTags"
@@ -33,7 +35,9 @@ type ClusterLoggingSpec struct {
 	FluentForwarderConfig     *FluentForwarderConfig `json:"fluentForwarderConfig,omitempty" yaml:"fluentForwarderConfig,omitempty"`
 	IncludeSystemComponent    *bool                  `json:"includeSystemComponent,omitempty" yaml:"includeSystemComponent,omitempty"`
 	KafkaConfig               *KafkaConfig           `json:"kafkaConfig,omitempty" yaml:"kafkaConfig,omitempty"`
+	MultiLineContinuousRegexp string                 `json:"multiLineContinuousRegexp,omitempty" yaml:"multiLineContinuousRegexp,omitempty"`
 	MultiLineEndRegexp        string                 `json:"multiLineEndRegexp,omitempty" yaml:"multiLineEndRegexp,omitempty"`
+	MultiLineSeparator        string                 `json:"multiLineSeparator,omitempty" yaml:"multiLineSeparator,omitempty"`
 	MultiLineStartRegexp      string                 `json:"multiLineStartRegexp,omitempty" yaml:"multiLineStartRegexp,omitempty"`
 	OutputFlushInterval       int64                  `json:"outputFlushInterval,omitempty" yaml:"outputFlushInterval,omitempty"`
 	OutputTags                map[string]string      `json:"outputTags,omitempty" yaml:"outputTags,omitempty"`
