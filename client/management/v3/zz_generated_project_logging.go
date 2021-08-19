@@ -9,6 +9,7 @@ const (
 	ProjectLoggingFieldAnnotations               = "annotations"
 	ProjectLoggingFieldCreated                   = "created"
 	ProjectLoggingFieldCreatorID                 = "creatorId"
+	ProjectLoggingFieldCustomBuffer              = "customBuffer"
 	ProjectLoggingFieldCustomTargetConfig        = "customTargetConfig"
 	ProjectLoggingFieldElasticsearchConfig       = "elasticsearchConfig"
 	ProjectLoggingFieldEnableExceptionStackMatch = "enableExceptionStackMatch"
@@ -40,6 +41,7 @@ type ProjectLogging struct {
 	Annotations               map[string]string      `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	Created                   string                 `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID                 string                 `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CustomBuffer              string                 `json:"customBuffer,omitempty" yaml:"customBuffer,omitempty"`
 	CustomTargetConfig        *CustomTargetConfig    `json:"customTargetConfig,omitempty" yaml:"customTargetConfig,omitempty"`
 	ElasticsearchConfig       *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearchConfig,omitempty"`
 	EnableExceptionStackMatch bool                   `json:"enableExceptionStackMatch,omitempty" yaml:"enableExceptionStackMatch,omitempty"`

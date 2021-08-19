@@ -2,6 +2,7 @@ package client
 
 const (
 	ProjectLoggingSpecType                           = "projectLoggingSpec"
+	ProjectLoggingSpecFieldCustomBuffer              = "customBuffer"
 	ProjectLoggingSpecFieldCustomTargetConfig        = "customTargetConfig"
 	ProjectLoggingSpecFieldDisplayName               = "displayName"
 	ProjectLoggingSpecFieldElasticsearchConfig       = "elasticsearchConfig"
@@ -20,6 +21,7 @@ const (
 )
 
 type ProjectLoggingSpec struct {
+	CustomBuffer              string                 `json:"customBuffer,omitempty" yaml:"customBuffer,omitempty"`
 	CustomTargetConfig        *CustomTargetConfig    `json:"customTargetConfig,omitempty" yaml:"customTargetConfig,omitempty"`
 	DisplayName               string                 `json:"displayName,omitempty" yaml:"displayName,omitempty"`
 	ElasticsearchConfig       *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearchConfig,omitempty"`

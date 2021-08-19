@@ -12,6 +12,7 @@ const (
 	ClusterLoggingFieldConditions                = "conditions"
 	ClusterLoggingFieldCreated                   = "created"
 	ClusterLoggingFieldCreatorID                 = "creatorId"
+	ClusterLoggingFieldCustomBuffer              = "customBuffer"
 	ClusterLoggingFieldCustomTargetConfig        = "customTargetConfig"
 	ClusterLoggingFieldElasticsearchConfig       = "elasticsearchConfig"
 	ClusterLoggingFieldEnableExceptionStackMatch = "enableExceptionStackMatch"
@@ -46,6 +47,7 @@ type ClusterLogging struct {
 	Conditions                []LoggingCondition     `json:"conditions,omitempty" yaml:"conditions,omitempty"`
 	Created                   string                 `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID                 string                 `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
+	CustomBuffer              string                 `json:"customBuffer,omitempty" yaml:"customBuffer,omitempty"`
 	CustomTargetConfig        *CustomTargetConfig    `json:"customTargetConfig,omitempty" yaml:"customTargetConfig,omitempty"`
 	ElasticsearchConfig       *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearchConfig,omitempty"`
 	EnableExceptionStackMatch bool                   `json:"enableExceptionStackMatch,omitempty" yaml:"enableExceptionStackMatch,omitempty"`
