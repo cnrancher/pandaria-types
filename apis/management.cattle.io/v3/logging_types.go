@@ -56,6 +56,7 @@ type LoggingCommonField struct {
 	EnableMultiLineFilter     bool              `json:"enableMultiLineFilter,omitempty"`
 	MultiLineStartRegexp      string            `json:"multiLineStartRegexp,omitempty"`
 	MultiLineEndRegexp        string            `json:"multiLineEndRegexp,omitempty"`
+	CustomBuffer              string            `json:"customBuffer,omitempty"`
 }
 
 type LoggingTargets struct {
