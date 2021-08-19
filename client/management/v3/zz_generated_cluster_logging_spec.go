@@ -3,6 +3,7 @@ package client
 const (
 	ClusterLoggingSpecType                           = "clusterLoggingSpec"
 	ClusterLoggingSpecFieldClusterID                 = "clusterId"
+	ClusterLoggingSpecFieldCustomBuffer              = "customBuffer"
 	ClusterLoggingSpecFieldCustomTargetConfig        = "customTargetConfig"
 	ClusterLoggingSpecFieldDisplayName               = "displayName"
 	ClusterLoggingSpecFieldElasticsearchConfig       = "elasticsearchConfig"
@@ -22,6 +23,7 @@ const (
 
 type ClusterLoggingSpec struct {
 	ClusterID                 string                 `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
+	CustomBuffer              string                 `json:"customBuffer,omitempty" yaml:"customBuffer,omitempty"`
 	CustomTargetConfig        *CustomTargetConfig    `json:"customTargetConfig,omitempty" yaml:"customTargetConfig,omitempty"`
 	DisplayName               string                 `json:"displayName,omitempty" yaml:"displayName,omitempty"`
 	ElasticsearchConfig       *ElasticsearchConfig   `json:"elasticsearchConfig,omitempty" yaml:"elasticsearchConfig,omitempty"`
