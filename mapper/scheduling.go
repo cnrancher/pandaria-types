@@ -355,7 +355,7 @@ func (s SchedulingMapper) ToInternal(data map[string]interface{}) error {
 		if nodeAffinity.RequiredDuringSchedulingIgnoredDuringExecution == nil {
 			nodeAffinity.RequiredDuringSchedulingIgnoredDuringExecution = &v1.NodeSelector{}
 		}
-		nodeAffinity.RequiredDuringSchedulingIgnoredDuringExecution.NodeSelectorTerms = StringsToNodeSelectorTerm(requireAny)
+		nodeAffinity.RequiredDuringSchedulingIgnoredDuringExecution.NodeSelectorTerms = append(nodeAffinity.RequiredDuringSchedulingIgnoredDuringExecution.NodeSelectorTerms, StringsToNodeSelectorTerm(requireAny)...)
 	}
 
 	if len(preferred) > 0 {
