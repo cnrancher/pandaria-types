@@ -13,6 +13,7 @@ require (
 	github.com/coreos/prometheus-operator v0.36.0
 	github.com/knative/pkg v0.0.0-20190817231834-12ee58e32cc8
 	github.com/pkg/errors v0.8.1
+	github.com/prometheus/client_golang v1.4.0
 	github.com/rancher/norman v0.0.0-20200520181341-ab75acb55410
 	github.com/rancher/wrangler v0.5.4-0.20200520040055-b8d49179cfc8
 	github.com/rancher/wrangler-api v0.5.1-0.20200326194427-c13310506d04
