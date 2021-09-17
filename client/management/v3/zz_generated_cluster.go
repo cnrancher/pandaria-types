@@ -163,6 +163,8 @@ type ClusterOperations interface {
 
 	ActionDisableMonitoring(resource *Cluster) error
 
+	ActionEditConnectionConfig(resource *Cluster, input *ConnectionConfig) error
+
 	ActionEditF5CIS(resource *Cluster, input *F5CISInput) error
 
 	ActionEditMonitoring(resource *Cluster, input *MonitoringInput) error
@@ -184,6 +186,10 @@ type ClusterOperations interface {
 	ActionRunSecurityScan(resource *Cluster, input *CisScanConfig) error
 
 	ActionSaveAsTemplate(resource *Cluster, input *SaveAsTemplateInput) (*SaveAsTemplateOutput, error)
+
+	ActionValidateConnectionConfig(resource *Cluster, input *ConnectionConfig) error
+
+	ActionViewConnectionConfig(resource *Cluster) (*ConnectionConfig, error)
 
 	ActionViewF5CIS(resource *Cluster) (*F5CISOutput, error)
 
@@ -274,6 +280,11 @@ func (c *ClusterClient) ActionDisableMonitoring(resource *Cluster) error {
 	return err
 }
 
+func (c *ClusterClient) ActionEditConnectionConfig(resource *Cluster, input *ConnectionConfig) error {
+	err := c.apiClient.Ops.DoAction(ClusterType, "editConnectionConfig", &resource.Resource, input, nil)
+	return err
+}
+
 func (c *ClusterClient) ActionEditF5CIS(resource *Cluster, input *F5CISInput) error {
 	err := c.apiClient.Ops.DoAction(ClusterType, "editF5CIS", &resource.Resource, input, nil)
 	return err
@@ -331,6 +342,17 @@ func (c *ClusterClient) ActionRunSecurityScan(resource *Cluster, input *CisScanC
 func (c *ClusterClient) ActionSaveAsTemplate(resource *Cluster, input *SaveAsTemplateInput) (*SaveAsTemplateOutput, error) {
 	resp := &SaveAsTemplateOutput{}
 	err := c.apiClient.Ops.DoAction(ClusterType, "saveAsTemplate", &resource.Resource, input, resp)
+	return resp, err
+}
+
+func (c *ClusterClient) ActionValidateConnectionConfig(resource *Cluster, input *ConnectionConfig) error {
+	err := c.apiClient.Ops.DoAction(ClusterType, "validateConnectionConfig", &resource.Resource, input, nil)
+	return err
+}
+
+func (c *ClusterClient) ActionViewConnectionConfig(resource *Cluster) (*ConnectionConfig, error) {
+	resp := &ConnectionConfig{}
+	err := c.apiClient.Ops.DoAction(ClusterType, "viewConnectionConfig", &resource.Resource, nil, resp)
 	return resp, err
 }
 

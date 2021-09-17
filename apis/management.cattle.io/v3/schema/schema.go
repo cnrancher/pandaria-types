@@ -236,8 +236,9 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 		MustImport(&Version, v3.ExportOutput{}).
 		MustImport(&Version, v3.MonitoringInput{}).
 		MustImport(&Version, v3.MonitoringOutput{}).
-		MustImport(&Version, v3.F5CISInput{}).  // Pandaria
-		MustImport(&Version, v3.F5CISOutput{}). // Pandaria
+		MustImport(&Version, v3.F5CISInput{}).       // Pandaria
+		MustImport(&Version, v3.F5CISOutput{}).      // Pandaria
+		MustImport(&Version, v3.ConnectionConfig{}). // Pandaria
 		MustImport(&Version, v3.RestoreFromEtcdBackupInput{}).
 		MustImport(&Version, v3.SaveAsTemplateInput{}).
 		MustImport(&Version, v3.SaveAsTemplateOutput{}).
@@ -301,6 +302,15 @@ func clusterTypes(schemas *types.Schemas) *types.Schemas {
 			}
 			schema.ResourceActions[v3.ClusterActionEditF5CIS] = types.Action{
 				Input: "f5CISInput",
+			}
+			schema.ResourceActions[v3.ClusterActionViewConnectionConfig] = types.Action{
+				Output: "connectionConfig",
+			}
+			schema.ResourceActions[v3.ClusterActionEditConnectionConfig] = types.Action{
+				Input: "connectionConfig",
+			}
+			schema.ResourceActions[v3.ClusterActionValidateConnectionConfig] = types.Action{
+				Input: "connectionConfig",
 			}
 		})
 }
