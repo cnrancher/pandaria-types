@@ -38,6 +38,10 @@ const (
 	ClusterActionViewF5CIS             = "viewF5CIS"    // PANDARIA
 	ClusterActionEditF5CIS             = "editF5CIS"    // PANDARIA
 
+	ClusterActionEditConnectionConfig     = "editConnectionConfig"     // PANDARIA
+	ClusterActionValidateConnectionConfig = "validateConnectionConfig" // PANDARIA
+	ClusterActionViewConnectionConfig     = "viewConnectionConfig"     // PANDARIA
+
 	// ClusterConditionReady Cluster ready to serve API (healthy when true, unhealthy when false)
 	ClusterConditionReady          condition.Cond = "Ready"
 	ClusterConditionPending        condition.Cond = "Pending"
@@ -325,6 +329,12 @@ type F5CISOutput struct {
 	Answers      map[string]string `json:"answers,omitempty"`
 	ValuesYaml   string            `json:"valuesYaml,omitempty"`
 	ExtraAnswers map[string]string `json:"extraAnswers,omitempty"`
+}
+
+type ConnectionConfig struct {
+	ClusterID    string `json:"clusterID,omitempty"`
+	APIEndpoint  string `json:"apiEndpoint,omitempty"`
+	DirectAccess string `json:"directAccess,omitempty"`
 }
 
 type RestoreFromEtcdBackupInput struct {
