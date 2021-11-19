@@ -114,12 +114,14 @@ func NewScaledContext(config rest.Config) (*ScaledContext, error) {
 		RESTConfig: config,
 	}
 
-	context.Management, err = managementv3.NewForConfig(config)
+	pbConfig := enableProtobuf(&config)
+
+	context.Management, err = managementv3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Project, err = projectv3.NewForConfig(config)
+	context.Project, err = projectv3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -129,16 +131,16 @@ func NewScaledContext(config rest.Config) (*ScaledContext, error) {
 		return nil, err
 	}
 
-	context.RBAC, err = rbacv1.NewForConfig(config)
+	context.RBAC, err = rbacv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Core, err = corev1.NewForConfig(config)
+	context.Core, err = corev1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
-	context.Project, err = projectv3.NewForConfig(config)
+	context.Project, err = projectv3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +160,7 @@ func NewScaledContext(config rest.Config) (*ScaledContext, error) {
 	}
 
 	// PANDARIA
-	context.PandariaManagement, err = pandariav3.NewForConfig(config)
+	context.PandariaManagement, err = pandariav3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -329,12 +331,14 @@ func NewManagementContext(config rest.Config) (*ManagementContext, error) {
 		RESTConfig: config,
 	}
 
-	context.Management, err = managementv3.NewForConfig(config)
+	pbConfig := enableProtobuf(&config)
+
+	context.Management, err = managementv3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Project, err = projectv3.NewForConfig(config)
+	context.Project, err = projectv3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -349,16 +353,16 @@ func NewManagementContext(config rest.Config) (*ManagementContext, error) {
 		return nil, err
 	}
 
-	context.RBAC, err = rbacv1.NewForConfig(config)
+	context.RBAC, err = rbacv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Core, err = corev1.NewForConfig(config)
+	context.Core, err = corev1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
-	context.Project, err = projectv3.NewForConfig(config)
+	context.Project, err = projectv3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -379,7 +383,7 @@ func NewManagementContext(config rest.Config) (*ManagementContext, error) {
 	}
 
 	// PANDARIA
-	context.PandariaManagement, err = pandariav3.NewForConfig(config)
+	context.PandariaManagement, err = pandariav3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -412,6 +416,8 @@ func NewUserContext(scaledContext *ScaledContext, config rest.Config, clusterNam
 		runContext:  scaledContext.RunContext,
 	}
 
+	pbConfig := enableProtobuf(&config)
+
 	context.Management, err = scaledContext.NewManagementContext()
 	if err != nil {
 		return nil, err
@@ -422,89 +428,90 @@ func NewUserContext(scaledContext *ScaledContext, config rest.Config, clusterNam
 		return nil, err
 	}
 
-	context.Apps, err = appsv1.NewForConfig(config)
+	context.Apps, err = appsv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Core, err = corev1.NewForConfig(config)
+	context.Core, err = corev1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Project, err = projectv3.NewForConfig(config)
+	context.Project, err = projectv3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Storage, err = storagev1.NewForConfig(config)
+	context.Storage, err = storagev1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.RBAC, err = rbacv1.NewForConfig(config)
+	context.RBAC, err = rbacv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Networking, err = knetworkingv1.NewForConfig(config)
+	context.Networking, err = knetworkingv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Extensions, err = extv1beta1.NewForConfig(config)
+	context.Extensions, err = extv1beta1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Policy, err = policyv1beta1.NewForConfig(config)
+	context.Policy, err = policyv1beta1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.BatchV1, err = batchv1.NewForConfig(config)
+	context.BatchV1, err = batchv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.BatchV1Beta1, err = batchv1beta1.NewForConfig(config)
+	context.BatchV1Beta1, err = batchv1beta1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Autoscaling, err = autoscaling.NewForConfig(config)
+	context.Autoscaling, err = autoscaling.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Monitoring, err = monitoringv1.NewForConfig(config)
+	context.Monitoring, err = monitoringv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.F5CIS, err = f5cisv1.NewForConfig(config)
+	context.F5CIS, err = f5cisv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Cluster, err = clusterv3.NewForConfig(config)
+	context.Cluster, err = clusterv3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Istio, err = istiov1alpha3.NewForConfig(config)
+	context.Istio, err = istiov1alpha3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.APIAggregation, err = apiregistrationv1.NewForConfig(config)
+	context.APIAggregation, err = apiregistrationv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
 	wranglerConf := config
 	wranglerConf.Timeout = 30 * time.Minute
-	context.rbacw, err = rbac.NewFactoryFromConfig(&wranglerConf)
+	pbWrangerConf := enableProtobuf(&wranglerConf)
+	context.rbacw, err = rbac.NewFactoryFromConfig(&pbWrangerConf)
 	if err != nil {
 		return nil, err
 	}
@@ -542,82 +549,84 @@ func NewUserOnlyContext(config rest.Config) (*UserOnlyContext, error) {
 		RESTConfig: config,
 	}
 
+	pbConfig := enableProtobuf(&config)
+
 	context.K8sClient, err = kubernetes.NewForConfig(&config)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Apps, err = appsv1.NewForConfig(config)
+	context.Apps, err = appsv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Core, err = corev1.NewForConfig(config)
+	context.Core, err = corev1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Project, err = projectv3.NewForConfig(config)
+	context.Project, err = projectv3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Storage, err = storagev1.NewForConfig(config)
+	context.Storage, err = storagev1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.RBAC, err = rbacv1.NewForConfig(config)
+	context.RBAC, err = rbacv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Extensions, err = extv1beta1.NewForConfig(config)
+	context.Extensions, err = extv1beta1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Policy, err = policyv1beta1.NewForConfig(config)
+	context.Policy, err = policyv1beta1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.BatchV1, err = batchv1.NewForConfig(config)
+	context.BatchV1, err = batchv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.BatchV1Beta1, err = batchv1beta1.NewForConfig(config)
+	context.BatchV1Beta1, err = batchv1beta1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Autoscaling, err = autoscaling.NewForConfig(config)
+	context.Autoscaling, err = autoscaling.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Monitoring, err = monitoringv1.NewForConfig(config)
+	context.Monitoring, err = monitoringv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.F5CIS, err = f5cisv1.NewForConfig(config)
+	context.F5CIS, err = f5cisv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Cluster, err = clusterv3.NewForConfig(config)
+	context.Cluster, err = clusterv3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.Istio, err = istiov1alpha3.NewForConfig(config)
+	context.Istio, err = istiov1alpha3.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
 
-	context.APIRegistration, err = apiregistrationv1.NewForConfig(config)
+	context.APIRegistration, err = apiregistrationv1.NewForConfig(pbConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -643,4 +652,11 @@ func NewUserOnlyContext(config rest.Config) (*UserOnlyContext, error) {
 func (w *UserOnlyContext) Start(ctx context.Context) error {
 	logrus.Info("Starting workload controllers")
 	return controller.SyncThenStart(ctx, 5, w.controllers()...)
+}
+
+func enableProtobuf(cfg *rest.Config) rest.Config {
+	cpy := rest.CopyConfig(cfg)
+	cpy.AcceptContentTypes = "application/vnd.kubernetes.protobuf, application/json"
+	cpy.ContentType = "application/json"
+	return *cpy
 }
