@@ -1,6 +1,6 @@
 module github.com/rancher/types
 
-go 1.13
+go 1.14
 
 replace (
 	github.com/knative/pkg => github.com/rancher/pkg v0.0.0-20190514055449-b30ab9de040e
