@@ -100,6 +100,10 @@ type AccessControl interface {
 	FilterList(apiContext *APIContext, schema *Schema, obj []map[string]interface{}, context map[string]string) []map[string]interface{}
 }
 
+type PandariaResponseControl interface {
+	Filter(apiContext *APIContext, schema *Schema, code int, obj interface{}) (int, interface{})
+}
+
 type APIContext struct {
 	Action                      string
 	ID                          string
@@ -118,6 +122,7 @@ type APIContext struct {
 	SubContextAttributeProvider SubContextAttributeProvider
 	URLBuilder                  URLBuilder
 	AccessControl               AccessControl
+	ResponseControl             PandariaResponseControl // PANDARIA
 	SubContext                  map[string]string
 	Pagination                  *Pagination
 
@@ -147,6 +152,10 @@ func (r *APIContext) Option(key string) string {
 }
 
 func (r *APIContext) WriteResponse(code int, obj interface{}) {
+	// PANDARIA: Add response control check to filter schema fields and links
+	if r.ResponseControl != nil {
+		code, obj = r.ResponseControl.Filter(r, r.Schema, code, obj)
+	}
 	r.ResponseWriter.Write(r, code, obj)
 }
 

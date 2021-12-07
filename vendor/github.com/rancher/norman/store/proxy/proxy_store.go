@@ -4,6 +4,7 @@ import (
 	"context"
 	ejson "encoding/json"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -17,6 +18,7 @@ import (
 	"github.com/rancher/norman/types/convert/merge"
 	"github.com/rancher/norman/types/values"
 	"github.com/sirupsen/logrus"
+	"github.com/tcnksm/go-httpstat"
 	"golang.org/x/sync/errgroup"
 	"k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -29,6 +31,7 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/rest"
 	restclientwatch "k8s.io/client-go/rest/watch"
+	"k8s.io/utils/trace"
 )
 
 var (
@@ -85,6 +88,11 @@ func (s *simpleClientGetter) APIExtClient(apiContext *types.APIContext, context 
 	return s.apiExtClient, nil
 }
 
+type StoreTyper interface {
+	runtime.ObjectConvertor
+	runtime.ObjectCreater
+}
+
 type Store struct {
 	sync.Mutex
 
@@ -98,10 +106,17 @@ type Store struct {
 	authContext    map[string]string
 	close          context.Context
 	broadcasters   map[rest.Interface]*broadcast.Broadcaster
+	typer          StoreTyper
 }
 
-func NewProxyStore(ctx context.Context, clientGetter ClientGetter, storageContext types.StorageContext,
+func NewProxyStore(ctx context.Context, clientGetter ClientGetter, storageContext types.StorageContext, typer StoreTyper,
 	prefix []string, group, version, kind, resourcePlural string) types.Store {
+
+	// Default to an empty scheme, all types will default to generic
+	if typer == nil {
+		typer = runtime.NewScheme()
+	}
+
 	return &errorStore{
 		Store: &Store{
 			clientGetter:   clientGetter,
@@ -117,6 +132,7 @@ func NewProxyStore(ctx context.Context, clientGetter ClientGetter, storageContex
 			},
 			close:        ctx,
 			broadcasters: map[rest.Interface]*broadcast.Broadcaster{},
+			typer:        typer,
 		},
 	}
 }
@@ -134,7 +150,19 @@ func (s *Store) doAuthed(apiContext *types.APIContext, request *rest.Request) re
 	for _, header := range authHeaders {
 		request.SetHeader(header, apiContext.Request.Header[http.CanonicalHeaderKey(header)]...)
 	}
-	return request.Do(apiContext.Request.Context())
+	enableTrace := strings.EqualFold(os.Getenv("PANDARIA_NORMAN_GET_TRACE"), "true") ||
+		strings.EqualFold(apiContext.Request.URL.Query().Get("httptrace"), "true")
+	httpstatResult := &httpstat.Result{}
+	reqCtx := apiContext.Request.Context()
+	if enableTrace {
+		reqCtx = httpstat.WithHTTPStat(apiContext.Request.Context(), httpstatResult)
+	}
+	result := request.Do(reqCtx)
+	if enableTrace {
+		httpstatResult.End(time.Now())
+		logrus.Tracef("SingleResult httpstat: %+v", httpstatResult)
+	}
+	return result
 }
 
 func (s *Store) k8sClient(apiContext *types.APIContext) (rest.Interface, error) {
@@ -193,16 +221,22 @@ func (s *Store) Context() types.StorageContext {
 }
 
 func (s *Store) List(apiContext *types.APIContext, schema *types.Schema, opt *types.QueryOptions) ([]map[string]interface{}, error) {
-	var resultList unstructured.UnstructuredList
+	result := []map[string]interface{}{}
 
+	listTrace := trace.New("Proxy Store List", trace.Field{Key: "resource", Value: s.resourcePlural})
+	defer listTrace.LogIfLong(10 * time.Second)
 	// if there are no namespaces field in options, a single request is made
 	if opt == nil || opt.Namespaces == nil {
 		ns := getNamespace(apiContext, opt)
-		list, err := s.retryList(ns, apiContext)
+		resultList := s.getListStruct()
+
+		err := s.retryList(ns, apiContext, resultList)
 		if err != nil {
 			return nil, err
 		}
-		resultList = *list
+
+		collectionResults, _ := s.collectionFromInternal(resultList, apiContext, schema)
+		result = append(result, collectionResults...)
 	} else {
 		var (
 			errGroup errgroup.Group
@@ -213,13 +247,16 @@ func (s *Store) List(apiContext *types.APIContext, schema *types.Schema, opt *ty
 		for _, ns := range allNS {
 			nsCopy := ns
 			errGroup.Go(func() error {
-				list, err := s.retryList(nsCopy, apiContext)
+				resultList := s.getListStruct()
+
+				err := s.retryList(nsCopy, apiContext, resultList)
 				if err != nil {
 					return err
 				}
 
 				mux.Lock()
-				resultList.Items = append(resultList.Items, list.Items...)
+				collectionResults, _ := s.collectionFromInternal(resultList, apiContext, schema)
+				result = append(result, collectionResults...)
 				mux.Unlock()
 
 				return nil
@@ -230,38 +267,50 @@ func (s *Store) List(apiContext *types.APIContext, schema *types.Schema, opt *ty
 		}
 	}
 
-	var result []map[string]interface{}
+	listTrace.Step("Completed List", trace.Field{Key: "list-len", Value: len(result)})
 
-	for _, obj := range resultList.Items {
-		result = append(result, s.fromInternal(apiContext, schema, obj.Object))
+	filtered := apiContext.AccessControl.FilterList(apiContext, schema, result, s.authContext)
+
+	listTrace.Step("Completed FilterList")
+
+	if logrus.IsLevelEnabled(logrus.TraceLevel) {
+		listTrace.Log()
 	}
-
-	return apiContext.AccessControl.FilterList(apiContext, schema, result, s.authContext), nil
+	return filtered, nil
 }
 
-func (s *Store) retryList(namespace string, apiContext *types.APIContext) (*unstructured.UnstructuredList, error) {
-	var resultList *unstructured.UnstructuredList
+func (s *Store) retryList(namespace string, apiContext *types.APIContext, resultList runtime.Object) error {
 	k8sClient, err := s.k8sClient(apiContext)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	for i := 0; i < 3; i++ {
 		req := s.common(namespace, k8sClient.Get())
 		start := time.Now()
-		resultList = &unstructured.UnstructuredList{}
-		err = req.Do(apiContext.Request.Context()).Into(resultList)
+		enableTrace := strings.EqualFold(os.Getenv("PANDARIA_NORMAN_GET_TRACE"), "true") ||
+			strings.EqualFold(apiContext.Request.URL.Query().Get("httptrace"), "true")
+		reqCtx := apiContext.Request.Context()
+		result := &httpstat.Result{}
+		if enableTrace {
+			reqCtx = httpstat.WithHTTPStat(apiContext.Request.Context(), result)
+		}
+		err = req.Do(reqCtx).Into(resultList)
+		if enableTrace {
+			result.End(time.Now())
+			logrus.Tracef("LIST httpstat: %+v", result)
+		}
 		logrus.Tracef("LIST: %v, %v", time.Now().Sub(start), s.resourcePlural)
 		if err != nil {
 			if i < 2 && strings.Contains(err.Error(), "Client.Timeout exceeded") {
 				logrus.Infof("Error on LIST %v: %v. Attempt: %v. Retrying", s.resourcePlural, err, i+1)
 				continue
 			}
-			return resultList, err
+			return err
 		}
-		return resultList, err
+		return err
 	}
-	return resultList, err
+	return err
 }
 
 func (s *Store) Watch(apiContext *types.APIContext, schema *types.Schema, opt *types.QueryOptions) (chan map[string]interface{}, error) {
@@ -296,7 +345,7 @@ func (s *Store) realWatch(apiContext *types.APIContext, schema *types.Schema, op
 		ResourceVersion: "0",
 	}, metav1.ParameterCodec)
 
-	body, err := req.Stream(apiContext.Request.Context())
+	body, err := req.Stream(s.close)
 	if err != nil {
 		return nil, err
 	}
@@ -305,7 +354,7 @@ func (s *Store) realWatch(apiContext *types.APIContext, schema *types.Schema, op
 	decoder := streaming.NewDecoder(framer, &unstructuredDecoder{})
 	watcher := watch.NewStreamWatcher(restclientwatch.NewDecoder(decoder, &unstructuredDecoder{}), &errorReporter{})
 
-	watchingContext, cancelWatchingContext := context.WithCancel(apiContext.Request.Context())
+	watchingContext, cancelWatchingContext := context.WithCancel(s.close)
 	go func() {
 		<-watchingContext.Done()
 		logrus.Tracef("stopping watcher for %s", schema.ID)
@@ -559,4 +608,39 @@ func (s *Store) fromInternal(apiContext *types.APIContext, schema *types.Schema,
 	}
 
 	return data
+}
+
+// getListStruct returns a runtime object for storing results from list requests.  If the Store's scheme does not return
+// a type for the resource associated with the store, a generic type will be used.
+func (s *Store) getListStruct() runtime.Object {
+	// try to find the list type for this store
+	obj, err := s.typer.New(schema.GroupVersionKind{
+		Group:   s.group,
+		Version: s.version,
+		Kind:    s.kind + "List",
+	})
+	// if we cannot get the specific type default to a generic parser
+	if err != nil {
+		logrus.Debugf("Falling back to generic list type for [%s]: %v", s.kind, err)
+		return new(unstructured.UnstructuredList)
+	}
+
+	return obj
+}
+
+// collectionFromInternal maps a collection runtime object to an array of maps.
+func (s *Store) collectionFromInternal(list runtime.Object, apiContext *types.APIContext, schema *types.Schema) ([]map[string]interface{}, error) {
+	var ul unstructured.UnstructuredList
+
+	err := s.typer.Convert(list, &ul, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	results := make([]map[string]interface{}, len(ul.Items))
+	for i := range ul.Items {
+		results[i] = s.fromInternal(apiContext, schema, ul.Items[i].Object)
+	}
+
+	return results, nil
 }

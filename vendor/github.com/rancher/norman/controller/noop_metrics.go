@@ -79,7 +79,9 @@ func (noopCacheMetricsProvider) NewListDurationMetric(name string) cache.Summary
 func (noopCacheMetricsProvider) NewItemsInListMetric(name string) cache.SummaryMetric {
 	return noopMetric{}
 }
-func (noopCacheMetricsProvider) NewWatchesMetric(name string) cache.CounterMetric { return noopMetric{} }
+func (noopCacheMetricsProvider) NewWatchesMetric(name string) cache.CounterMetric {
+	return noopMetric{}
+}
 func (noopCacheMetricsProvider) NewShortWatchesMetric(name string) cache.CounterMetric {
 	return noopMetric{}
 }
