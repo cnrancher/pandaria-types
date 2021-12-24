@@ -59,4 +59,8 @@ type ContainerResourceLimit struct {
 	RequestsMemory string `json:"requestsMemory,omitempty"`
 	LimitsCPU      string `json:"limitsCpu,omitempty"`
 	LimitsMemory   string `json:"limitsMemory,omitempty"`
+	MaxCPU         string `json:"maxCpu,omitempty"`
+	MinCPU         string `json:"minCpu,omitempty"`
+	MaxMemory      string `json:"maxMemory,omitempty"`
+	MinMemory      string `json:"minMemory,omitempty"`
 }
