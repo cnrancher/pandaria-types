@@ -61,6 +61,8 @@ type NamespaceOperations interface {
 	ByID(id string) (*Namespace, error)
 	Delete(container *Namespace) error
 
+	ActionClearAllFinalizers(resource *Namespace) error
+
 	ActionMove(resource *Namespace, input *NamespaceMove) error
 }
 
@@ -131,6 +133,11 @@ func (c *NamespaceClient) ByID(id string) (*Namespace, error) {
 
 func (c *NamespaceClient) Delete(container *Namespace) error {
 	return c.apiClient.Ops.DoResourceDelete(NamespaceType, &container.Resource)
+}
+
+func (c *NamespaceClient) ActionClearAllFinalizers(resource *Namespace) error {
+	err := c.apiClient.Ops.DoAction(NamespaceType, "clearAllFinalizers", &resource.Resource, nil, nil)
+	return err
 }
 
 func (c *NamespaceClient) ActionMove(resource *Namespace, input *NamespaceMove) error {

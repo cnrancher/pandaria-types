@@ -55,6 +55,7 @@ func namespaceTypes(schemas *types.Schemas) *types.Schemas {
 			schema.ResourceActions["move"] = types.Action{
 				Input: "namespaceMove",
 			}
+			schema.ResourceActions["clearAllFinalizers"] = types.Action{}
 		})
 }
 
