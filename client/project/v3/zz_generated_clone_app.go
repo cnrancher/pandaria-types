@@ -12,6 +12,7 @@ const (
 	CloneAppFieldCreated                   = "created"
 	CloneAppFieldCreatorID                 = "creatorId"
 	CloneAppFieldDockerCredentialList      = "credentialList"
+	CloneAppFieldIgnoreList                = "ignoreList"
 	CloneAppFieldIngressList               = "ingressList"
 	CloneAppFieldLabels                    = "labels"
 	CloneAppFieldName                      = "name"
@@ -33,6 +34,7 @@ type CloneApp struct {
 	Created                   string                   `json:"created,omitempty" yaml:"created,omitempty"`
 	CreatorID                 string                   `json:"creatorId,omitempty" yaml:"creatorId,omitempty"`
 	DockerCredentialList      []map[string]interface{} `json:"credentialList,omitempty" yaml:"credentialList,omitempty"`
+	IgnoreList                map[string][]string      `json:"ignoreList,omitempty" yaml:"ignoreList,omitempty"`
 	IngressList               []Ingress                `json:"ingressList,omitempty" yaml:"ingressList,omitempty"`
 	Labels                    map[string]string        `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Name                      string                   `json:"name,omitempty" yaml:"name,omitempty"`
