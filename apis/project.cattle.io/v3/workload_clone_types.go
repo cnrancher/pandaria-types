@@ -48,6 +48,7 @@ type CloneApp struct {
 	PersistentVolumeClaimList []*RelatedSourceInterface `json:"pvcList,omitempty"`
 	IngressList               []extv1beta1.Ingress      `json:"ingressList,omitempty"`
 	ServiceList               []*RelatedSourceInterface `json:"serviceList,omitempty"`
+	IgnoreList                map[string][]string       `json:"ignoreList,omitempty"`
 }
 
 type CloneTarget struct {
