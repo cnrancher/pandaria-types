@@ -1,7 +1,7 @@
 package v1
 
 import (
-	v1 "github.com/F5Networks/k8s-bigip-ctlr/config/apis/cis/v1"
+	"github.com/F5Networks/k8s-bigip-ctlr/config/apis/cis/v1"
 	"github.com/rancher/norman/lifecycle"
 	"github.com/rancher/norman/resource"
 	"k8s.io/apimachinery/pkg/runtime"

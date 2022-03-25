@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	v1 "github.com/F5Networks/k8s-bigip-ctlr/config/apis/cis/v1"
+	"github.com/F5Networks/k8s-bigip-ctlr/config/apis/cis/v1"
 	"github.com/rancher/norman/controller"
 	"github.com/rancher/norman/objectclient"
 	"github.com/rancher/norman/resource"
