@@ -39,7 +39,7 @@ github.com/gorilla/websocket
 # github.com/hashicorp/golang-lru v0.5.3
 github.com/hashicorp/golang-lru
 github.com/hashicorp/golang-lru/simplelru
-# github.com/json-iterator/go v1.1.9
+# github.com/json-iterator/go v1.1.12
 github.com/json-iterator/go
 # github.com/knative/pkg v0.0.0-20190817231834-12ee58e32cc8 => github.com/rancher/pkg v0.0.0-20190514055449-b30ab9de040e
 ## explicit
@@ -54,7 +54,7 @@ github.com/matryer/moq/pkg/moq
 github.com/matttproud/golang_protobuf_extensions/pbutil
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
 github.com/modern-go/concurrent
-# github.com/modern-go/reflect2 v1.0.1
+# github.com/modern-go/reflect2 v1.0.2
 github.com/modern-go/reflect2
 # github.com/pkg/errors v0.8.1
 ## explicit
@@ -73,8 +73,9 @@ github.com/prometheus/common/model
 github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
-# github.com/rancher/norman v0.0.0-20200520181341-ab75acb55410 => github.com/niusmallnan/norman v0.0.0-20211123080736-0b483f13a56c
+# github.com/rancher/norman v0.0.0-20200520181341-ab75acb55410 => github.com/cnrancher/pandaria-norman v0.0.0-20211207080314-675c3cbcbbc4
 ## explicit
+github.com/rancher/norman/api/builtin
 github.com/rancher/norman/clientbase
 github.com/rancher/norman/condition
 github.com/rancher/norman/controller
@@ -84,10 +85,13 @@ github.com/rancher/norman/lifecycle
 github.com/rancher/norman/metrics
 github.com/rancher/norman/objectclient
 github.com/rancher/norman/objectclient/dynamic
+github.com/rancher/norman/parse
 github.com/rancher/norman/pkg/broadcast
 github.com/rancher/norman/resource
 github.com/rancher/norman/restwatch
+github.com/rancher/norman/store/empty
 github.com/rancher/norman/store/proxy
+github.com/rancher/norman/store/schema
 github.com/rancher/norman/types
 github.com/rancher/norman/types/convert
 github.com/rancher/norman/types/convert/merge
@@ -96,6 +100,7 @@ github.com/rancher/norman/types/factory
 github.com/rancher/norman/types/mapper
 github.com/rancher/norman/types/slice
 github.com/rancher/norman/types/values
+github.com/rancher/norman/urlbuilder
 # github.com/rancher/wrangler v0.5.4-0.20200520040055-b8d49179cfc8
 ## explicit
 github.com/rancher/wrangler/pkg/data
@@ -461,5 +466,5 @@ sigs.k8s.io/structured-merge-diff/v3/value
 sigs.k8s.io/yaml
 # github.com/knative/pkg => github.com/rancher/pkg v0.0.0-20190514055449-b30ab9de040e
 # github.com/matryer/moq => github.com/rancher/moq v0.0.0-20190404221404-ee5226d43009
-# github.com/rancher/norman => github.com/niusmallnan/norman v0.0.0-20211123080736-0b483f13a56c
+# github.com/rancher/norman => github.com/cnrancher/pandaria-norman v0.0.0-20211207080314-675c3cbcbbc4
 # k8s.io/client-go => k8s.io/client-go v0.18.18
