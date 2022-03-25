@@ -454,6 +454,9 @@ type ServiceNowConfig struct {
 }
 
 type NotifierStatus struct {
+	SMTPCredentialSecret     string `json:"smtpCredentialSecret,omitempty" norman:"nocreate,noupdate"`
+	WechatCredentialSecret   string `json:"wechatCredentialSecret,omitempty" norman:"nocreate,noupdate"`
+	DingtalkCredentialSecret string `json:"dingtalkCredentialSecret,omitempty" norman:"nocreate,noupdate"`
 }
 
 // BasicAuth contains basic HTTP authentication credentials.
