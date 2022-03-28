@@ -6,6 +6,7 @@ import (
 
 const (
 	NotifierType                          = "notifier"
+	NotifierFieldAliyunSMSConfig          = "aliyunsmsConfig"
 	NotifierFieldAnnotations              = "annotations"
 	NotifierFieldClusterID                = "clusterId"
 	NotifierFieldCreated                  = "created"
@@ -23,6 +24,7 @@ const (
 	NotifierFieldSMTPConfig               = "smtpConfig"
 	NotifierFieldSMTPCredentialSecret     = "smtpCredentialSecret"
 	NotifierFieldSendResolved             = "sendResolved"
+	NotifierFieldServiceNowConfig         = "servicenowConfig"
 	NotifierFieldSlackConfig              = "slackConfig"
 	NotifierFieldState                    = "state"
 	NotifierFieldTransitioning            = "transitioning"
@@ -35,6 +37,7 @@ const (
 
 type Notifier struct {
 	types.Resource
+	AliyunSMSConfig          *AliyunSMSConfig  `json:"aliyunsmsConfig,omitempty" yaml:"aliyunsmsConfig,omitempty"`
 	Annotations              map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
 	ClusterID                string            `json:"clusterId,omitempty" yaml:"clusterId,omitempty"`
 	Created                  string            `json:"created,omitempty" yaml:"created,omitempty"`
@@ -52,6 +55,7 @@ type Notifier struct {
 	SMTPConfig               *SMTPConfig       `json:"smtpConfig,omitempty" yaml:"smtpConfig,omitempty"`
 	SMTPCredentialSecret     string            `json:"smtpCredentialSecret,omitempty" yaml:"smtpCredentialSecret,omitempty"`
 	SendResolved             bool              `json:"sendResolved,omitempty" yaml:"sendResolved,omitempty"`
+	ServiceNowConfig         *ServiceNowConfig `json:"servicenowConfig,omitempty" yaml:"servicenowConfig,omitempty"`
 	SlackConfig              *SlackConfig      `json:"slackConfig,omitempty" yaml:"slackConfig,omitempty"`
 	State                    string            `json:"state,omitempty" yaml:"state,omitempty"`
 	Transitioning            string            `json:"transitioning,omitempty" yaml:"transitioning,omitempty"`
